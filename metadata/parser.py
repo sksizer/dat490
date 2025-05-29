@@ -83,20 +83,21 @@ def parse_codebook_html(html_path: Path) -> Dict[str, ColumnMetadata]:
                 prologue_match = re.search(r'Question\s*Prologue:\s*(.+?)(?=Question:|$)', cell_text, re.DOTALL)
                 question_match = re.search(r'Question:\s*(.+?)$', cell_text, re.DOTALL)
                 
-                if (label_match and section_name_match and section_number_match and 
-                    question_number_match and column_match and type_match and 
-                    sas_name_match and question_match):
+                # Only require label and SAS variable name
+                if label_match and sas_name_match:
                     
                     # Clean up the extracted values
                     label = label_match.group(1).strip()
-                    section_name = section_name_match.group(1).strip()
-                    section_number = int(section_number_match.group(1))
-                    question_number = int(question_number_match.group(1))
-                    column = column_match.group(1).strip()
-                    type_of_variable = type_match.group(1).strip()
                     sas_variable_name = sas_name_match.group(1).strip()
+                    
+                    # Extract optional fields
+                    section_name = section_name_match.group(1).strip() if section_name_match else None
+                    section_number = int(section_number_match.group(1)) if section_number_match else None
+                    question_number = int(question_number_match.group(1)) if question_number_match else None
+                    column = column_match.group(1).strip() if column_match else None
+                    type_of_variable = type_match.group(1).strip() if type_match else None
                     question_prologue = prologue_match.group(1).strip() if prologue_match else None
-                    question = question_match.group(1).strip()
+                    question = question_match.group(1).strip() if question_match else None
                     
                     # Remove any extra whitespace or newlines
                     if question_prologue and not question_prologue:
@@ -105,12 +106,12 @@ def parse_codebook_html(html_path: Path) -> Dict[str, ColumnMetadata]:
                     # Create ColumnMetadata object
                     metadata = ColumnMetadata(
                         label=label,
+                        sas_variable_name=sas_variable_name,
                         section_name=section_name,
                         section_number=section_number,
                         question_number=question_number,
                         column=column,
                         type_of_variable=type_of_variable,
-                        sas_variable_name=sas_variable_name,
                         question_prologue=question_prologue,
                         question=question
                     )
