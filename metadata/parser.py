@@ -11,15 +11,53 @@ except ImportError:
     from models import ColumnMetadata
 
 def get_value_lookup(table:PageElement) -> Dict[None | int, str]:
-    value_dict : Dict[None | int, str] = {}
+    """
+    Given one of the branch table objects, we can extract out in a fairly
+    simple manner all the possible values for the target column
+
+    Simplified table structure example:
+    <table>
+    <tbody>
+    <tr>
+    <td>value</td> (which might be a single int value, blank or could be a range
+    <td>Value description
+    </tr>
+    </tbody>
+    </table>
+
+    :param table:
+    :return:
+    """
+    value_dict : Dict[None | int, str] = {} # Stores the value to value description
+
     for tr in table.find('tbody').find_all('tr'):
         cells = tr.find_all('td')
-        value = None
-        try:
-            value = int(cells[0].text)
-        except:
-            value = None
-        value_dict[value] = cells[1].text
+        if len(cells) < 2:
+            continue
+            
+        value_text = cells[0].text.strip()
+        description = cells[1].text.strip()
+        
+        # Check if the value is actually a range such as "1 - 30" or "1-30"
+        range_match = re.match(r'^(\d+)\s*[-–]\s*(\d+)$', value_text)
+        if range_match:
+            start = int(range_match.group(1))
+            end = int(range_match.group(2))
+            # Add each value in the range
+            # This is kind of ugly because we are creating some value lookups
+            # that have thousands of values...a function would be better but I
+            # was trying to keep the metadata 'pure' data
+            for i in range(start, end + 1):
+                value_dict[i] = description
+        else:
+            # Try to parse as single integer
+            try:
+                value = int(value_text)
+                value_dict[value] = description
+            except:
+                # If not a number, store as None
+                value_dict[None] = description
+                
     return value_dict
 
 def parse_codebook_html(html_path: Path) -> Dict[str, ColumnMetadata]:
@@ -129,7 +167,7 @@ def parse_codebook_html(html_path: Path) -> Dict[str, ColumnMetadata]:
                 metadata_dict[sas_variable_name] = metadata
 
         except Exception as e:
-            # Skip cells that don't parse correctly
+            # Skip cells that don't parse correctly but show problems
             print(e)
 
     return metadata_dict
