@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 
@@ -12,3 +12,4 @@ class ColumnMetadata(BaseModel):
     type_of_variable: Optional[str] = None  # "Num" or "Char"
     question_prologue: Optional[str] = None
     question: Optional[str] = None
+    value_lookup: dict[None | int, str] # This is a dictionary that returns the textual
