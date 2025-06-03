@@ -1,7 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 
-
 class ColumnMetadata(BaseModel):
     label: str
     sas_variable_name: str
