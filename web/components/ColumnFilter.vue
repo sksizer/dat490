@@ -102,11 +102,11 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
 </script>
 
 <template>
-  <UCard class="mb-4" :ui="{ body: { padding: 'p-3' } }">
+  <UCard class="mb-2" :ui="{ body: { padding: 'p-2' } }">
     <div class="flex items-center justify-between">
       <!-- Left side: Active filters or placeholder -->
-      <div class="flex items-center gap-2 flex-wrap flex-1">
-        <span class="text-sm font-medium text-gray-700 mr-2">Filters:</span>
+      <div class="flex items-center gap-1 flex-wrap flex-1">
+        <span class="text-xs font-medium text-gray-700 mr-1">Filters:</span>
         
         <template v-if="hasActiveFilters">
           <!-- Section filters -->
@@ -115,7 +115,8 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
             :key="`section-${section}`"
             color="blue"
             variant="soft"
-            class="flex items-center gap-1"
+            size="sm"
+            class="flex items-center gap-0.5 text-xs"
           >
             Section: {{ section }}
             <UButton
@@ -124,7 +125,7 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
               size="2xs"
               :padded="false"
               icon="i-heroicons-x-mark"
-              class="ml-1 hover:bg-gray-200 rounded"
+              class="ml-0.5 hover:bg-gray-200 rounded"
             />
           </UBadge>
           
@@ -134,7 +135,8 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
             :key="`type-${type}`"
             color="green"
             variant="soft"
-            class="flex items-center gap-1"
+            size="sm"
+            class="flex items-center gap-0.5 text-xs"
           >
             Type: {{ type }}
             <UButton
@@ -143,7 +145,7 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
               size="2xs"
               :padded="false"
               icon="i-heroicons-x-mark"
-              class="ml-1 hover:bg-gray-200 rounded"
+              class="ml-0.5 hover:bg-gray-200 rounded"
             />
           </UBadge>
           
@@ -153,7 +155,8 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
             :key="`computed-${computed}`"
             color="purple"
             variant="soft"
-            class="flex items-center gap-1"
+            size="sm"
+            class="flex items-center gap-0.5 text-xs"
           >
             Computed: {{ computed }}
             <UButton
@@ -162,14 +165,14 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
               size="2xs"
               :padded="false"
               icon="i-heroicons-x-mark"
-              class="ml-1 hover:bg-gray-200 rounded"
+              class="ml-0.5 hover:bg-gray-200 rounded"
             />
           </UBadge>
           
           <button
             v-if="hasActiveFilters"
             @click="clearAllFilters"
-            class="text-xs text-gray-500 hover:text-gray-700 ml-2"
+            class="text-xs text-gray-500 hover:text-gray-700 ml-1"
           >
             Clear all
           </button>
@@ -179,7 +182,7 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
       </div>
       
       <!-- Right side: Expand button -->
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1">
         <span v-if="activeFilterCount > 0" class="text-xs text-gray-500">
           {{ activeFilterCount }} active
         </span>
@@ -195,12 +198,12 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
     </div>
     
     <!-- Expanded filter options -->
-    <div v-if="isExpanded" class="mt-3 pt-3 border-t border-gray-200">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div v-if="isExpanded" class="mt-2 pt-2 border-t border-gray-200">
+      <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-2 dense-grid">
         <!-- Section filters -->
         <div>
           <div class="flex items-center justify-between mb-2">
-            <h4 class="text-sm font-medium text-gray-700">Section</h4>
+            <h4 class="text-xs font-medium text-gray-700">Section</h4>
             <div class="flex items-center gap-1">
               <input
                 type="checkbox"
@@ -213,17 +216,17 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
               <span class="text-xs text-gray-500">All</span>
             </div>
           </div>
-          <div class="space-y-1 max-h-40 overflow-y-auto">
+          <div class="space-y-0.5 max-h-32 overflow-y-auto">
             <label 
               v-for="section in options.sections"
               :key="section"
-              class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded"
+              class="flex items-center gap-1 cursor-pointer hover:bg-gray-50 p-0.5 rounded text-xs"
             >
               <UCheckbox
                 :model-value="modelValue.sections.includes(section)"
                 @update:model-value="(checked) => updateFilter('sections', section, checked)"
               />
-              <span class="text-sm">{{ section || 'No section' }}</span>
+              <span class="text-xs">{{ section || 'No section' }}</span>
             </label>
           </div>
         </div>
@@ -231,7 +234,7 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
         <!-- Type filters -->
         <div>
           <div class="flex items-center justify-between mb-2">
-            <h4 class="text-sm font-medium text-gray-700">Type</h4>
+            <h4 class="text-xs font-medium text-gray-700">Type</h4>
             <div class="flex items-center gap-1">
               <input
                 type="checkbox"
@@ -244,11 +247,11 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
               <span class="text-xs text-gray-500">All</span>
             </div>
           </div>
-          <div class="space-y-1 max-h-40 overflow-y-auto">
+          <div class="space-y-0.5 max-h-32 overflow-y-auto">
             <label 
               v-for="type in options.types"
               :key="type"
-              class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded"
+              class="flex items-center gap-1 cursor-pointer hover:bg-gray-50 p-0.5 rounded text-xs"
             >
               <UCheckbox
                 :model-value="modelValue.types.includes(type)"
@@ -262,7 +265,7 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
         <!-- Computed filters -->
         <div>
           <div class="flex items-center justify-between mb-2">
-            <h4 class="text-sm font-medium text-gray-700">Computed</h4>
+            <h4 class="text-xs font-medium text-gray-700">Computed</h4>
             <div class="flex items-center gap-1">
               <input
                 type="checkbox"
@@ -279,7 +282,7 @@ const toggleSelectAll = (filterType: keyof FilterOptions) => {
             <label 
               v-for="computed in options.computed"
               :key="computed"
-              class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded"
+              class="flex items-center gap-1 cursor-pointer hover:bg-gray-50 p-0.5 rounded text-xs"
             >
               <UCheckbox
                 :model-value="modelValue.computed.includes(computed)"

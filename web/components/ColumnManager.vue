@@ -150,7 +150,7 @@ const handleDragEnd = () => {
       <UButton
         @click="resetToDefaults"
         variant="ghost"
-        size="sm"
+        size="xs"
         icon="i-heroicons-arrow-path"
         title="Reset to default columns and sorting"
       >
@@ -159,7 +159,7 @@ const handleDragEnd = () => {
       <UButton
         @click="isExpanded = !isExpanded"
         variant="ghost"
-        size="sm"
+        size="xs"
         :icon="isExpanded ? 'i-heroicons-chevron-up' : 'i-heroicons-chevron-down'"
       >
         {{ isExpanded ? 'Hide' : 'Manage' }}
@@ -167,9 +167,9 @@ const handleDragEnd = () => {
     </div>
     
     <!-- Expanded column management -->
-    <div v-if="isExpanded" class="mt-3 pt-3 border-t border-gray-200">
-      <div class="text-xs text-gray-500 mb-2">Drag to reorder • Click checkbox to show/hide • Click arrows to sort</div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+    <div v-if="isExpanded" class="mt-2 pt-2 border-t border-gray-200">
+      <div class="text-xs text-gray-500 mb-1">Drag to reorder • Click checkbox to show/hide • Click arrows to sort</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
         <div 
           v-for="column in columns"
           :key="column.accessorKey"
@@ -180,14 +180,14 @@ const handleDragEnd = () => {
           @drop="handleDrop($event, column.accessorKey!)"
           @dragend="handleDragEnd"
           :class="[
-            'flex items-center gap-2 p-2 rounded cursor-move transition-all duration-150',
+            'flex items-center gap-1 p-1 rounded cursor-move transition-all duration-150 text-xs',
             draggedItem === column.accessorKey ? 'opacity-50 scale-95' : '',
             dragOverItem === column.accessorKey ? 'bg-blue-50 border-2 border-blue-200' : 'hover:bg-gray-50 border-2 border-transparent'
           ]"
         >
           <!-- Drag handle -->
           <div class="text-gray-400 hover:text-gray-600">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
               <path d="M7 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM7 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM7 14a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM13 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM13 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM13 14a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
             </svg>
           </div>

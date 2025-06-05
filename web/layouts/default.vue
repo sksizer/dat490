@@ -29,7 +29,7 @@ const menuItems = computed(() => [
     <!-- Fixed Header -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-gray-800 text-white shadow-md border-b-2 border-blue-500">
       <UContainer>
-        <div class="flex items-center py-3">
+        <div class="flex items-center py-2">
           <!-- Left section with dropdown using hamburger icon -->
           <div class="flex items-center">
             <UDropdownMenu :items="menuItems" hover>
@@ -48,8 +48,8 @@ const menuItems = computed(() => [
     </header>
     
     <!-- Main Content with padding for fixed header/footer -->
-    <main class="flex-1 overflow-y-auto pt-16 pb-16">
-      <UContainer class="py-3">
+    <main class="flex-1 overflow-y-auto pt-14 pb-12">
+      <UContainer class="py-1">
         <slot />
       </UContainer>
     </main>
@@ -57,7 +57,7 @@ const menuItems = computed(() => [
     <!-- Fixed Footer -->
     <footer class="fixed bottom-0 left-0 right-0 z-50 bg-gray-100 border-t border-gray-200">
       <UContainer>
-        <div class="py-4">
+        <div class="py-2">
           <p class="text-sm text-gray-600">&copy; {{ new Date().getFullYear() }} {{ appName }}</p>
         </div>
       </UContainer>

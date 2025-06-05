@@ -75,7 +75,7 @@ const createSortableHeader = (columnId: string, label: string) => {
       : 'Click to sort'
     
     return h('button', {
-      class: 'flex items-center gap-1 hover:text-gray-900 transition-colors',
+      class: 'flex items-center gap-1 hover:text-gray-900 transition-colors text-xs font-medium',
       onClick: () => handleHeaderClick(columnId),
       title: `${label} - ${sortStatus}`
     }, [
@@ -108,17 +108,17 @@ const columns: ColumnDef<any>[] = [
     }, [
       h(resolveComponent('UIcon'), { 
         name: 'i-heroicons-arrow-top-right-on-square',
-        class: 'w-4 h-4 text-gray-500'
+        class: 'w-3 h-3 text-gray-500'
       })
     ]),
     cell: ({ row }) => h(resolveComponent('NuxtLink'), {
       to: `/columns/${row.original.sas_variable_name || row.original.key}`,
       target: '_blank',
-      class: 'inline-flex items-center justify-center p-1 rounded hover:bg-gray-100 transition-colors',
+      class: 'inline-flex items-center justify-center p-0.5 rounded hover:bg-gray-100 transition-colors',
       title: `View details for ${row.original.label || row.original.key}`
     }, () => h(resolveComponent('UIcon'), { 
       name: 'i-heroicons-arrow-top-right-on-square',
-      class: 'w-4 h-4 text-gray-600'
+      class: 'w-3 h-3 text-gray-600'
     })),
   },
   {
@@ -138,7 +138,7 @@ const columns: ColumnDef<any>[] = [
             }
           },
           title: 'Select columns for Pandas DataFrame extraction\n\n• Check to select all visible columns\n• Uncheck to deselect all\n• Selected columns will appear in the Pandas extraction code above',
-          class: 'rounded border-gray-300 cursor-pointer'
+          class: 'rounded border-gray-300 cursor-pointer w-3 h-3'
         })
       ])
     },
@@ -146,13 +146,13 @@ const columns: ColumnDef<any>[] = [
       type: 'checkbox',
       checked: selectedRows.value.has(row.original.key),
       onChange: () => toggleRowSelection(row.original.key),
-      class: 'rounded border-gray-300'
+      class: 'rounded border-gray-300 w-3 h-3'
     }),
   },
   {
     accessorKey: 'key',
     header: createSortableHeader('key', 'Column/Feature'),
-    cell: ({ row }) => h('span', { class: 'font-mono text-sm' }, row.original.key),
+    cell: ({ row }) => h('span', { class: 'font-mono text-xs' }, row.original.key),
   },
   {
     accessorKey: 'label',
@@ -161,7 +161,7 @@ const columns: ColumnDef<any>[] = [
   {
     accessorKey: 'sas_variable_name',
     header: createSortableHeader('sas_variable_name', 'SAS Variable'),
-    cell: ({ row }) => h('span', { class: 'font-mono text-sm' }, row.original.sas_variable_name),
+    cell: ({ row }) => h('span', { class: 'font-mono text-xs' }, row.original.sas_variable_name),
   },
   {
     accessorKey: 'section_name',
@@ -179,8 +179,8 @@ const columns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       const question = row.original.question
       if (!question) return '-'
-      // Truncate long questions
-      return question.length > 100 ? question.substring(0, 100) + '...' : question
+      // Truncate long questions for better density
+      return question.length > 80 ? question.substring(0, 80) + '...' : question
     },
   },
   {
@@ -368,7 +368,7 @@ const copyToClipboard = async () => {
   }
 }
 
-// State for expanding/collapsing the snippet
+// State for expanding/collapsing the snippet - default to collapsed for density
 const isSnippetExpanded = ref(false)
 
 // Generate truncated version of the snippet
@@ -506,19 +506,19 @@ const handleColumnReorder = (reorderedColumns: Array<{ accessorKey?: string; hea
 </script>
 
 <template>
-  <div class="container mx-auto py-4">
-    <h1 class="text-2xl font-bold mb-3">BRFSS Feature Metadatas</h1>
+  <div class="container mx-auto py-2 mobile-compact">
+    <h1 class="text-2xl font-bold mb-2">BRFSS Feature Metadatas</h1>
     <UContainer id="bfrssLinks">Links: <ul><li><ULink to='/html/codebook_USCODE23_LLCP_021924.HTML' target="_blank">Codebook</ULink></li></ul></UContainer>
     
     <ModelMetadataSummary :model-data="modelData" />
     
-    <div class="mb-4">
+    <div class="mb-2">
       <UInput 
         v-model="search" 
         placeholder="Search features..." 
         icon="i-heroicons-magnifying-glass"
-        size="md"
-        class="max-w-md"
+        size="sm"
+        class="max-w-sm"
       />
     </div>
 
@@ -529,12 +529,12 @@ const handleColumnReorder = (reorderedColumns: Array<{ accessorKey?: string; hea
     />
 
     <!-- Pandas DataFrame Snippet -->
-    <div v-if="pandasSnippet" class="mb-4">
-      <UCard :ui="{ body: { padding: 'p-3' } }">
+    <div v-if="pandasSnippet" class="mb-2">
+      <UCard :ui="{ body: { padding: 'p-2' } }">
         <div class="flex items-center justify-between mb-1">
-          <div class="flex items-center gap-3">
-            <h3 class="text-sm font-semibold text-gray-700">Pandas DataFrame Extraction</h3>
-            <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2">
+            <h3 class="text-xs font-semibold text-gray-700">Pandas DataFrame Extraction</h3>
+            <div class="flex items-center gap-1">
               <UBadge 
                 :color="selectedVisibleRows.length > 0 ? 'primary' : 'gray'" 
                 variant="soft"
@@ -561,7 +561,7 @@ const handleColumnReorder = (reorderedColumns: Array<{ accessorKey?: string; hea
               v-if="filteredData.length > 3 || selectedVisibleRows.length > 3"
               @click="isSnippetExpanded = !isSnippetExpanded" 
               variant="ghost" 
-              size="sm"
+              size="xs"
               :icon="isSnippetExpanded ? 'i-heroicons-chevron-up' : 'i-heroicons-chevron-down'"
             >
               {{ isSnippetExpanded ? 'Collapse' : 'Expand' }}
@@ -569,26 +569,26 @@ const handleColumnReorder = (reorderedColumns: Array<{ accessorKey?: string; hea
             <UButton 
               @click="copyToClipboard" 
               variant="ghost" 
-              size="sm"
+              size="xs"
               icon="i-heroicons-clipboard-document"
             >
               Copy
             </UButton>
           </div>
         </div>
-        <pre class="bg-gray-100 p-2 rounded-md overflow-x-auto text-sm"><code>{{ isSnippetExpanded ? pandasSnippet : truncatedSnippet }}</code></pre>
+        <pre class="bg-gray-100 p-1 rounded-md overflow-x-auto text-xs"><code>{{ isSnippetExpanded ? pandasSnippet : truncatedSnippet }}</code></pre>
       </UCard>
     </div>
 
     <UCard :ui="{ body: { padding: 'p-3' } }">
       <!-- Combined header with stats and controls -->
-      <div v-if="filteredData.length > 0" class="mb-3">
+      <div v-if="filteredData.length > 0" class="mb-2">
         <div class="flex items-start justify-between">
-          <div class="flex items-center gap-4 text-sm text-gray-600">
+          <div class="flex items-center gap-3 text-xs text-gray-600">
             <span>
               Showing {{ filteredData.length }} of {{ tableData.length }} features
             </span>
-            <span v-if="selectedVisibleRows.length > 0" class="font-medium text-primary-600">
+            <span v-if="selectedVisibleRows.length > 0" class="font-medium text-primary-600 text-xs">
               {{ selectedVisibleRows.length }} selected for extraction
             </span>
           </div>
@@ -611,7 +611,12 @@ const handleColumnReorder = (reorderedColumns: Array<{ accessorKey?: string; hea
         :data="sortedFilteredData"
         :columns="visibleTableColumns"
         :loading="!modelData"
-        class="w-full"
+        class="w-full text-sm compact-table"
+        :ui="{
+          th: { padding: 'px-2 py-0.5' },
+          td: { padding: 'px-2 py-0.5' },
+          tbody: 'divide-y divide-gray-200'
+        }"
       >
         <template #empty-state>
           <div class="text-center py-8">

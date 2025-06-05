@@ -31,23 +31,23 @@ const stats = computed(() => {
 </script>
 
 <template>
-  <UCard class="mb-6">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+  <UCard class="mb-3">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
       <div>
         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Columns</p>
-        <p class="mt-1 text-3xl font-semibold">{{ stats.totalColumns }}</p>
+        <p class="mt-1 text-2xl font-semibold">{{ stats.totalColumns }}</p>
       </div>
       <div>
         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Computed Columns</p>
-        <p class="mt-1 text-3xl font-semibold">{{ stats.computedColumns }}</p>
+        <p class="mt-1 text-2xl font-semibold">{{ stats.computedColumns }}</p>
       </div>
       <div>
         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Sections</p>
-        <p class="mt-1 text-3xl font-semibold">{{ stats.sections }}</p>
+        <p class="mt-1 text-2xl font-semibold">{{ stats.sections }}</p>
       </div>
       <div>
         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Variable Types</p>
-        <p class="mt-1 text-3xl font-semibold">{{ stats.typesOfVariables }}</p>
+        <p class="mt-1 text-2xl font-semibold">{{ stats.typesOfVariables }}</p>
       </div>
     </div>
   </UCard>
