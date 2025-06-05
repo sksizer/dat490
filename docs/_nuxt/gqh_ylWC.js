@@ -1,0 +1,1 @@
+import{_ as o}from"./BTnf8Fuj.js";import{f as e,l as r,o as t}from"./DJDYaumC.js";import"./88opOQSr.js";import"./DpMU-uLD.js";const f=e({__name:"[...slug]",setup(a){return(s,_)=>(t(),r(o))}});export{f as default};
