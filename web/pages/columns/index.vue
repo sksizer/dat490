@@ -549,8 +549,8 @@ const resetColumnsToDefault = () => {
 }
 
 // Handle column reordering from drag and drop
-const handleColumnReorder = (reorderedColumns: Array<{ accessorKey?: string; header?: string }>) => {
-  columnDisplayOrder.value = reorderedColumns.map(col => col.accessorKey!).filter(Boolean)
+const handleColumnReorder = (newColumnOrder: string[]) => {
+  columnDisplayOrder.value = newColumnOrder
 }
 </script>
 
@@ -647,9 +647,10 @@ const handleColumnReorder = (reorderedColumns: Array<{ accessorKey?: string; hea
             :visible-columns="visibleColumns"
             :column-ordering="columnOrdering"
             :columns="columnsForSelectors"
+            :column-display-order="columnDisplayOrder"
             @update:visible-columns="visibleColumns = $event"
             @update:column-ordering="columnOrdering = $event"
-            @update:column-order="handleColumnReorder"
+            @update:column-display-order="handleColumnReorder"
             @reset="resetColumnsToDefault"
           />
         </div>
