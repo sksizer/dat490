@@ -172,18 +172,71 @@ const search = ref('')
 // Selection state - tracks which row keys are selected
 const selectedRows = ref<Set<string>>(new Set())
 
-// Filtered data based on search
-const filteredData = computed(() => {
-  if (!search.value) return tableData.value
+// Filter state
+const filters = ref({
+  sections: [] as string[],
+  types: [] as string[],
+  computed: [] as string[]
+})
+
+// Get unique filter options from data
+const filterOptions = computed(() => {
+  const sections = new Set<string>()
+  const types = new Set<string>()
+  const computed = new Set<string>()
   
-  const searchLower = search.value.toLowerCase()
-  return tableData.value.filter(item => 
-    item.key.toLowerCase().includes(searchLower) ||
-    item.label.toLowerCase().includes(searchLower) ||
-    item.sas_variable_name.toLowerCase().includes(searchLower) ||
-    (item.question && item.question.toLowerCase().includes(searchLower)) ||
-    (item.section_name && item.section_name.toLowerCase().includes(searchLower))
-  )
+  tableData.value.forEach(item => {
+    if (item.section_name) sections.add(item.section_name)
+    if (item.type_of_variable) types.add(item.type_of_variable)
+    computed.add(item.computed ? 'Yes' : 'No')
+  })
+  
+  return {
+    sections: Array.from(sections).sort(),
+    types: Array.from(types).sort(),
+    computed: Array.from(computed).sort()
+  }
+})
+
+// Filtered data based on search and filters
+const filteredData = computed(() => {
+  let data = tableData.value
+  
+  // Apply search filter
+  if (search.value) {
+    const searchLower = search.value.toLowerCase()
+    data = data.filter(item => 
+      item.key.toLowerCase().includes(searchLower) ||
+      item.label.toLowerCase().includes(searchLower) ||
+      item.sas_variable_name.toLowerCase().includes(searchLower) ||
+      (item.question && item.question.toLowerCase().includes(searchLower)) ||
+      (item.section_name && item.section_name.toLowerCase().includes(searchLower))
+    )
+  }
+  
+  // Apply section filter
+  if (filters.value.sections.length > 0) {
+    data = data.filter(item => 
+      filters.value.sections.includes(item.section_name || '')
+    )
+  }
+  
+  // Apply type filter
+  if (filters.value.types.length > 0) {
+    data = data.filter(item => 
+      filters.value.types.includes(item.type_of_variable || '')
+    )
+  }
+  
+  // Apply computed filter
+  if (filters.value.computed.length > 0) {
+    data = data.filter(item => {
+      const computedValue = item.computed ? 'Yes' : 'No'
+      return filters.value.computed.includes(computedValue)
+    })
+  }
+  
+  return data
 })
 
 // Get selected rows that are currently visible (filtered)
@@ -383,6 +436,12 @@ const sortedFilteredData = computed(() => {
         class="max-w-md"
       />
     </div>
+
+    <!-- Column Filter -->
+    <ColumnFilter 
+      v-model="filters"
+      :options="filterOptions"
+    />
 
     <!-- Pandas DataFrame Snippet -->
     <div v-if="pandasSnippet" class="mb-4">
