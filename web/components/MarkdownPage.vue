@@ -29,7 +29,6 @@ const { data: page } = await useAsyncData(`content-${contentPath.value}`, () => 
         <NuxtLink to="/" class="text-blue-500 hover:underline">Return to home</NuxtLink>
       </p>
     </div>
-    <div>{{contentPath}}</div>
   </div>
 
 </template>

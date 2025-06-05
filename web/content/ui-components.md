@@ -1,5 +1,5 @@
 ---
-title: UI Components
+title: Nuxt UI Components 
 description: Documentation of available Nuxt UI components and usage notes
 navigation:
   title: UI Components

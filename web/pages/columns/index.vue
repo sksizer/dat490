@@ -21,7 +21,7 @@ const tableData = computed(() => {
 const columns: ColumnDef<any>[] = [
   {
     accessorKey: 'key',
-    header: 'Variable Name',
+    header: 'Column/Feature',
     cell: ({ row }) => h('span', { class: 'font-mono text-sm' }, row.original.key),
   },
   {

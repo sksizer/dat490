@@ -1,10 +1,6 @@
 <script setup lang="ts">
 const appName = "DAT490"
-// Note: Using queryCollection API for Nuxt 3 Content
-// See documentation: https://content.nuxt.com/docs/utils/query-collection
 const { data: docPages } = await useAsyncData('docs', () => queryCollection('docs').find())
-
-// Transform the data for the dropdown menu
 const docNavItems = computed(() => {
   return docPages.value?.map(page => {
     const nav = page.navigation || {}
@@ -30,10 +26,6 @@ const menuItems = computed(() => [
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <!-- Navbar 
-         Note: UHeader is not a valid Nuxt UI component. Using standard header with classes instead.
-         See Nuxt UI components list: https://ui.nuxt.com/components
-    -->
     <UContainer>
       <header class="bg-gray-800 text-white shadow-md border-b-2 border-blue-500">
         <div class="flex items-center py-3">
@@ -44,7 +36,7 @@ const menuItems = computed(() => [
             </UDropdownMenu>
             
             <!-- Title next to menu button -->
-            <NuxtLink to="/" class="text-xl font-bold ml-3">{{ appName }}</NuxtLink>
+            <NuxtLink to="/" class="text-xl font-bold ml-3">{{ appName }}  </NuxtLink>
           </div>
           
           <!-- Right section (empty for now) -->

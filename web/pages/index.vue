@@ -17,14 +17,21 @@ onMounted(() => {
   })) || []
 })
 
+const { data: modelData } = await useAsyncData('model', () => {
+  const val = queryCollection('columns').first()
+return val; }
+)
+
 </script>
 
 <template>
   <div>
-      <h1>Markdown Files</h1>
+      <h1>BFRSS Column Data - <NuxtLink to="/columns" class="link">Explore</NuxtLink></h1>
+      <ModelMetadataSummary :modelData="modelData" />
+      <h1>Documentation</h1>
       <div v-if="availablePaths && availablePaths.length > 0" class="mt-2">
         <div v-for="path in availablePaths">
-          <NuxtLink :to="path.path">{{path.title}}</NuxtLink>
+          <NuxtLink class="link" :to="path.path">{{path.title}}</NuxtLink>
         </div>
     </div>
 
