@@ -62,6 +62,43 @@ const activeFilterCount = computed(() => {
 const removeFilter = (filterType: keyof FilterOptions, value: string) => {
   updateFilter(filterType, value, false)
 }
+
+// Check if all items in a filter category are selected
+const isAllSelected = (filterType: keyof FilterOptions) => {
+  const available = props.options[filterType]
+  const selected = props.modelValue[filterType]
+  return available.length > 0 && selected.length === available.length
+}
+
+// Check if some but not all items in a filter category are selected
+const isSomeSelected = (filterType: keyof FilterOptions) => {
+  const available = props.options[filterType]
+  const selected = props.modelValue[filterType]
+  return selected.length > 0 && selected.length < available.length
+}
+
+// Select all items in a filter category
+const selectAll = (filterType: keyof FilterOptions) => {
+  const currentFilters = { ...props.modelValue }
+  currentFilters[filterType] = [...props.options[filterType]]
+  emit('update:modelValue', currentFilters)
+}
+
+// Deselect all items in a filter category
+const selectNone = (filterType: keyof FilterOptions) => {
+  const currentFilters = { ...props.modelValue }
+  currentFilters[filterType] = []
+  emit('update:modelValue', currentFilters)
+}
+
+// Handle select all/none toggle
+const toggleSelectAll = (filterType: keyof FilterOptions) => {
+  if (isAllSelected(filterType)) {
+    selectNone(filterType)
+  } else {
+    selectAll(filterType)
+  }
+}
 </script>
 
 <template>
@@ -162,7 +199,20 @@ const removeFilter = (filterType: keyof FilterOptions, value: string) => {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Section filters -->
         <div>
-          <h4 class="text-sm font-medium text-gray-700 mb-2">Section</h4>
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-sm font-medium text-gray-700">Section</h4>
+            <div class="flex items-center gap-1">
+              <input
+                type="checkbox"
+                :checked="isAllSelected('sections')"
+                :indeterminate="isSomeSelected('sections')"
+                @change="toggleSelectAll('sections')"
+                title="Select all sections / Deselect all"
+                class="rounded border-gray-300 text-xs"
+              />
+              <span class="text-xs text-gray-500">All</span>
+            </div>
+          </div>
           <div class="space-y-1 max-h-40 overflow-y-auto">
             <label 
               v-for="section in options.sections"
@@ -180,7 +230,20 @@ const removeFilter = (filterType: keyof FilterOptions, value: string) => {
         
         <!-- Type filters -->
         <div>
-          <h4 class="text-sm font-medium text-gray-700 mb-2">Type</h4>
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-sm font-medium text-gray-700">Type</h4>
+            <div class="flex items-center gap-1">
+              <input
+                type="checkbox"
+                :checked="isAllSelected('types')"
+                :indeterminate="isSomeSelected('types')"
+                @change="toggleSelectAll('types')"
+                title="Select all types / Deselect all"
+                class="rounded border-gray-300 text-xs"
+              />
+              <span class="text-xs text-gray-500">All</span>
+            </div>
+          </div>
           <div class="space-y-1 max-h-40 overflow-y-auto">
             <label 
               v-for="type in options.types"
@@ -198,7 +261,20 @@ const removeFilter = (filterType: keyof FilterOptions, value: string) => {
         
         <!-- Computed filters -->
         <div>
-          <h4 class="text-sm font-medium text-gray-700 mb-2">Computed</h4>
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-sm font-medium text-gray-700">Computed</h4>
+            <div class="flex items-center gap-1">
+              <input
+                type="checkbox"
+                :checked="isAllSelected('computed')"
+                :indeterminate="isSomeSelected('computed')"
+                @change="toggleSelectAll('computed')"
+                title="Select all computed options / Deselect all"
+                class="rounded border-gray-300 text-xs"
+              />
+              <span class="text-xs text-gray-500">All</span>
+            </div>
+          </div>
           <div class="space-y-1">
             <label 
               v-for="computed in options.computed"

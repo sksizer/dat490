@@ -300,10 +300,22 @@ const pandasSnippet = computed(() => {
   const columnKeys = rowsToUse.map(item => `'${item.key}'`)
   if (columnKeys.length === 0) return ''
   
-  // Add comment about selection
-  const selectionComment = selectedVisibleRows.value.length > 0 
-    ? `# Extract ${columnKeys.length} selected columns from DataFrame`
-    : `# Extract ${columnKeys.length} columns from DataFrame (select specific columns for custom extraction)`
+  // Add comment about selection and filtering
+  let selectionComment = ''
+  if (selectedVisibleRows.value.length > 0) {
+    selectionComment = `# Extract ${columnKeys.length} selected columns from DataFrame`
+  } else {
+    const hasFilters = filters.value.sections.length > 0 || 
+                      filters.value.types.length > 0 || 
+                      filters.value.computed.length > 0 ||
+                      search.value.length > 0
+    
+    if (hasFilters) {
+      selectionComment = `# Extract ${columnKeys.length} filtered columns from DataFrame`
+    } else {
+      selectionComment = `# Extract ${columnKeys.length} columns from DataFrame (select specific columns for custom extraction)`
+    }
+  }
   
   // Format for readability - if more than 5 columns, use multiline format
   if (columnKeys.length > 5) {
@@ -347,10 +359,24 @@ const truncatedSnippet = computed(() => {
   const displayColumns = columnKeys.slice(0, 3)
   const remainingCount = columnKeys.length - 3
   
-  if (columnKeys.length <= 3) {
-    return `selected_columns = [${displayColumns.join(', ')}]`
+  // Add context about what type of columns these are
+  let prefix = ''
+  if (selectedVisibleRows.value.length > 0) {
+    prefix = `# ${columnKeys.length} selected columns\n`
   } else {
-    return `selected_columns = [${displayColumns.join(', ')}, ... # +${remainingCount} more]`
+    const hasFilters = filters.value.sections.length > 0 || 
+                      filters.value.types.length > 0 || 
+                      filters.value.computed.length > 0 ||
+                      search.value.length > 0
+    if (hasFilters) {
+      prefix = `# ${columnKeys.length} filtered columns\n`
+    }
+  }
+  
+  if (columnKeys.length <= 3) {
+    return `${prefix}selected_columns = [${displayColumns.join(', ')}]`
+  } else {
+    return `${prefix}selected_columns = [${displayColumns.join(', ')}, ... # +${remainingCount} more]`
   }
 })
 
@@ -449,11 +475,21 @@ const sortedFilteredData = computed(() => {
         <div class="flex items-center justify-between mb-1">
           <div class="flex items-center gap-3">
             <h3 class="text-sm font-semibold text-gray-700">Pandas DataFrame Extraction</h3>
-            <div v-if="selectedVisibleRows.length > 0" class="flex items-center gap-2">
-              <UBadge color="primary" variant="soft">
-                {{ selectedVisibleRows.length }} column{{ selectedVisibleRows.length !== 1 ? 's' : '' }} selected
+            <div class="flex items-center gap-2">
+              <UBadge 
+                :color="selectedVisibleRows.length > 0 ? 'primary' : 'gray'" 
+                variant="soft"
+              >
+                {{ filteredData.length }} column{{ filteredData.length !== 1 ? 's' : '' }}
+                <span v-if="selectedVisibleRows.length > 0">
+                  ({{ selectedVisibleRows.length }} selected)
+                </span>
+                <span v-else-if="filters.sections.length > 0 || filters.types.length > 0 || filters.computed.length > 0 || search.length > 0">
+                  (filtered)
+                </span>
               </UBadge>
               <button
+                v-if="selectedVisibleRows.length > 0"
                 @click="deselectAll"
                 class="text-xs text-gray-500 hover:text-gray-700"
               >
