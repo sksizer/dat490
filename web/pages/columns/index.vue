@@ -18,8 +18,10 @@ const tableData = computed(() => {
   }))
 })
 
-// Ordering state
-const columnOrdering = ref<ColumnOrder[]>([])
+// Ordering state - default to sorting by Column/Feature
+const columnOrdering = ref<ColumnOrder[]>([
+  { columnId: 'key', direction: 'asc' }
+])
 
 // Add or toggle column ordering when header is clicked
 const handleHeaderClick = (columnId: string) => {
@@ -521,17 +523,19 @@ const sortedFilteredData = computed(() => {
       </UCard>
     </div>
 
-    <!-- Ordering Selector -->
-    <OrderingSelector
-      v-model="columnOrdering"
-      :columns="columnsForSelectors"
-    />
-
     <UCard :ui="{ body: { padding: 'p-3' } }">
-      <!-- Column Selector integrated into table header -->
-      <div class="border-b border-gray-200 pb-3 mb-3">
+      <!-- Table controls integrated into header -->
+      <div class="space-y-3 border-b border-gray-200 pb-3 mb-3">
+        <!-- Column Selector -->
         <ColumnSelector 
           v-model="visibleColumns"
+          :columns="columnsForSelectors"
+          class="!mb-0"
+        />
+        
+        <!-- Ordering Selector -->
+        <OrderingSelector
+          v-model="columnOrdering"
           :columns="columnsForSelectors"
           class="!mb-0"
         />
