@@ -9,6 +9,15 @@ from typing import Dict
 from bs4 import BeautifulSoup, PageElement
 
 
+class ValueDef(BaseModel):
+    description: str
+
+
+class ValueRange(ValueDef):
+    start: int
+    end: int
+
+
 class ColumnMetadata(BaseModel):
     computed: bool
     label: str
@@ -21,7 +30,7 @@ class ColumnMetadata(BaseModel):
     type_of_variable: Optional[str] = None  # "Num" or "Char".first().name
     question_prologue: Optional[str] = None
     question: Optional[str] = None
-    value_lookup: Optional[dict[None | int, str]] = None # This is a dictionary that returns the textual
+    value_lookup: list[ValueDef]
     html_name: str
 
 
@@ -29,7 +38,33 @@ class SharedModel(BaseModel):
     columns:  dict[str, ColumnMetadata]
 
 
-def get_value_lookup(table:PageElement) -> dict[None | int, str]:
+def get_value_def(tr:PageElement) -> ValueDef | ValueRange:
+    cells = tr.find_all('td')
+
+    value_text = cells[0].text.strip()
+    description = cells[1].text.strip()
+
+    # Check if the value is actually a range such as "1 - 30" or "1-30"
+    range_match = re.match(r'^(\d+)\s*[-–]\s*(\d+)$', value_text)
+    if range_match:
+        return ValueRange(
+            start = int(range_match.group(1)),
+            end = int(range_match.group(2)),
+            description=description
+        )
+    else:
+        # Try to parse as single integer
+        try:
+            return ValueRange(
+                start = int(value_text),
+                end = int(value_text),
+                description=description)
+        except:
+            return ValueDef(
+                description=description
+            )
+
+def get_value_lookup(table:PageElement) -> list[ValueRange]:
     """
     Given one of the branch table objects, we can extract out in a fairly
     simple manner all the possible values for the target column
@@ -47,37 +82,12 @@ def get_value_lookup(table:PageElement) -> dict[None | int, str]:
     :param table:
     :return:
     """
-    value_dict : dict[None | int, str] = {} # Stores the value to value description
+    value_ranges : list[ValueRange] = []
 
     for tr in table.find('tbody').find_all('tr'):
-        cells = tr.find_all('td')
-        if len(cells) < 2:
-            continue
+        value_ranges.append(get_value_def(tr))
 
-        value_text = cells[0].text.strip()
-        description = cells[1].text.strip()
-
-        # Check if the value is actually a range such as "1 - 30" or "1-30"
-        range_match = re.match(r'^(\d+)\s*[-–]\s*(\d+)$', value_text)
-        if range_match:
-            start = int(range_match.group(1))
-            end = int(range_match.group(2))
-            # Add each value in the range
-            # This is kind of ugly because we are creating some value lookups
-            # that have thousands of values...a function would be better but I
-            # was trying to keep the metadata 'pure' data
-            for i in range(start, end + 1):
-                value_dict[i] = description
-        else:
-            # Try to parse as single integer
-            try:
-                value = int(value_text)
-                value_dict[value] = description
-            except:
-                # If not a number, store as None
-                value_dict[None] = description
-
-    return value_dict
+    return value_ranges
 
 def parse_codebook_html(html_path: Path) -> Dict[str, ColumnMetadata]:
     """
