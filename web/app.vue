@@ -1,9 +1,7 @@
 <script lang="ts" setup>
   const siteState = useState('siteState', () => {
-
-    return shallowRef({
-
-    })
+    return {
+    }
   });
 
 </script>

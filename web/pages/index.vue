@@ -19,8 +19,8 @@ onMounted(() => {
 
 const { data: modelData } = await useAsyncData('model', () => {
   const val = queryCollection('columns').first()
-return val; }
-)
+  return val; 
+})
 
 </script>
 
