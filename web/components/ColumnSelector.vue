@@ -48,7 +48,7 @@ const getColumnLabel = (columnId: string) => {
 </script>
 
 <template>
-  <UCard class="mb-4" :ui="{ body: { padding: 'p-3' } }">
+  <div class="mb-4">
     <div class="flex items-center justify-between">
       <!-- Left side: Column badges -->
       <div class="flex items-center gap-2 flex-wrap flex-1">
@@ -99,5 +99,5 @@ const getColumnLabel = (columnId: string) => {
         </label>
       </div>
     </div>
-  </UCard>
+  </div>
 </template>

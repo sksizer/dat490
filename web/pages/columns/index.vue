@@ -527,13 +527,16 @@ const sortedFilteredData = computed(() => {
       :columns="columnsForSelectors"
     />
 
-    <!-- Column Selector -->
-    <ColumnSelector 
-      v-model="visibleColumns"
-      :columns="columnsForSelectors"
-    />
-
     <UCard :ui="{ body: { padding: 'p-3' } }">
+      <!-- Column Selector integrated into table header -->
+      <div class="border-b border-gray-200 pb-3 mb-3">
+        <ColumnSelector 
+          v-model="visibleColumns"
+          :columns="columnsForSelectors"
+          class="!mb-0"
+        />
+      </div>
+
       <div v-if="filteredData.length > 0" class="flex items-center justify-between mb-2 text-sm text-gray-600">
         <span>
           Showing {{ filteredData.length }} of {{ tableData.length }} columns
