@@ -33,6 +33,17 @@ const defaultColumnOrdering = [
   { columnId: 'key', direction: 'asc' as const }
 ]
 
+// Default column display order
+const defaultColumnOrder = [
+  'key',
+  'label',
+  'sas_variable_name',
+  'section_name',
+  'type_of_variable',
+  'question',
+  'computed'
+]
+
 // Ordering state - default to sorting by Column/Feature
 const columnOrdering = ref<ColumnOrder[]>([...defaultColumnOrdering])
 
@@ -398,23 +409,52 @@ const truncatedSnippet = computed(() => {
 // Visible columns state - all except SAS Variable by default
 const visibleColumns = ref([...defaultVisibleColumns])
 
-// Filter columns based on visibility - always include _navigation and _selection columns
+// Column display order state
+const columnDisplayOrder = ref([...defaultColumnOrder])
+
+// Filter columns based on visibility and order them according to columnDisplayOrder
 const visibleTableColumns = computed(() => {
-  return columns.filter(col => 
+  const filteredColumns = columns.filter(col => 
     col.accessorKey === '_navigation' || 
     col.accessorKey === '_selection' || 
     visibleColumns.value.includes(col.accessorKey as string)
   )
+  
+  // Separate navigation/selection columns from data columns
+  const navColumns = filteredColumns.filter(col => 
+    col.accessorKey === '_navigation' || col.accessorKey === '_selection'
+  )
+  const dataColumns = filteredColumns.filter(col => 
+    col.accessorKey !== '_navigation' && col.accessorKey !== '_selection'
+  )
+  
+  // Sort data columns based on display order
+  const orderedDataColumns = dataColumns.sort((a, b) => {
+    const aIndex = columnDisplayOrder.value.indexOf(a.accessorKey as string)
+    const bIndex = columnDisplayOrder.value.indexOf(b.accessorKey as string)
+    return aIndex - bIndex
+  })
+  
+  // Return navigation/selection columns first, then ordered data columns
+  return [...navColumns, ...orderedDataColumns]
 })
 
 // Columns with string headers for selector components - exclude _navigation and _selection columns
+// Ordered based on the current display order
 const columnsForSelectors = computed(() => {
-  return columns
+  const baseColumns = columns
     .filter(col => col.accessorKey !== '_selection' && col.accessorKey !== '_navigation')
     .map(col => ({
       accessorKey: col.accessorKey,
       header: columnMetadata[col.accessorKey as keyof typeof columnMetadata]
     }))
+  
+  // Sort based on the current display order
+  return baseColumns.sort((a, b) => {
+    const aIndex = columnDisplayOrder.value.indexOf(a.accessorKey!)
+    const bIndex = columnDisplayOrder.value.indexOf(b.accessorKey!)
+    return aIndex - bIndex
+  })
 })
 
 // Apply sorting to filtered data
@@ -456,6 +496,12 @@ const sortedFilteredData = computed(() => {
 const resetColumnsToDefault = () => {
   visibleColumns.value = [...defaultVisibleColumns]
   columnOrdering.value = [...defaultColumnOrdering]
+  columnDisplayOrder.value = [...defaultColumnOrder]
+}
+
+// Handle column reordering from drag and drop
+const handleColumnReorder = (reorderedColumns: Array<{ accessorKey?: string; header?: string }>) => {
+  columnDisplayOrder.value = reorderedColumns.map(col => col.accessorKey!).filter(Boolean)
 }
 </script>
 
@@ -554,13 +600,14 @@ const resetColumnsToDefault = () => {
             :columns="columnsForSelectors"
             @update:visible-columns="visibleColumns = $event"
             @update:column-ordering="columnOrdering = $event"
+            @update:column-order="handleColumnReorder"
             @reset="resetColumnsToDefault"
           />
         </div>
       </div>
       
       <UTable
-        :key="`${visibleColumns.join(',')}-${columnOrdering.map(o => `${o.columnId}:${o.direction}`).join(',')}`"
+        :key="`${visibleColumns.join(',')}-${columnOrdering.map(o => `${o.columnId}:${o.direction}`).join(',')}-${columnDisplayOrder.join(',')}`"
         :data="sortedFilteredData"
         :columns="visibleTableColumns"
         :loading="!modelData"
