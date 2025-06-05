@@ -25,9 +25,10 @@ const menuItems = computed(() => [
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col">
-    <UContainer>
-      <header class="bg-gray-800 text-white shadow-md border-b-2 border-blue-500">
+  <div class="h-screen flex flex-col">
+    <!-- Fixed Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-gray-800 text-white shadow-md border-b-2 border-blue-500">
+      <UContainer>
         <div class="flex items-center py-3">
           <!-- Left section with dropdown using hamburger icon -->
           <div class="flex items-center">
@@ -43,18 +44,22 @@ const menuItems = computed(() => [
           <div class="ml-auto">
           </div>
         </div>
-      </header>
-    </UContainer>
+      </UContainer>
+    </header>
     
-    <!-- Main Content -->
-    <UContainer class="flex-grow py-6">
-      <slot />
-    </UContainer>
+    <!-- Main Content with padding for fixed header/footer -->
+    <main class="flex-1 overflow-y-auto pt-16 pb-16">
+      <UContainer class="py-6">
+        <slot />
+      </UContainer>
+    </main>
     
-    <!-- Footer -->
-    <footer class="bg-gray-100 border-t border-gray-200 py-4">
+    <!-- Fixed Footer -->
+    <footer class="fixed bottom-0 left-0 right-0 z-50 bg-gray-100 border-t border-gray-200">
       <UContainer>
-        <p class="text-sm text-gray-600">&copy; {{ new Date().getFullYear() }} {{ appName }}</p>
+        <div class="py-4">
+          <p class="text-sm text-gray-600">&copy; {{ new Date().getFullYear() }} {{ appName }}</p>
+        </div>
       </UContainer>
     </footer>
   </div>
