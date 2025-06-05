@@ -28,17 +28,49 @@ export default defineContentConfig({
                         z.union([
                             // ValueDef
                             z.object({
-                                description: z.string()
+                                description: z.string(),
+                                missing: z.boolean().optional()
                             }),
                             // ValueRange
                             z.object({
                                 description: z.string(),
+                                missing: z.boolean().optional(),
                                 start: z.number(),
                                 end: z.number()
                             })
                         ])
                     ),
-                    html_name: z.string()
+                    html_name: z.string(),
+                    // Add statistics schema
+                    statistics: z.union([
+                        // NumericStatistics
+                        z.object({
+                            count: z.number(),
+                            null_count: z.number(),
+                            unique_count: z.number().nullable().optional(),
+                            mean: z.number().nullable().optional(),
+                            std: z.number().nullable().optional(),
+                            min: z.number().nullable().optional(),
+                            q25: z.number().nullable().optional(),
+                            median: z.number().nullable().optional(),
+                            q75: z.number().nullable().optional(),
+                            max: z.number().nullable().optional()
+                        }),
+                        // CategoricalStatistics
+                        z.object({
+                            count: z.number(),
+                            null_count: z.number(),
+                            unique_count: z.number().nullable().optional(),
+                            value_counts: z.record(z.string(), z.number()),
+                            top_values: z.array(
+                                z.object({
+                                    value: z.string(),
+                                    count: z.number(),
+                                    description: z.string().optional()
+                                })
+                            )
+                        })
+                    ]).optional()
                 }))
             })
         })

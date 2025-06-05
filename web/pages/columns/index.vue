@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ColumnDef } from '@tanstack/vue-table'
 import type { ColumnOrder } from '~/components/OrderingSelector.vue'
+import site from '~/model/site'
 
 // Fetch the model data
 const { data: modelData } = await useAsyncData('model', () => {
@@ -20,31 +21,34 @@ const tableData = computed(() => {
 
 // Default column configuration
 const defaultVisibleColumns = [
+  'count',
   'key',
   'label',
-  // 'sas_variable_name', // Excluded by default
   'section_name',
+  // 'sas_variable_name', // Excluded by default
   'type_of_variable',
   'question',
   'computed'
 ]
 
 const defaultColumnOrdering = [
+  { columnId: 'count', direction: 'desc' as const },
   { columnId: 'key', direction: 'asc' as const }
 ]
 
 // Default column display order
 const defaultColumnOrder = [
+  'count',
   'key',
   'label',
-  'sas_variable_name',
   'section_name',
+  'sas_variable_name',
   'type_of_variable',
   'question',
   'computed'
 ]
 
-// Ordering state - default to sorting by Column/Feature
+// Ordering state - default to sorting by Count (desc) then Column/Feature
 const columnOrdering = ref<ColumnOrder[]>([...defaultColumnOrdering])
 
 // Add or toggle column ordering when header is clicked
@@ -80,9 +84,15 @@ const createSortableHeader = (columnId: string, label: string) => {
       title: `${label} - ${sortStatus}`
     }, [
       h('span', label),
-      orderInfo && h('span', { class: 'text-xs' }, 
-        orderInfo.direction === 'asc' ? '↑' : '↓'
-      )
+      // Always show an icon, but style depends on sort status
+      h(resolveComponent('UIcon'), { 
+        name: orderInfo 
+          ? (orderInfo.direction === 'asc' ? 'i-heroicons-arrow-up' : 'i-heroicons-arrow-down')
+          : 'i-heroicons-arrows-up-down',
+        class: orderInfo 
+          ? 'w-3 h-3' 
+          : 'w-3 h-3 text-gray-300' // Light grey for unsorted columns
+      })
     ])
   }
 }
@@ -94,6 +104,7 @@ const columnMetadata = {
   sas_variable_name: 'SAS Variable',
   section_name: 'Section',
   type_of_variable: 'Type',
+  count: 'Response Count',
   question: 'Question',
   computed: 'Computed'
 }
@@ -157,6 +168,20 @@ const columns: ColumnDef<any>[] = [
   {
     accessorKey: 'label',
     header: createSortableHeader('label', 'Label'),
+    cell: ({ row }) => {
+      const label = row.original.label
+      if (!label) return '-'
+      
+      // For long labels, show truncated text with tooltip
+      if (label.length > site.columnSettings.labelTruncationLength) {
+        return h('span', { 
+          title: label, // Full text as tooltip
+          class: 'cursor-help'
+        }, label.substring(0, site.columnSettings.labelTruncationLength) + '...')
+      }
+      
+      return label
+    },
   },
   {
     accessorKey: 'sas_variable_name',
@@ -174,13 +199,29 @@ const columns: ColumnDef<any>[] = [
     cell: ({ row }) => row.original.type_of_variable || '-',
   },
   {
+    accessorKey: 'count',
+    header: createSortableHeader('count', 'Count'),
+    cell: ({ row }) => {
+      if (!row.original.statistics) return '-'
+      return row.original.statistics.count.toLocaleString()
+    },
+  },
+  {
     accessorKey: 'question',
     header: createSortableHeader('question', 'Question'),
     cell: ({ row }) => {
       const question = row.original.question
       if (!question) return '-'
-      // Truncate long questions for better density
-      return question.length > 80 ? question.substring(0, 80) + '...' : question
+      
+      // For long questions, show truncated text with tooltip
+      if (question.length > site.columnSettings.questionTruncationLength) {
+        return h('span', { 
+          title: question, // Full text as tooltip
+          class: 'cursor-help'
+        }, question.substring(0, site.columnSettings.questionTruncationLength) + '...')
+      }
+      
+      return question
     },
   },
   {
@@ -466,8 +507,16 @@ const sortedFilteredData = computed(() => {
   // Sort by each column in order
   sorted.sort((a, b) => {
     for (const order of columnOrdering.value) {
-      const aVal = a[order.columnId]
-      const bVal = b[order.columnId]
+      let aVal, bVal;
+      
+      // Special handling for nested properties like statistics.count
+      if (order.columnId === 'count') {
+        aVal = a.statistics?.count
+        bVal = b.statistics?.count
+      } else {
+        aVal = a[order.columnId]
+        bVal = b[order.columnId]
+      }
       
       // Handle null/undefined
       if (aVal == null && bVal == null) continue

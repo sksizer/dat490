@@ -111,6 +111,13 @@ const resetCodebook = () => {
             Value Lookup
           </a>
           <a 
+            v-if="columnData.statistics"
+            href="#statistics" 
+            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
+          >
+            Statistics
+          </a>
+          <a 
             href="#technical-details" 
             class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
           >
@@ -205,6 +212,105 @@ const resetCodebook = () => {
                 <span class="font-mono text-xs text-gray-600 min-w-[2.5rem]">{{ index + 1 }}</span>
               </template>
               <span class="text-gray-900 text-xs">{{ value.description }}</span>
+            </div>
+          </div>
+        </UCard>
+        
+        <!-- Statistics -->
+        <UCard id="statistics" v-if="columnData.statistics" :ui="{ body: { padding: 'p-2' }, header: { padding: 'p-2' } }">
+          <template #header>
+            <h2 class="text-base font-semibold">Statistics</h2>
+          </template>
+          
+          <div class="space-y-2">
+            <!-- Basic statistics (common to both types) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
+              <div>
+                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Count</h3>
+                <p class="text-gray-900 text-sm">{{ columnData.statistics.count.toLocaleString() }}</p>
+              </div>
+              
+              <div>
+                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Null Count</h3>
+                <p class="text-gray-900 text-sm">{{ columnData.statistics.null_count.toLocaleString() }}</p>
+              </div>
+              
+              <div v-if="columnData.statistics.unique_count !== undefined">
+                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Unique Values</h3>
+                <p class="text-gray-900 text-sm">{{ columnData.statistics.unique_count.toLocaleString() }}</p>
+              </div>
+            </div>
+            
+            <!-- Numeric statistics -->
+            <div v-if="'mean' in columnData.statistics" class="mt-3">
+              <h3 class="text-xs font-medium text-gray-700 mb-1">Numeric Distribution</h3>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                <div v-if="columnData.statistics.mean !== undefined && columnData.statistics.mean !== null">
+                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">Mean</h3>
+                  <p class="text-gray-900 text-sm">{{ columnData.statistics.mean.toLocaleString(undefined, {maximumFractionDigits: 4}) }}</p>
+                </div>
+                
+                <div v-if="columnData.statistics.median !== undefined && columnData.statistics.median !== null">
+                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">Median</h3>
+                  <p class="text-gray-900 text-sm">{{ columnData.statistics.median.toLocaleString(undefined, {maximumFractionDigits: 2}) }}</p>
+                </div>
+                
+                <div v-if="columnData.statistics.std !== undefined && columnData.statistics.std !== null">
+                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">Std Dev</h3>
+                  <p class="text-gray-900 text-sm">{{ columnData.statistics.std.toLocaleString(undefined, {maximumFractionDigits: 4}) }}</p>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-5 gap-2 mt-2">
+                <div v-if="columnData.statistics.min !== undefined && columnData.statistics.min !== null">
+                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">Min</h3>
+                  <p class="text-gray-900 text-sm">{{ columnData.statistics.min.toLocaleString(undefined, {maximumFractionDigits: 2}) }}</p>
+                </div>
+                
+                <div v-if="columnData.statistics.q25 !== undefined && columnData.statistics.q25 !== null">
+                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">25th %</h3>
+                  <p class="text-gray-900 text-sm">{{ columnData.statistics.q25.toLocaleString(undefined, {maximumFractionDigits: 2}) }}</p>
+                </div>
+                
+                <div v-if="columnData.statistics.median !== undefined && columnData.statistics.median !== null">
+                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">50th %</h3>
+                  <p class="text-gray-900 text-sm">{{ columnData.statistics.median.toLocaleString(undefined, {maximumFractionDigits: 2}) }}</p>
+                </div>
+                
+                <div v-if="columnData.statistics.q75 !== undefined && columnData.statistics.q75 !== null">
+                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">75th %</h3>
+                  <p class="text-gray-900 text-sm">{{ columnData.statistics.q75.toLocaleString(undefined, {maximumFractionDigits: 2}) }}</p>
+                </div>
+                
+                <div v-if="columnData.statistics.max !== undefined && columnData.statistics.max !== null">
+                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">Max</h3>
+                  <p class="text-gray-900 text-sm">{{ columnData.statistics.max.toLocaleString(undefined, {maximumFractionDigits: 2}) }}</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Categorical statistics -->
+            <div v-if="'top_values' in columnData.statistics && columnData.statistics.top_values.length > 0" class="mt-3">
+              <h3 class="text-xs font-medium text-gray-700 mb-1">Top Values</h3>
+              
+              <div class="space-y-0.5">
+                <div 
+                  v-for="(valueInfo, index) in columnData.statistics.top_values.slice(0, 10)" 
+                  :key="index"
+                  class="flex items-start gap-2 py-0.5 border-b border-gray-100 last:border-0 text-sm"
+                >
+                  <span class="font-mono text-xs text-gray-600 min-w-[6rem] whitespace-nowrap">
+                    {{ valueInfo.value }} ({{ valueInfo.count.toLocaleString() }})
+                  </span>
+                  <span v-if="valueInfo.description" class="text-gray-900 text-xs">
+                    {{ valueInfo.description }}
+                  </span>
+                </div>
+              </div>
+              <div v-if="columnData.statistics.top_values.length > 10" class="text-xs text-gray-500 mt-1">
+                Showing 10 of {{ columnData.statistics.top_values.length }} values
+              </div>
             </div>
           </div>
         </UCard>

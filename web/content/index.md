@@ -18,6 +18,16 @@ navigation:
 ### 2023 BRFSS Survey
 - [Site](https://www.cdc.gov/brfss/annual_data/annual_2023.html)
 - [Codebook](data/codebook_USCODE23_LLCP_021924.HTML) - details on data columns
+- [Column Explorer](/columns) - Browse all 350 columns with statistics and value distributions
+- Dataset Size: 433,323 respondents across all 50 states, DC, and territories
+
+## Data Features
+- Comprehensive health survey data from all US states and territories
+- Includes demographics, health behaviors, chronic conditions, and preventive health measures
+- Each column includes detailed statistical information:
+  - Distribution statistics (min, max, mean, median, etc.)
+  - Value frequency counts
+  - Data completeness metrics
 
 ## Code
 [Github](https://github.com/sksizer/dat490)

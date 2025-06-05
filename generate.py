@@ -1,23 +1,51 @@
 import os
 import json
+import pandas as pd
+import subprocess
+import glob
 
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, Union, Any, List
 import re
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List
 from bs4 import BeautifulSoup, PageElement
 
 
 class ValueDef(BaseModel):
     """Base model for representing value definitions in BRFSS survey data."""
     description: str
+    missing: bool = Field(default=False)
 
 
 class ValueRange(ValueDef):
     """Model for value definitions that have a numeric range (single value or range of values)."""
     start: int
     end: int
+
+
+class ColumnStatistics(BaseModel):
+    """Base model for statistical information about a column."""
+    count: int                          # Number of non-null values
+    null_count: int                     # Number of null values
+    unique_count: Optional[int] = None  # Number of unique values
+
+
+class NumericStatistics(ColumnStatistics):
+    """Statistical information for numeric columns."""
+    mean: Optional[float] = None        # Mean value
+    std: Optional[float] = None         # Standard deviation
+    min: Optional[float] = None         # Minimum value
+    q25: Optional[float] = None         # 25th percentile
+    median: Optional[float] = None      # Median value (50th percentile)
+    q75: Optional[float] = None         # 75th percentile
+    max: Optional[float] = None         # Maximum value
+
+
+class CategoricalStatistics(ColumnStatistics):
+    """Statistical information for categorical columns."""
+    value_counts: Dict[str, int]        # Count of each unique value
+    top_values: List[Dict[str, Any]]    # List of most common values with counts
 
 
 class ColumnMetadata(BaseModel):
@@ -37,8 +65,9 @@ class ColumnMetadata(BaseModel):
     type_of_variable: Optional[str] = None # "Num" or "Char"
     question_prologue: Optional[str] = None # Text before the actual question
     question: Optional[str] = None      # The actual question text from survey
-    value_lookup: list[ValueDef]        # Possible values for this variable
+    value_lookup: list[ValueDef | ValueRange]        # Possible values for this variable
     html_name: str                      # HTML anchor name for linking to codebook
+    statistics: Optional[Union[NumericStatistics, CategoricalStatistics]] = None  # Statistical information
 
 
 class SharedModel(BaseModel):
@@ -117,12 +146,13 @@ def get_value_lookup(table:PageElement) -> list[ValueDef]:
 
     return value_ranges
 
-def parse_codebook_html(html_path: Path) -> Dict[str, ColumnMetadata]:
+def parse_codebook_html(html_path: Path, df: Optional[pd.DataFrame] = None) -> Dict[str, ColumnMetadata]:
     """
     Parse the BRFSS codebook HTML file and extract column metadata.
 
     Args:
         html_path: Path to the HTML codebook file
+        df: Optional DataFrame containing BRFSS data for calculating statistics
 
     Returns:
         Dictionary mapping SAS variable names to ColumnMetadata objects
@@ -134,7 +164,6 @@ def parse_codebook_html(html_path: Path) -> Dict[str, ColumnMetadata]:
 
     # Find all div elements with class "branch"
     branches = soup.find_all('div', class_='branch')
-
 
     # The first one is the Codebook header table which we don't want
     branches = branches[1:]
@@ -213,6 +242,81 @@ def parse_codebook_html(html_path: Path) -> Dict[str, ColumnMetadata]:
                 if question_prologue and not question_prologue:
                     question_prologue = None
 
+                # Calculate statistics if DataFrame is provided and column exists
+                statistics = None
+                if df is not None and sas_variable_name in df.columns:
+                    series = df[sas_variable_name]
+                    
+                    # Common statistics for all columns
+                    count = series.count()
+                    null_count = series.isna().sum()
+                    unique_count = series.nunique()
+                    
+                    # Determine if column should be treated as numeric or categorical
+                    is_numeric = False
+                    if type_of_variable == "Num" and pd.api.types.is_numeric_dtype(series):
+                        try:
+                            # Calculate numeric statistics
+                            desc = series.describe()
+                            
+                            # Create numeric statistics
+                            statistics = NumericStatistics(
+                                count=count,
+                                null_count=null_count,
+                                unique_count=unique_count,
+                                mean=float(desc['mean']) if not pd.isna(desc['mean']) else None,
+                                std=float(desc['std']) if not pd.isna(desc['std']) else None,
+                                min=float(desc['min']) if not pd.isna(desc['min']) else None,
+                                q25=float(desc['25%']) if not pd.isna(desc['25%']) else None,
+                                median=float(desc['50%']) if not pd.isna(desc['50%']) else None,
+                                q75=float(desc['75%']) if not pd.isna(desc['75%']) else None,
+                                max=float(desc['max']) if not pd.isna(desc['max']) else None
+                            )
+                            is_numeric = True
+                        except Exception as e:
+                            print(f"Error calculating numeric stats for {sas_variable_name}: {e}")
+                            is_numeric = False
+                    
+                    # If not numeric or numeric calculation failed, treat as categorical
+                    if not is_numeric:
+                        try:
+                            # Get value counts (limited to top 20 for brevity)
+                            value_counts = series.value_counts().head(20).to_dict()
+                            
+                            # Convert all keys to strings for JSON compatibility
+                            value_counts_str = {str(k): int(v) for k, v in value_counts.items()}
+                            
+                            # Create list of top values with counts and descriptions
+                            top_values = []
+                            for value, count in value_counts.items():
+                                # Try to get description from value_lookup
+                                description = None
+                                value_lookup_list = get_value_lookup(table)
+                                if isinstance(value, (int, float)) and not pd.isna(value):
+                                    value_int = int(value) if hasattr(value, 'is_integer') and value.is_integer() else int(value) if isinstance(value, int) else None
+                                    # Search through ValueRange objects to find a match
+                                    for val_def in value_lookup_list:
+                                        if isinstance(val_def, ValueRange) and value_int is not None and val_def.start <= value_int <= val_def.end:
+                                            description = val_def.description
+                                            break
+                                
+                                top_values.append({
+                                    "value": str(value),
+                                    "count": int(count),
+                                    "description": description if description else "Unknown"
+                                })
+                            
+                            # Create categorical statistics
+                            statistics = CategoricalStatistics(
+                                count=count,
+                                null_count=null_count,
+                                unique_count=unique_count,
+                                value_counts=value_counts_str,
+                                top_values=top_values
+                            )
+                        except Exception as e:
+                            print(f"Error calculating categorical stats for {sas_variable_name}: {e}")
+
                 # Create ColumnMetadata object
                 metadata = ColumnMetadata(
                     label=label,
@@ -227,7 +331,8 @@ def parse_codebook_html(html_path: Path) -> Dict[str, ColumnMetadata]:
                     question=question,
                     value_lookup=get_value_lookup(table),
                     computed= True if section_name == 'Calculated Variables' or section_name == 'Calculated Race Variables' else False,
-                    html_name=html_name
+                    html_name=html_name,
+                    statistics=statistics
                 )
 
                 metadata_dict[sas_variable_name] = metadata
@@ -239,19 +344,82 @@ def parse_codebook_html(html_path: Path) -> Dict[str, ColumnMetadata]:
     return metadata_dict
 
 
+def convert_notebooks_to_html(output_dir: Path) -> List[str]:
+    """
+    Converts all Jupyter notebooks in the current directory to HTML and saves them to the specified output directory.
+    
+    Args:
+        output_dir: Path to the directory where HTML files will be saved
+        
+    Returns:
+        List of paths to the generated HTML files
+    """
+    # Ensure output directory exists
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Find all notebook files
+    notebook_files = glob.glob("*.ipynb")
+    generated_files = []
+    
+    if not notebook_files:
+        print("No Jupyter notebooks found in the current directory")
+        return generated_files
+    
+    print(f"Found {len(notebook_files)} Jupyter notebooks to convert")
+    
+    for notebook_file in notebook_files:
+        output_filename = os.path.splitext(os.path.basename(notebook_file))[0] + ".html"
+        output_path = output_dir / output_filename
+        
+        try:
+            print(f"Converting {notebook_file} to HTML...")
+            subprocess.run(
+                ["jupyter", "nbconvert", "--to", "html", "--no-input", 
+                 f"--output={output_path}", notebook_file],
+                check=True,
+                capture_output=True
+            )
+            generated_files.append(str(output_path))
+            print(f"Successfully generated {output_path}")
+        except subprocess.CalledProcessError as e:
+            print(f"Error converting {notebook_file}: {e}")
+            print(f"Command output: {e.stdout.decode()}")
+            print(f"Command error: {e.stderr.decode()}")
+        except Exception as e:
+            print(f"Unexpected error converting {notebook_file}: {e}")
+    
+    return generated_files
+
+
 if __name__ == '__main__':
     """
     Main script execution - parse BRFSS codebook and generate JSON files.
     
     This script:
-    1. Parses the BRFSS codebook HTML file to extract column metadata
-    2. Creates a SharedModel containing all column metadata
-    3. Generates two JSON files for the web application:
+    1. Loads the BRFSS data to calculate statistical information
+    2. Parses the BRFSS codebook HTML file to extract column metadata and add statistics
+    3. Creates a SharedModel containing all column metadata
+    4. Generates two JSON files for the web application:
        - schema.json: JSON schema definition for the data model
        - model.json: The actual data model with all column metadata
+    5. Converts all Jupyter notebooks to HTML for web viewing
     """
-    # Parse the codebook HTML file
-    column_metadatas = parse_codebook_html(Path('data', 'codebook_USCODE23_LLCP_021924.HTML'))
+    # Load the BRFSS data
+    try:
+        print("Loading BRFSS data...")
+        df = pd.read_parquet(Path('data', 'LLCP2023.parquet'))
+        print(f"Loaded data with {len(df)} rows and {len(df.columns)} columns")
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        print("Continuing without statistical information")
+        df = None
+    
+    # Parse the codebook HTML file with data for statistics
+    print("Parsing codebook and calculating statistics...")
+    column_metadatas = parse_codebook_html(
+        Path('data', 'codebook_USCODE23_LLCP_021924.HTML'),
+        df
+    )
 
     # Create the shared model with all column metadata
     model = SharedModel(
@@ -265,14 +433,28 @@ if __name__ == '__main__':
     web_data_path = web_data_dir / 'model.json'
 
     # Write JSON schema to file
+    print("Writing schema.json...")
     with open(web_data_schem_path, 'w') as f:
         f.write(json.dumps(model.model_json_schema(
             mode='serialization'
         )))
 
     # Write model data to file
+    print("Writing model.json...")
     with open(web_data_path, 'w') as f:
         f.write(model.model_dump_json())
 
     # Output summary of parsing results
     print(f"Successfully processed {len(column_metadatas.keys())} columns from BRFSS codebook")
+    
+    # Convert notebooks to HTML
+    print("\nConverting Jupyter notebooks to HTML...")
+    html_output_dir = Path('web', 'public', 'html', 'notebooks')
+    generated_files = convert_notebooks_to_html(html_output_dir)
+    
+    if generated_files:
+        print(f"\nSuccessfully generated {len(generated_files)} HTML files:")
+        for html_file in generated_files:
+            print(f" - {html_file}")
+    else:
+        print("No HTML files were generated from notebooks")
