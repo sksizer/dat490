@@ -18,10 +18,11 @@ class ColumnMetadata(BaseModel):
     module_number: Optional[int] = None  # Added module_number field
     question_number: Optional[int] = None
     column: Optional[str] = None  # Can be a range like "1-2" or single number
-    type_of_variable: Optional[str] = None  # "Num" or "Char"
+    type_of_variable: Optional[str] = None  # "Num" or "Char".first().name
     question_prologue: Optional[str] = None
     question: Optional[str] = None
     value_lookup: Optional[dict[None | int, str]] = None # This is a dictionary that returns the textual
+    html_name: str
 
 
 class SharedModel(BaseModel):
@@ -96,12 +97,15 @@ def parse_codebook_html(html_path: Path) -> Dict[str, ColumnMetadata]:
     # Find all div elements with class "branch"
     branches = soup.find_all('div', class_='branch')
 
+
     # The first one is the Codebook header table which we don't want
     branches = branches[1:]
 
     metadata_dict = {}
 
     for branch in branches:
+        html_name = branch.find('a')['name']
+        print('html_name' + html_name)
         # Find the table with summary="Procedure Report: Report"
         table = branch.find('table', attrs={'summary': 'Procedure Report: Report'})
         if not table:
@@ -184,7 +188,8 @@ def parse_codebook_html(html_path: Path) -> Dict[str, ColumnMetadata]:
                     question_prologue=question_prologue,
                     question=question,
                     value_lookup=get_value_lookup(table),
-                    computed= True if section_name == 'Calculated Variables' or section_name == 'Calculated Race Variables' else False
+                    computed= True if section_name == 'Calculated Variables' or section_name == 'Calculated Race Variables' else False,
+                    html_name=html_name
                 )
 
                 metadata_dict[sas_variable_name] = metadata
