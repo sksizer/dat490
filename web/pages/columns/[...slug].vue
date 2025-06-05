@@ -104,6 +104,13 @@ const resetCodebook = () => {
             Valid Values
           </a>
           <a 
+            v-if="columnData.value_lookup && columnData.value_lookup.length > 0"
+            href="#value-lookup" 
+            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
+          >
+            Value Lookup
+          </a>
+          <a 
             href="#technical-details" 
             class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
           >
@@ -171,6 +178,33 @@ const resetCodebook = () => {
             >
               <span class="font-mono text-xs text-gray-600 min-w-[2.5rem]">{{ value }}</span>
               <span class="text-gray-900 text-xs">{{ label }}</span>
+            </div>
+          </div>
+        </UCard>
+        
+        <!-- Value Lookup -->
+        <UCard id="value-lookup" v-if="columnData.value_lookup && columnData.value_lookup.length > 0" :ui="{ body: { padding: 'p-2' }, header: { padding: 'p-2' } }">
+          <template #header>
+            <h2 class="text-base font-semibold">Value Lookup</h2>
+          </template>
+          
+          <div class="space-y-0.5">
+            <div 
+              v-for="(value, index) in columnData.value_lookup" 
+              :key="index"
+              class="flex items-start gap-2 py-0.5 border-b border-gray-100 last:border-0 text-sm"
+            >
+              <!-- ValueRange has start and end properties -->
+              <template v-if="'start' in value && 'end' in value">
+                <span class="font-mono text-xs text-gray-600 min-w-[6rem]">
+                  {{ value.start === value.end ? value.start : `${value.start} - ${value.end}` }}
+                </span>
+              </template>
+              <!-- ValueDef has only description -->
+              <template v-else>
+                <span class="font-mono text-xs text-gray-600 min-w-[2.5rem]">{{ index + 1 }}</span>
+              </template>
+              <span class="text-gray-900 text-xs">{{ value.description }}</span>
             </div>
           </div>
         </UCard>
