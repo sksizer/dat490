@@ -44,9 +44,14 @@ const handleHeaderClick = (columnId: string) => {
 const createSortableHeader = (columnId: string, label: string) => {
   return () => {
     const orderInfo = columnOrdering.value.find(o => o.columnId === columnId)
+    const sortStatus = orderInfo 
+      ? `Sorted ${orderInfo.direction === 'asc' ? 'ascending' : 'descending'}`
+      : 'Click to sort'
+    
     return h('button', {
       class: 'flex items-center gap-1 hover:text-gray-900 transition-colors',
-      onClick: () => handleHeaderClick(columnId)
+      onClick: () => handleHeaderClick(columnId),
+      title: `${label} - ${sortStatus}`
     }, [
       h('span', label),
       orderInfo && h('span', { class: 'text-xs' }, 
@@ -69,6 +74,55 @@ const columnMetadata = {
 
 // Define table columns
 const columns: ColumnDef<any>[] = [
+  {
+    accessorKey: '_navigation',
+    header: () => h('div', { 
+      title: 'Open column details in new tab',
+      class: 'flex items-center justify-center'
+    }, [
+      h(resolveComponent('UIcon'), { 
+        name: 'i-heroicons-arrow-top-right-on-square',
+        class: 'w-4 h-4 text-gray-500'
+      })
+    ]),
+    cell: ({ row }) => h(resolveComponent('NuxtLink'), {
+      to: `/columns/${row.original.sas_variable_name || row.original.key}`,
+      target: '_blank',
+      class: 'inline-flex items-center justify-center p-1 rounded hover:bg-gray-100 transition-colors',
+      title: `View details for ${row.original.label || row.original.key}`
+    }, () => h(resolveComponent('UIcon'), { 
+      name: 'i-heroicons-arrow-top-right-on-square',
+      class: 'w-4 h-4 text-gray-600'
+    })),
+  },
+  {
+    accessorKey: '_selection',
+    header: () => {
+      return h('div', { class: 'relative inline-block' }, [
+        h('input', {
+          type: 'checkbox',
+          checked: allVisibleSelected.value,
+          indeterminate: someVisibleSelected.value,
+          onChange: (e: Event) => {
+            const target = e.target as HTMLInputElement
+            if (target.checked) {
+              selectAllVisible()
+            } else {
+              deselectAll()
+            }
+          },
+          title: 'Select columns for Pandas DataFrame extraction\n\n• Check to select all visible columns\n• Uncheck to deselect all\n• Selected columns will appear in the Pandas extraction code above',
+          class: 'rounded border-gray-300 cursor-pointer'
+        })
+      ])
+    },
+    cell: ({ row }) => h('input', {
+      type: 'checkbox',
+      checked: selectedRows.value.has(row.original.key),
+      onChange: () => toggleRowSelection(row.original.key),
+      class: 'rounded border-gray-300'
+    }),
+  },
   {
     accessorKey: 'key',
     header: createSortableHeader('key', 'Column/Feature'),
@@ -115,6 +169,9 @@ const columns: ColumnDef<any>[] = [
 // Search state
 const search = ref('')
 
+// Selection state - tracks which row keys are selected
+const selectedRows = ref<Set<string>>(new Set())
+
 // Filtered data based on search
 const filteredData = computed(() => {
   if (!search.value) return tableData.value
@@ -129,21 +186,82 @@ const filteredData = computed(() => {
   )
 })
 
-// Generate pandas snippet based on filtered columns
+// Get selected rows that are currently visible (filtered)
+const selectedVisibleRows = computed(() => {
+  const visibleKeys = new Set(filteredData.value.map(item => item.key))
+  return Array.from(selectedRows.value).filter(key => visibleKeys.has(key))
+})
+
+// Watch for filter changes and deselect hidden rows
+watch(filteredData, (newFilteredData) => {
+  const visibleKeys = new Set(newFilteredData.map(item => item.key))
+  const currentSelected = Array.from(selectedRows.value)
+  
+  // Remove any selected rows that are no longer visible
+  currentSelected.forEach(key => {
+    if (!visibleKeys.has(key)) {
+      selectedRows.value.delete(key)
+    }
+  })
+})
+
+// Helper functions for selection
+const toggleRowSelection = (key: string) => {
+  if (selectedRows.value.has(key)) {
+    selectedRows.value.delete(key)
+  } else {
+    selectedRows.value.add(key)
+  }
+}
+
+const selectAllVisible = () => {
+  filteredData.value.forEach(item => {
+    selectedRows.value.add(item.key)
+  })
+}
+
+const deselectAll = () => {
+  selectedRows.value.clear()
+}
+
+// Check if all visible rows are selected
+const allVisibleSelected = computed(() => {
+  if (filteredData.value.length === 0) return false
+  return filteredData.value.every(item => selectedRows.value.has(item.key))
+})
+
+// Check if some but not all visible rows are selected
+const someVisibleSelected = computed(() => {
+  if (filteredData.value.length === 0) return false
+  const selectedCount = filteredData.value.filter(item => selectedRows.value.has(item.key)).length
+  return selectedCount > 0 && selectedCount < filteredData.value.length
+})
+
+// Generate pandas snippet based on selected columns
 const pandasSnippet = computed(() => {
-  const columnKeys = filteredData.value.map(item => `'${item.key}'`)
+  // Use selected visible rows, or fall back to all filtered data if none selected
+  const rowsToUse = selectedVisibleRows.value.length > 0 
+    ? filteredData.value.filter(item => selectedVisibleRows.value.includes(item.key))
+    : filteredData.value
+    
+  const columnKeys = rowsToUse.map(item => `'${item.key}'`)
   if (columnKeys.length === 0) return ''
+  
+  // Add comment about selection
+  const selectionComment = selectedVisibleRows.value.length > 0 
+    ? `# Extract ${columnKeys.length} selected columns from DataFrame`
+    : `# Extract ${columnKeys.length} columns from DataFrame (select specific columns for custom extraction)`
   
   // Format for readability - if more than 5 columns, use multiline format
   if (columnKeys.length > 5) {
     const formattedColumns = columnKeys.map(col => `    ${col}`).join(',\n')
-    return `# Extract ${columnKeys.length} columns from DataFrame
+    return `${selectionComment}
 selected_columns = [
 ${formattedColumns}
 ]
 df_filtered = df[selected_columns]`
   } else {
-    return `# Extract ${columnKeys.length} columns from DataFrame
+    return `${selectionComment}
 selected_columns = [${columnKeys.join(', ')}]
 df_filtered = df[selected_columns]`
   }
@@ -164,7 +282,12 @@ const isSnippetExpanded = ref(false)
 
 // Generate truncated version of the snippet
 const truncatedSnippet = computed(() => {
-  const columnKeys = filteredData.value.map(item => `'${item.key}'`)
+  // Use selected visible rows, or fall back to all filtered data if none selected
+  const rowsToUse = selectedVisibleRows.value.length > 0 
+    ? filteredData.value.filter(item => selectedVisibleRows.value.includes(item.key))
+    : filteredData.value
+    
+  const columnKeys = rowsToUse.map(item => `'${item.key}'`)
   if (columnKeys.length === 0) return ''
   
   // For truncated version, show first 3 columns
@@ -189,19 +312,23 @@ const visibleColumns = ref([
   'computed'
 ])
 
-// Filter columns based on visibility
+// Filter columns based on visibility - always include _navigation and _selection columns
 const visibleTableColumns = computed(() => {
   return columns.filter(col => 
+    col.accessorKey === '_navigation' || 
+    col.accessorKey === '_selection' || 
     visibleColumns.value.includes(col.accessorKey as string)
   )
 })
 
-// Columns with string headers for selector components
+// Columns with string headers for selector components - exclude _navigation and _selection columns
 const columnsForSelectors = computed(() => {
-  return columns.map(col => ({
-    accessorKey: col.accessorKey,
-    header: columnMetadata[col.accessorKey as keyof typeof columnMetadata]
-  }))
+  return columns
+    .filter(col => col.accessorKey !== '_selection' && col.accessorKey !== '_navigation')
+    .map(col => ({
+      accessorKey: col.accessorKey,
+      header: columnMetadata[col.accessorKey as keyof typeof columnMetadata]
+    }))
 })
 
 // Apply sorting to filtered data
@@ -243,6 +370,7 @@ const sortedFilteredData = computed(() => {
 <template>
   <div class="container mx-auto py-8">
     <h1 class="text-3xl font-bold mb-6">BRFSS Model Columns</h1>
+    <UContainer id="bfrssLinks">Links: <ul><li><ULink to='/html/codebook_USCODE23_LLCP_021924.HTML' target="_blank">Codebook</ULink></li></ul></UContainer>
     
     <ModelMetadataSummary :model-data="modelData" />
     
@@ -260,10 +388,23 @@ const sortedFilteredData = computed(() => {
     <div v-if="pandasSnippet" class="mb-6">
       <UCard>
         <div class="flex items-center justify-between mb-2">
-          <h3 class="text-sm font-semibold text-gray-700">Pandas DataFrame Extraction</h3>
+          <div class="flex items-center gap-4">
+            <h3 class="text-sm font-semibold text-gray-700">Pandas DataFrame Extraction</h3>
+            <div v-if="selectedVisibleRows.length > 0" class="flex items-center gap-2">
+              <UBadge color="primary" variant="soft">
+                {{ selectedVisibleRows.length }} column{{ selectedVisibleRows.length !== 1 ? 's' : '' }} selected
+              </UBadge>
+              <button
+                @click="deselectAll"
+                class="text-xs text-gray-500 hover:text-gray-700"
+              >
+                Clear selection
+              </button>
+            </div>
+          </div>
           <div class="flex items-center gap-2">
             <UButton 
-              v-if="filteredData.length > 3"
+              v-if="filteredData.length > 3 || selectedVisibleRows.length > 3"
               @click="isSnippetExpanded = !isSnippetExpanded" 
               variant="ghost" 
               size="sm"
@@ -285,19 +426,28 @@ const sortedFilteredData = computed(() => {
       </UCard>
     </div>
 
-    <!-- Column Selector -->
-    <ColumnSelector 
-      v-model="visibleColumns"
-      :columns="columnsForSelectors"
-    />
-
     <!-- Ordering Selector -->
     <OrderingSelector
       v-model="columnOrdering"
       :columns="columnsForSelectors"
     />
 
+    <!-- Column Selector -->
+    <ColumnSelector 
+      v-model="visibleColumns"
+      :columns="columnsForSelectors"
+    />
+
     <UCard>
+      <div v-if="filteredData.length > 0" class="flex items-center justify-between mb-4 text-sm text-gray-600">
+        <span>
+          Showing {{ filteredData.length }} of {{ tableData.length }} columns
+        </span>
+        <span v-if="selectedVisibleRows.length > 0" class="font-medium text-primary-600">
+          {{ selectedVisibleRows.length }} selected for extraction
+        </span>
+      </div>
+      
       <UTable
         :key="`${visibleColumns.join(',')}-${columnOrdering.map(o => `${o.columnId}:${o.direction}`).join(',')}`"
         :data="sortedFilteredData"

@@ -24,7 +24,8 @@ export default defineContentConfig({
                     type_of_variable: z.string().nullable().optional(),
                     question_prologue: z.string().nullable().optional(),
                     question: z.string().nullable().optional(),
-                    value_lookup: z.record(z.string(), z.string())
+                    value_lookup: z.record(z.string(), z.string()),
+                    html_name: z.string()
                 }))
             })
         })
