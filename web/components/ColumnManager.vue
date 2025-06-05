@@ -6,6 +6,9 @@ interface Props {
   columnOrdering: ColumnOrder[]
   columns: Array<{ accessorKey?: string; header?: string }>
   columnDisplayOrder: string[]
+  totalFeatures: number
+  filteredFeatures: number
+  selectedFeatures: number
 }
 
 const props = defineProps<Props>()
@@ -42,34 +45,47 @@ const activeSortCount = computed(() => props.columnOrdering.length)
 </script>
 
 <template>
-  <div>
-    <!-- Control buttons -->
-    <div class="flex items-center justify-end gap-2">
-      <span class="text-sm text-gray-600">
-        {{ visibleColumnCount }} visible
-        <span v-if="activeSortCount > 0">, {{ activeSortCount }} sorted</span>
-      </span>
-      <UButton
-        @click="resetToDefaults"
-        variant="ghost"
-        size="xs"
-        icon="i-heroicons-arrow-path"
-        title="Reset to default columns and sorting"
-      >
-        Reset
-      </UButton>
-      <UButton
-        @click="isExpanded = !isExpanded"
-        variant="ghost"
-        size="xs"
-        :icon="isExpanded ? 'i-heroicons-chevron-up' : 'i-heroicons-chevron-down'"
-      >
-        {{ isExpanded ? 'Hide' : 'Manage' }}
-      </UButton>
+  <div class="w-full">
+    <!-- Control header -->
+    <div class="flex items-center justify-between w-full">
+      <!-- Left side: feature count information -->
+      <div class="flex items-center gap-3 text-xs text-gray-600">
+        <span>
+          Showing {{ filteredFeatures }} of {{ totalFeatures }} features
+        </span>
+        <span v-if="selectedFeatures > 0" class="font-medium text-primary-600 text-xs">
+          {{ selectedFeatures }} selected for extraction
+        </span>
+      </div>
+      
+      <!-- Right side: controls -->
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-gray-600">
+          {{ visibleColumnCount }} visible
+          <span v-if="activeSortCount > 0">, {{ activeSortCount }} sorted</span>
+        </span>
+        <UButton
+          @click="resetToDefaults"
+          variant="ghost"
+          size="xs"
+          icon="i-heroicons-arrow-path"
+          title="Reset to default columns and sorting"
+        >
+          Reset
+        </UButton>
+        <UButton
+          @click="isExpanded = !isExpanded"
+          variant="ghost"
+          size="xs"
+          :icon="isExpanded ? 'i-heroicons-chevron-up' : 'i-heroicons-chevron-down'"
+        >
+          {{ isExpanded ? 'Hide' : 'Manage' }}
+        </UButton>
+      </div>
     </div>
     
     <!-- Expanded management section -->
-    <div v-if="isExpanded" class="mt-2 pt-2 border-t border-gray-200">
+    <div v-if="isExpanded" class="mt-2 pt-2 border-t border-gray-200 w-full">
       <div class="flex flex-col gap-6 w-full">
         <!-- Column Display Manager -->
         <div class="w-full">
