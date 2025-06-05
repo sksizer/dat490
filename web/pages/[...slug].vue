@@ -1,11 +1,6 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  $END$
+  <MarkdownPage />
 </template>
-
-<style scoped>
-
-</style>
+<script setup lang="ts">
+import MarkdownPage from "~/components/MarkdownPage.vue";
+</script>

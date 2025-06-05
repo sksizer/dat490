@@ -2,6 +2,10 @@ import { defineCollection, defineContentConfig, z } from '@nuxt/content'
 
 export default defineContentConfig({
     collections: {
+        docs: defineCollection({
+            source: '*.md',
+            type: 'page'
+        }),
         columns: defineCollection({
             // Load every file inside the `content` directory
             source: 'model.json',

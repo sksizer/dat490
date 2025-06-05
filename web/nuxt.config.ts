@@ -1,8 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
+  app: {
+  },
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
-  css: ['~/assets/css/main.css'],
   modules: [
     '@nuxt/content',
     '@nuxt/eslint',
@@ -11,6 +13,26 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/scripts',
     '@nuxt/test-utils',
-    '@nuxt/ui'
-  ]
+    '@nuxt/ui',
+    '@nuxtjs/tailwindcss'
+  ],
+  css: ['~/assets/css/main.css'],
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ],
+    build: {
+      rollupOptions: {
+        output: {
+          assetFileNames: 'my-nuxt-site/assets/[name]-[hash][extname]'
+        }
+      }
+    }
+  },
+  tailwindcss: {
+    configPath: '~/tailwind.config.js',
+    exposeConfig: false,
+    cssPath: '~/assets/css/main.css',
+    viewer: true,
+  },
 })
