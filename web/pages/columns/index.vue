@@ -535,25 +535,28 @@ const resetColumnsToDefault = () => {
     </div>
 
     <UCard :ui="{ body: { padding: 'p-3' } }">
-      <!-- Table controls integrated into header -->
-      <div class="border-b border-gray-200 pb-3 mb-3">
-        <ColumnManager
-          :visible-columns="visibleColumns"
-          :column-ordering="columnOrdering"
-          :columns="columnsForSelectors"
-          @update:visible-columns="visibleColumns = $event"
-          @update:column-ordering="columnOrdering = $event"
-          @reset="resetColumnsToDefault"
-        />
-      </div>
-
-      <div v-if="filteredData.length > 0" class="flex items-center justify-between mb-2 text-sm text-gray-600">
-        <span>
-          Showing {{ filteredData.length }} of {{ tableData.length }} features
-        </span>
-        <span v-if="selectedVisibleRows.length > 0" class="font-medium text-primary-600">
-          {{ selectedVisibleRows.length }} selected for extraction
-        </span>
+      <!-- Combined header with stats and controls -->
+      <div v-if="filteredData.length > 0" class="mb-3">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-4 text-sm text-gray-600">
+            <span>
+              Showing {{ filteredData.length }} of {{ tableData.length }} features
+            </span>
+            <span v-if="selectedVisibleRows.length > 0" class="font-medium text-primary-600">
+              {{ selectedVisibleRows.length }} selected for extraction
+            </span>
+          </div>
+          
+          <!-- Column controls -->
+          <ColumnManager
+            :visible-columns="visibleColumns"
+            :column-ordering="columnOrdering"
+            :columns="columnsForSelectors"
+            @update:visible-columns="visibleColumns = $event"
+            @update:column-ordering="columnOrdering = $event"
+            @reset="resetColumnsToDefault"
+          />
+        </div>
       </div>
       
       <UTable

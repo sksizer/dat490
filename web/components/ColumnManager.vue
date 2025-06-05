@@ -82,75 +82,30 @@ const resetToDefaults = () => {
 </script>
 
 <template>
-  <div class="mb-4">
-    <div class="flex items-center justify-between">
-      <!-- Left side: Visible column badges -->
-      <div class="flex items-center gap-2 flex-wrap flex-1">
-        <span class="text-sm font-medium text-gray-700 mr-2">Columns:</span>
-        <UBadge 
-          v-for="columnId in visibleColumns" 
-          :key="columnId"
-          color="primary"
-          variant="soft"
-          class="flex items-center gap-1"
-        >
-          {{ getColumnLabel(columnId) }}
-          
-          <!-- Sort indicator/toggle -->
-          <UButton
-            @click.stop="cycleSorting(columnId)"
-            variant="ghost"
-            size="2xs"
-            :padded="false"
-            :icon="getColumnSort(columnId)?.direction === 'asc' ? 'i-heroicons-arrow-up' : 
-                   getColumnSort(columnId)?.direction === 'desc' ? 'i-heroicons-arrow-down' : 
-                   'i-heroicons-arrows-up-down'"
-            :class="[
-              'ml-1 rounded',
-              getColumnSort(columnId) ? 'text-primary-600 hover:bg-primary-100' : 'text-gray-400 hover:bg-gray-200'
-            ]"
-            :title="getColumnSort(columnId)?.direction === 'asc' ? 'Sorted ascending - click for descending' :
-                    getColumnSort(columnId)?.direction === 'desc' ? 'Sorted descending - click to remove sort' :
-                    'Click to sort ascending'"
-          />
-          
-          <!-- Remove button -->
-          <UButton
-            @click.stop="removeColumn(columnId)"
-            variant="ghost"
-            size="2xs"
-            :padded="false"
-            icon="i-heroicons-x-mark"
-            class="ml-1 hover:bg-gray-200 rounded"
-            title="Hide column"
-          />
-        </UBadge>
-      </div>
-      
-      <!-- Right side: Controls -->
-      <div class="flex items-center gap-2">
-        <span class="text-xs text-gray-500">
-          {{ visibleColumnCount }} visible
-          <span v-if="activeSortCount > 0">, {{ activeSortCount }} sorted</span>
-        </span>
-        <UButton
-          @click="resetToDefaults"
-          variant="ghost"
-          size="sm"
-          icon="i-heroicons-arrow-path"
-          title="Reset to default columns and sorting"
-        >
-          Reset
-        </UButton>
-        <UButton
-          @click="isExpanded = !isExpanded"
-          variant="ghost"
-          size="sm"
-          :icon="isExpanded ? 'i-heroicons-chevron-up' : 'i-heroicons-chevron-down'"
-        >
-          {{ isExpanded ? 'Hide' : 'Manage' }}
-        </UButton>
-      </div>
+  <div>
+    <!-- Control buttons -->
+    <div class="flex items-center justify-end gap-2">
+      <span class="text-sm text-gray-600">
+        {{ visibleColumnCount }} visible
+        <span v-if="activeSortCount > 0">, {{ activeSortCount }} sorted</span>
+      </span>
+      <UButton
+        @click="resetToDefaults"
+        variant="ghost"
+        size="sm"
+        icon="i-heroicons-arrow-path"
+        title="Reset to default columns and sorting"
+      >
+        Reset
+      </UButton>
+      <UButton
+        @click="isExpanded = !isExpanded"
+        variant="ghost"
+        size="sm"
+        :icon="isExpanded ? 'i-heroicons-chevron-up' : 'i-heroicons-chevron-down'"
+      >
+        {{ isExpanded ? 'Hide' : 'Manage' }}
+      </UButton>
     </div>
     
     <!-- Expanded column management -->
