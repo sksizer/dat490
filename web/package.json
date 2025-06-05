@@ -8,6 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "netlify_generate" : "npm install && nuxt generate",
     "update_site": "bun run generate && cp -R .output/public/ ../docs/"
   },
   "dependencies": {
