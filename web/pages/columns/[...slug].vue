@@ -59,11 +59,11 @@ const resetCodebook = () => {
 </script>
 
 <template>
-  <div class="container mx-auto py-8">
+  <div class="container mx-auto py-4">
     <!-- Back button -->
     <NuxtLink 
       to="/columns" 
-      class="inline-flex items-center gap-2 mb-6 text-gray-600 hover:text-gray-900 transition-colors"
+      class="inline-flex items-center gap-2 mb-4 text-gray-600 hover:text-gray-900 transition-colors"
     >
       <UIcon name="i-heroicons-arrow-left" />
       Back to columns
@@ -71,8 +71,8 @@ const resetCodebook = () => {
     
     <div v-if="columnData" id="top">
       <!-- Header -->
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold mb-2">{{ columnData.label || columnData.key }}</h1>
+      <div class="mb-5">
+        <h1 class="text-2xl font-bold mb-1">{{ columnData.label || columnData.key }}</h1>
         <div class="flex items-center gap-4 text-gray-600">
           <span class="font-mono text-sm">{{ columnData.key }}</span>
           <span v-if="columnData.sas_variable_name" class="text-sm">
@@ -82,8 +82,8 @@ const resetCodebook = () => {
       </div>
       
       <!-- Table of Contents -->
-      <div class="mb-8 sticky top-0 z-10 bg-white border-b border-gray-200">
-        <nav class="flex items-center gap-6 py-4 overflow-x-auto">
+      <div class="mb-5 sticky top-0 z-10 bg-white border-b border-gray-200">
+        <nav class="flex items-center gap-6 py-3 overflow-x-auto">
           <a 
             href="#top" 
             class="text-sm font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
@@ -120,20 +120,20 @@ const resetCodebook = () => {
       </div>
       
       <!-- Main details -->
-      <div class="grid gap-6">
+      <div class="grid gap-4">
         <!-- Basic Information -->
-        <UCard id="basic-information">
+        <UCard id="basic-information" :ui="{ body: { padding: 'p-3' }, header: { padding: 'p-3' } }">
           <template #header>
             <h2 class="text-lg font-semibold">Basic Information</h2>
           </template>
           
-          <div class="space-y-4">
+          <div class="space-y-2">
             <div v-if="columnData.question">
               <h3 class="text-sm font-medium text-gray-700 mb-1">Question</h3>
               <p class="text-gray-900">{{ columnData.question }}</p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
                 <h3 class="text-sm font-medium text-gray-700 mb-1">Section</h3>
                 <p class="text-gray-900">{{ columnData.section_name || 'Not specified' }}</p>
@@ -158,30 +158,30 @@ const resetCodebook = () => {
         </UCard>
         
         <!-- Valid Values -->
-        <UCard id="valid-values" v-if="columnData.valid_values && Object.keys(columnData.valid_values).length > 0">
+        <UCard id="valid-values" v-if="columnData.valid_values && Object.keys(columnData.valid_values).length > 0" :ui="{ body: { padding: 'p-3' }, header: { padding: 'p-3' } }">
           <template #header>
             <h2 class="text-lg font-semibold">Valid Values</h2>
           </template>
           
-          <div class="space-y-2">
+          <div class="space-y-1">
             <div 
               v-for="(label, value) in columnData.valid_values" 
               :key="value"
-              class="flex items-start gap-3 py-2 border-b border-gray-100 last:border-0"
+              class="flex items-start gap-3 py-1 border-b border-gray-100 last:border-0"
             >
               <span class="font-mono text-sm text-gray-600 min-w-[3rem]">{{ value }}</span>
-              <span class="text-gray-900">{{ label }}</span>
+              <span class="text-gray-900 text-sm">{{ label }}</span>
             </div>
           </div>
         </UCard>
         
         <!-- Technical Details -->
-        <UCard id="technical-details">
+        <UCard id="technical-details" :ui="{ body: { padding: 'p-3' }, header: { padding: 'p-3' } }">
           <template #header>
             <h2 class="text-lg font-semibold">Technical Details</h2>
           </template>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div v-if="columnData.sas_type">
               <h3 class="text-sm font-medium text-gray-700 mb-1">SAS Type</h3>
               <p class="text-gray-900 font-mono text-sm">{{ columnData.sas_type }}</p>
@@ -194,18 +194,18 @@ const resetCodebook = () => {
             
             <div v-if="columnData.tags">
               <h3 class="text-sm font-medium text-gray-700 mb-1">Tags</h3>
-              <p class="text-gray-900">{{ formatArray(columnData.tags) }}</p>
+              <p class="text-gray-900 text-sm">{{ formatArray(columnData.tags) }}</p>
             </div>
             
             <div v-if="columnData.column_order !== undefined">
               <h3 class="text-sm font-medium text-gray-700 mb-1">Column Order</h3>
-              <p class="text-gray-900">{{ columnData.column_order }}</p>
+              <p class="text-gray-900 text-sm">{{ columnData.column_order }}</p>
             </div>
           </div>
         </UCard>
         
         <!-- Codebook -->
-        <UCard id="codebook" v-if="columnData.html_name">
+        <UCard id="codebook" v-if="columnData.html_name" :ui="{ body: { padding: 'p-2' }, header: { padding: 'p-3' } }">
           <template #header>
             <div class="flex items-center justify-between">
               <h2 class="text-lg font-semibold">Codebook</h2>
@@ -231,7 +231,7 @@ const resetCodebook = () => {
             </div>
           </template>
           
-          <div class="bg-gray-50 rounded-lg p-2">
+          <div class="bg-gray-50 rounded-lg p-1">
             <iframe
               ref="codebookIframe"
               :src="`/html/codebook_USCODE23_LLCP_021924.HTML#${columnData.html_name}`"

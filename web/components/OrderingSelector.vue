@@ -40,7 +40,7 @@ const toggleDirection = (columnId: string) => {
 </script>
 
 <template>
-  <UCard v-if="modelValue.length > 0" class="mb-4">
+  <UCard v-if="modelValue.length > 0" class="mb-4" :ui="{ body: { padding: 'p-3' } }">
     <div class="flex items-center gap-2 flex-wrap">
       <span class="text-sm font-medium text-gray-700 mr-2">Sort by:</span>
       

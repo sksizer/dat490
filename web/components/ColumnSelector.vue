@@ -48,7 +48,7 @@ const getColumnLabel = (columnId: string) => {
 </script>
 
 <template>
-  <UCard class="mb-4">
+  <UCard class="mb-4" :ui="{ body: { padding: 'p-3' } }">
     <div class="flex items-center justify-between">
       <!-- Left side: Column badges -->
       <div class="flex items-center gap-2 flex-wrap flex-1">
@@ -84,12 +84,12 @@ const getColumnLabel = (columnId: string) => {
     </div>
     
     <!-- Expanded checklist -->
-    <div v-if="isExpanded" class="mt-4 pt-4 border-t border-gray-200">
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+    <div v-if="isExpanded" class="mt-3 pt-3 border-t border-gray-200">
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
         <label 
           v-for="option in columnOptions" 
           :key="option.id"
-          class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded"
+          class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded"
         >
           <UCheckbox
             :model-value="modelValue.includes(option.id)"

@@ -368,27 +368,27 @@ const sortedFilteredData = computed(() => {
 </script>
 
 <template>
-  <div class="container mx-auto py-8">
-    <h1 class="text-3xl font-bold mb-6">BRFSS Model Columns</h1>
+  <div class="container mx-auto py-4">
+    <h1 class="text-2xl font-bold mb-3">BRFSS Model Columns</h1>
     <UContainer id="bfrssLinks">Links: <ul><li><ULink to='/html/codebook_USCODE23_LLCP_021924.HTML' target="_blank">Codebook</ULink></li></ul></UContainer>
     
     <ModelMetadataSummary :model-data="modelData" />
     
-    <div class="mb-6">
+    <div class="mb-4">
       <UInput 
         v-model="search" 
         placeholder="Search columns..." 
         icon="i-heroicons-magnifying-glass"
-        size="lg"
+        size="md"
         class="max-w-md"
       />
     </div>
 
     <!-- Pandas DataFrame Snippet -->
-    <div v-if="pandasSnippet" class="mb-6">
-      <UCard>
-        <div class="flex items-center justify-between mb-2">
-          <div class="flex items-center gap-4">
+    <div v-if="pandasSnippet" class="mb-4">
+      <UCard :ui="{ body: { padding: 'p-3' } }">
+        <div class="flex items-center justify-between mb-1">
+          <div class="flex items-center gap-3">
             <h3 class="text-sm font-semibold text-gray-700">Pandas DataFrame Extraction</h3>
             <div v-if="selectedVisibleRows.length > 0" class="flex items-center gap-2">
               <UBadge color="primary" variant="soft">
@@ -422,7 +422,7 @@ const sortedFilteredData = computed(() => {
             </UButton>
           </div>
         </div>
-        <pre class="bg-gray-100 p-4 rounded-md overflow-x-auto text-sm"><code>{{ isSnippetExpanded ? pandasSnippet : truncatedSnippet }}</code></pre>
+        <pre class="bg-gray-100 p-2 rounded-md overflow-x-auto text-sm"><code>{{ isSnippetExpanded ? pandasSnippet : truncatedSnippet }}</code></pre>
       </UCard>
     </div>
 
@@ -438,8 +438,8 @@ const sortedFilteredData = computed(() => {
       :columns="columnsForSelectors"
     />
 
-    <UCard>
-      <div v-if="filteredData.length > 0" class="flex items-center justify-between mb-4 text-sm text-gray-600">
+    <UCard :ui="{ body: { padding: 'p-3' } }">
+      <div v-if="filteredData.length > 0" class="flex items-center justify-between mb-2 text-sm text-gray-600">
         <span>
           Showing {{ filteredData.length }} of {{ tableData.length }} columns
         </span>

@@ -49,7 +49,7 @@ const menuItems = computed(() => [
     
     <!-- Main Content with padding for fixed header/footer -->
     <main class="flex-1 overflow-y-auto pt-16 pb-16">
-      <UContainer class="py-6">
+      <UContainer class="py-3">
         <slot />
       </UContainer>
     </main>
