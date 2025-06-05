@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "netlify_generate" : "npm install && nuxt generate",
+    "netlify_generate" : "npm install && npm install @oxc-parser/binding-linux-x64-gnu && nuxt generate",
     "update_site": "bun run generate && cp -R .output/public/ ../docs/"
   },
   "dependencies": {
