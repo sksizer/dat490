@@ -10,35 +10,56 @@ from bs4 import BeautifulSoup, PageElement
 
 
 class ValueDef(BaseModel):
+    """Base model for representing value definitions in BRFSS survey data."""
     description: str
 
 
 class ValueRange(ValueDef):
+    """Model for value definitions that have a numeric range (single value or range of values)."""
     start: int
     end: int
 
 
 class ColumnMetadata(BaseModel):
-    computed: bool
-    label: str
-    sas_variable_name: str
-    section_name: Optional[str] = None
-    section_number: Optional[int] = None
-    module_number: Optional[int] = None  # Added module_number field
-    question_number: Optional[int] = None
-    column: Optional[str] = None  # Can be a range like "1-2" or single number
-    type_of_variable: Optional[str] = None  # "Num" or "Char".first().name
-    question_prologue: Optional[str] = None
-    question: Optional[str] = None
-    value_lookup: list[ValueDef]
-    html_name: str
+    """
+    Model representing metadata for a single column in the BRFSS dataset.
+    Contains information parsed from the codebook including variable details,
+    associated question text, and possible values.
+    """
+    computed: bool                      # Whether this is a calculated/derived variable
+    label: str                          # Human-readable label for the variable
+    sas_variable_name: str              # Original SAS variable name from dataset
+    section_name: Optional[str] = None  # Name of the survey section
+    section_number: Optional[int] = None # Core section number
+    module_number: Optional[int] = None # Module number for optional modules
+    question_number: Optional[int] = None # Question number within section
+    column: Optional[str] = None        # Column position in dataset (can be range like "1-2")
+    type_of_variable: Optional[str] = None # "Num" or "Char"
+    question_prologue: Optional[str] = None # Text before the actual question
+    question: Optional[str] = None      # The actual question text from survey
+    value_lookup: list[ValueDef]        # Possible values for this variable
+    html_name: str                      # HTML anchor name for linking to codebook
 
 
 class SharedModel(BaseModel):
-    columns:  dict[str, ColumnMetadata]
+    """Container model for all column metadata to be exported as JSON."""
+    columns: dict[str, ColumnMetadata]  # Map of SAS variable names to column metadata
 
 
 def get_value_def(tr:PageElement) -> ValueDef | ValueRange:
+    """
+    Extract value definition from a table row in the codebook.
+    
+    Parses a table row containing value codes and their descriptions. Handles both
+    single values and ranges (e.g., "1-30").
+    
+    Args:
+        tr: BeautifulSoup PageElement representing a table row with value information
+        
+    Returns:
+        Either a ValueDef (for non-numeric or unparseable values) or
+        ValueRange (for single numbers or numeric ranges)
+    """
     cells = tr.find_all('td')
 
     value_text = cells[0].text.strip()
@@ -64,25 +85,32 @@ def get_value_def(tr:PageElement) -> ValueDef | ValueRange:
                 description=description
             )
 
-def get_value_lookup(table:PageElement) -> list[ValueRange]:
+def get_value_lookup(table:PageElement) -> list[ValueDef]:
     """
-    Given one of the branch table objects, we can extract out in a fairly
-    simple manner all the possible values for the target column
-
-    Simplified table structure example:
+    Extract all possible values for a column from a codebook table.
+    
+    Given a table from the codebook HTML, extracts all value definitions
+    (codes and their descriptions) from the rows.
+    
+    Args:
+        table: BeautifulSoup PageElement representing a table containing value codes
+              and descriptions
+    
+    Returns:
+        List of ValueDef/ValueRange objects containing all possible values
+        for the column
+    
+    Example table structure:
     <table>
     <tbody>
     <tr>
-    <td>value</td> (which might be a single int value, blank or could be a range
-    <td>Value description
+        <td>value</td> <!-- single int value, blank, or range like "1-30" -->
+        <td>Value description</td>
     </tr>
     </tbody>
     </table>
-
-    :param table:
-    :return:
     """
-    value_ranges : list[ValueRange] = []
+    value_ranges : list[ValueDef] = []
 
     for tr in table.find('tbody').find_all('tr'):
         value_ranges.append(get_value_def(tr))
@@ -212,30 +240,39 @@ def parse_codebook_html(html_path: Path) -> Dict[str, ColumnMetadata]:
 
 
 if __name__ == '__main__':
+    """
+    Main script execution - parse BRFSS codebook and generate JSON files.
+    
+    This script:
+    1. Parses the BRFSS codebook HTML file to extract column metadata
+    2. Creates a SharedModel containing all column metadata
+    3. Generates two JSON files for the web application:
+       - schema.json: JSON schema definition for the data model
+       - model.json: The actual data model with all column metadata
+    """
+    # Parse the codebook HTML file
     column_metadatas = parse_codebook_html(Path('data', 'codebook_USCODE23_LLCP_021924.HTML'))
 
-    trimmed_metadatas = {}
-
-    for key,value in column_metadatas.items():
-        trimmed_metadatas[key] = ColumnMetadata(
-            **value.model_dump(exclude={'value_lookup'})
-        )
-
+    # Create the shared model with all column metadata
     model = SharedModel(
-        columns = trimmed_metadatas
+        columns = column_metadatas
     )
-    # Write out data
+    
+    # Prepare output directory
     web_data_dir = Path('web', 'content')
     web_data_dir.mkdir(parents=True, exist_ok=True)
     web_data_schem_path = web_data_dir / 'schema.json'
     web_data_path = web_data_dir / 'model.json'
 
+    # Write JSON schema to file
     with open(web_data_schem_path, 'w') as f:
         f.write(json.dumps(model.model_json_schema(
             mode='serialization'
         )))
 
+    # Write model data to file
     with open(web_data_path, 'w') as f:
         f.write(model.model_dump_json())
 
-    print(len(column_metadatas.keys()))
+    # Output summary of parsing results
+    print(f"Successfully processed {len(column_metadatas.keys())} columns from BRFSS codebook")
