@@ -18,10 +18,23 @@ const tableData = computed(() => {
   }))
 })
 
+// Default column configuration
+const defaultVisibleColumns = [
+  'key',
+  'label',
+  // 'sas_variable_name', // Excluded by default
+  'section_name',
+  'type_of_variable',
+  'question',
+  'computed'
+]
+
+const defaultColumnOrdering = [
+  { columnId: 'key', direction: 'asc' as const }
+]
+
 // Ordering state - default to sorting by Column/Feature
-const columnOrdering = ref<ColumnOrder[]>([
-  { columnId: 'key', direction: 'asc' }
-])
+const columnOrdering = ref<ColumnOrder[]>([...defaultColumnOrdering])
 
 // Add or toggle column ordering when header is clicked
 const handleHeaderClick = (columnId: string) => {
@@ -305,7 +318,7 @@ const pandasSnippet = computed(() => {
   // Add comment about selection and filtering
   let selectionComment = ''
   if (selectedVisibleRows.value.length > 0) {
-    selectionComment = `# Extract ${columnKeys.length} selected columns from DataFrame`
+    selectionComment = `# Extract ${columnKeys.length} selected features from DataFrame`
   } else {
     const hasFilters = filters.value.sections.length > 0 || 
                       filters.value.types.length > 0 || 
@@ -313,9 +326,9 @@ const pandasSnippet = computed(() => {
                       search.value.length > 0
     
     if (hasFilters) {
-      selectionComment = `# Extract ${columnKeys.length} filtered columns from DataFrame`
+      selectionComment = `# Extract ${columnKeys.length} filtered features from DataFrame`
     } else {
-      selectionComment = `# Extract ${columnKeys.length} columns from DataFrame (select specific columns for custom extraction)`
+      selectionComment = `# Extract ${columnKeys.length} features from DataFrame (select specific features for custom extraction)`
     }
   }
   
@@ -361,17 +374,17 @@ const truncatedSnippet = computed(() => {
   const displayColumns = columnKeys.slice(0, 3)
   const remainingCount = columnKeys.length - 3
   
-  // Add context about what type of columns these are
+  // Add context about what type of features these are
   let prefix = ''
   if (selectedVisibleRows.value.length > 0) {
-    prefix = `# ${columnKeys.length} selected columns\n`
+    prefix = `# ${columnKeys.length} selected features\n`
   } else {
     const hasFilters = filters.value.sections.length > 0 || 
                       filters.value.types.length > 0 || 
                       filters.value.computed.length > 0 ||
                       search.value.length > 0
     if (hasFilters) {
-      prefix = `# ${columnKeys.length} filtered columns\n`
+      prefix = `# ${columnKeys.length} filtered features\n`
     }
   }
   
@@ -383,15 +396,7 @@ const truncatedSnippet = computed(() => {
 })
 
 // Visible columns state - all except SAS Variable by default
-const visibleColumns = ref([
-  'key',
-  'label',
-  // 'sas_variable_name', // Excluded by default
-  'section_name',
-  'type_of_variable',
-  'question',
-  'computed'
-])
+const visibleColumns = ref([...defaultVisibleColumns])
 
 // Filter columns based on visibility - always include _navigation and _selection columns
 const visibleTableColumns = computed(() => {
@@ -446,11 +451,17 @@ const sortedFilteredData = computed(() => {
   
   return sorted
 })
+
+// Reset columns and sorting to default state
+const resetColumnsToDefault = () => {
+  visibleColumns.value = [...defaultVisibleColumns]
+  columnOrdering.value = [...defaultColumnOrdering]
+}
 </script>
 
 <template>
   <div class="container mx-auto py-4">
-    <h1 class="text-2xl font-bold mb-3">BRFSS Model Columns</h1>
+    <h1 class="text-2xl font-bold mb-3">BRFSS Feature Metadatas</h1>
     <UContainer id="bfrssLinks">Links: <ul><li><ULink to='/html/codebook_USCODE23_LLCP_021924.HTML' target="_blank">Codebook</ULink></li></ul></UContainer>
     
     <ModelMetadataSummary :model-data="modelData" />
@@ -458,7 +469,7 @@ const sortedFilteredData = computed(() => {
     <div class="mb-4">
       <UInput 
         v-model="search" 
-        placeholder="Search columns..." 
+        placeholder="Search features..." 
         icon="i-heroicons-magnifying-glass"
         size="md"
         class="max-w-md"
@@ -482,7 +493,7 @@ const sortedFilteredData = computed(() => {
                 :color="selectedVisibleRows.length > 0 ? 'primary' : 'gray'" 
                 variant="soft"
               >
-                {{ filteredData.length }} column{{ filteredData.length !== 1 ? 's' : '' }}
+                {{ filteredData.length }} feature{{ filteredData.length !== 1 ? 's' : '' }}
                 <span v-if="selectedVisibleRows.length > 0">
                   ({{ selectedVisibleRows.length }} selected)
                 </span>
@@ -525,25 +536,20 @@ const sortedFilteredData = computed(() => {
 
     <UCard :ui="{ body: { padding: 'p-3' } }">
       <!-- Table controls integrated into header -->
-      <div class="space-y-3 border-b border-gray-200 pb-3 mb-3">
-        <!-- Column Selector -->
-        <ColumnSelector 
-          v-model="visibleColumns"
+      <div class="border-b border-gray-200 pb-3 mb-3">
+        <ColumnManager
+          :visible-columns="visibleColumns"
+          :column-ordering="columnOrdering"
           :columns="columnsForSelectors"
-          class="!mb-0"
-        />
-        
-        <!-- Ordering Selector -->
-        <OrderingSelector
-          v-model="columnOrdering"
-          :columns="columnsForSelectors"
-          class="!mb-0"
+          @update:visible-columns="visibleColumns = $event"
+          @update:column-ordering="columnOrdering = $event"
+          @reset="resetColumnsToDefault"
         />
       </div>
 
       <div v-if="filteredData.length > 0" class="flex items-center justify-between mb-2 text-sm text-gray-600">
         <span>
-          Showing {{ filteredData.length }} of {{ tableData.length }} columns
+          Showing {{ filteredData.length }} of {{ tableData.length }} features
         </span>
         <span v-if="selectedVisibleRows.length > 0" class="font-medium text-primary-600">
           {{ selectedVisibleRows.length }} selected for extraction
@@ -559,7 +565,7 @@ const sortedFilteredData = computed(() => {
       >
         <template #empty-state>
           <div class="text-center py-8">
-            <p class="text-gray-500">No columns found</p>
+            <p class="text-gray-500">No features found</p>
           </div>
         </template>
       </UTable>

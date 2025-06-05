@@ -66,7 +66,7 @@ const resetCodebook = () => {
       class="inline-flex items-center gap-2 mb-4 text-gray-600 hover:text-gray-900 transition-colors"
     >
       <UIcon name="i-heroicons-arrow-left" />
-      Back to columns
+      Back to features
     </NuxtLink>
     
     <div v-if="columnData" id="top">
