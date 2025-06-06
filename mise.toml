@@ -1,3 +1,11 @@
 [tools]
 poetry = { version="latest", pyproject="{{ config_root }}/pyproject.toml" }
 python = '3.13.3'
+
+
+
+[tasks.package]
+run = [
+    'cd web && bun run generate',
+    'cp data/LLCP2023.parquet web/.output/public/LLCP2023.parquet'
+]
