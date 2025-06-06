@@ -8,7 +8,7 @@ import {
   GridComponent,
   ToolboxComponent
 } from 'echarts/components'
-import { SVGRenderer } from 'echarts/renderers'
+import { SVGRenderer, CanvasRenderer } from 'echarts/renderers'
 
 // Register the required components
 use([
@@ -17,7 +17,8 @@ use([
   TooltipComponent,
   GridComponent,
   ToolboxComponent,
-  SVGRenderer
+  SVGRenderer,
+  CanvasRenderer
 ])
 
 interface ValueRange {
@@ -48,6 +49,9 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   title: 'Observation Counts by Feature'
 })
+
+// Renderer toggle state
+const useCanvasRenderer = ref(false)
 
 // Prepare chart data from the sorted and filtered column data
 const chartData = computed(() => {
@@ -241,6 +245,14 @@ const chartOption = computed<EChartsOption>(() => ({
       saveAsImage: {
         pixelRatio: 2,
         title: 'Save as Image'
+      },
+      myRendererToggle: {
+        show: true,
+        title: useCanvasRenderer.value ? 'Switch to SVG Renderer' : 'Switch to Canvas Renderer',
+        icon: 'path://M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z',
+        onclick: () => {
+          useCanvasRenderer.value = !useCanvasRenderer.value
+        }
       }
     },
     right: 15,
@@ -317,12 +329,30 @@ const chartHeight = 400
 
 <template>
   <div class="w-full" :style="{ height: `${chartHeight}px` }">
+    <!-- Renderer Toggle Info -->
+    <div v-if="chartData.length > 0" class="flex items-center justify-between mb-2">
+      <div class="text-xs text-gray-500">
+        Current renderer: {{ useCanvasRenderer ? 'Canvas' : 'SVG' }}
+        <span v-if="chartData.length > 100" class="text-orange-600">
+          ({{ chartData.length }} features - try Canvas for better performance)
+        </span>
+      </div>
+      <button 
+        @click="useCanvasRenderer = !useCanvasRenderer"
+        class="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded border text-gray-700 transition-colors"
+      >
+        Switch to {{ useCanvasRenderer ? 'SVG' : 'Canvas' }}
+      </button>
+    </div>
+    
     <VChart 
       v-if="chartData.length > 0"
+      :key="useCanvasRenderer ? 'canvas' : 'svg'"
       :option="chartOption" 
       :init-options="{ 
         width: 'auto', 
-        height: chartHeight 
+        height: chartHeight,
+        renderer: useCanvasRenderer ? 'canvas' : 'svg'
       }"
       autoresize
       :style="{ height: `${chartHeight}px` }"
