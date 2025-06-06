@@ -7571,9 +7571,91 @@ memory usage: 1.1+ GB
 </div>
 </div>
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>count    433323.000000
+mean          7.836318
+std           3.694292
+min           1.000000
+25%           5.000000
+50%           8.000000
+75%          11.000000
+max          14.000000
+Name: _AGEG5YR, dtype: float64</pre>
+</div>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Parsed 344 column definitions from the codebook
+
+_STATE:
+  Label: State FIPS Code
+  Question: State FIPS Code
+  Column: 1-2
+  Type: Num
+  Computed: False
+  Section Name: Record Identification
+  Section Number: 0
+  Question Number: 1
+
+FMONTH:
+  Label: File Month
+  Question: File Month
+  Column: 17-18
+  Type: Num
+  Computed: False
+  Section Name: Record Identification
+  Section Number: 0
+  Question Number: 8
+
+IDATE:
+  Label: Interview Date
+  Question: Interview Date
+  Column: 19-26
+  Type: Char
+  Computed: False
+  Section Name: Record Identification
+  Section Number: 0
+  Question Number: 9
+
+IMONTH:
+  Label: Interview Month
+  Question: Interview Month
+  Column: 19-20
+  Type: Char
+  Computed: False
+  Section Name: Record Identification
+  Section Number: 0
+  Question Number: 10
+
+IDAY:
+  Label: Interview Day
+  Question: Interview Day
+  Column: 21-22
+  Type: Char
+  Computed: False
+  Section Name: Record Identification
+  Section Number: 0
+  Question Number: 11
+</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7584,7 +7666,25 @@ memory usage: 1.1+ GB
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Total columns in dataframe: 350
+Total metadata parsed: 344
+Coverage: 98.3%
+
+Columns without metadata: 7
+First 10 missing: ['LNDSXBRT', 'CELSXBRT', 'BIRTHSEX', 'TRNSGNDR', 'USEMRJN4', 'RCSGEND1', 'RCSXBRTH']
+Note: There is data for these columns but no metadata is available, likely purged bc of policy changes.
+</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7617,7 +7717,33 @@ memory usage: 1.1+ GB
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Column: _STATE
+Label: State FIPS Code
+Question: State FIPS Code
+
+Sample of value mappings (first 10):
+  1: Alabama
+  2: Alaska
+  4: Arizona
+  5: Arkansas
+  6: California
+  8: Colorado
+  9: Connecticut
+  10: Delaware
+  11: District of Columbia
+  12: Florida
+</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7637,7 +7763,30 @@ memory usage: 1.1+ GB
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Top 10 states by number of respondents:
+
+Code 53: Washington (Count: 26,444)
+Code 36: New York (Count: 17,349)
+Code 24: Maryland (Count: 17,255)
+Code 27: Minnesota (Count: 16,170)
+Code 39: Ohio (Count: 13,384)
+Code 12: Florida (Count: 13,255)
+Code 31: Nebraska (Count: 12,886)
+Code 55: Wisconsin (Count: 12,819)
+Code 23: Maine (Count: 12,255)
+Code 4: Arizona (Count: 12,036)
+</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7648,7 +7797,30 @@ memory usage: 1.1+ GB
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Sample of translated state values:
+   _STATE STATE_NAME
+0     1.0    Alabama
+1     1.0    Alabama
+2     1.0    Alabama
+3     1.0    Alabama
+4     1.0    Alabama
+5     1.0    Alabama
+6     1.0    Alabama
+7     1.0    Alabama
+8     1.0    Alabama
+9     1.0    Alabama
+</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7659,7 +7831,30 @@ memory usage: 1.1+ GB
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Column: POORHLTH
+Label: Poor Physical or Mental Health
+
+Total value mappings: 34
+
+Sample mappings:
+  1: Number of daysNotes: _ _ Number of days
+  15: Number of daysNotes: _ _ Number of days
+  30: Number of daysNotes: _ _ Number of days
+  77: Don't know/Not sure
+  88: None
+  99: Refused
+</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7670,7 +7865,30 @@ memory usage: 1.1+ GB
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Translated _STATE
+Translated FMONTH
+Translated DISPCODE
+Skipped SEX1 (not found in metadata or dataframe)
+
+Sample of translated data:
+   _STATE  FMONTH  DISPCODE _STATE_DESC FMONTH_DESC        DISPCODE_DESC
+0     1.0     1.0    1100.0     Alabama     January  Completed Interview
+1     1.0     1.0    1100.0     Alabama     January  Completed Interview
+2     1.0     1.0    1100.0     Alabama     January  Completed Interview
+3     1.0     1.0    1100.0     Alabama     January  Completed Interview
+4     1.0     1.0    1100.0     Alabama     January  Completed Interview
+</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7681,7 +7899,21 @@ memory usage: 1.1+ GB
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Columns in 'Calculated Variables' section: 70
+
+Column names: ['_RFHLTH', '_PHYS14D', '_MENT14D', '_HLTHPL1', '_HCVU653', '_TOTINDA', 'METVL12_', 'METVL22_', 'MAXVO21_', 'FC601_', 'ACTIN13_', 'ACTIN23_', 'PADUR1_', 'PADUR2_', 'PAFREQ1_', 'PAFREQ2_', '_MINAC12', '_MINAC22', 'STRFREQ_', 'PAMISS3_', 'PAMIN13_', 'PAMIN23_', 'PA3MIN_', 'PAVIG13_', 'PAVIG23_', 'PA3VIGM_', '_PACAT3', '_PAINDX3', '_PA150R4', '_PA300R4', '_PA30023', '_PASTRNG', '_PAREC3', '_PASTAE3', '_RFHYPE6', '_CHOLCH3', '_RFCHOL3', '_MICHD', '_LTASTH1', '_CASTHM1', '_ASTHMS1', '_DRDXAR2', '_SEX', '_AGEG5YR', '_AGE65YR', '_AGE80', '_AGE_G', 'HTIN4', 'HTM4', 'WTKG3', '_BMI5', '_BMI5CAT', '_RFBMI5', '_CHLDCNT', '_EDUCAG', '_INCOMG1', '_SMOKER3', '_RFSMOK3', '_CURECI2', 'DRNKANY6', 'DROCDY4_', '_RFBING6', '_DRNKWK2', '_RFDRHV8', '_FLSHOT7', '_PNEUMO3', '_AIDTST4', '_RFSEAT2', '_RFSEAT3', '_DRNKDRV']
+</pre>
+</div>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
@@ -7710,18 +7942,27 @@ memory usage: 1.1+ GB
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-1-d0f6ade0a3b1&gt;</span> in <span class="ansi-cyan-fg">&lt;cell line: 0&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>k_df <span class="ansi-blue-fg">=</span> bfrss_raw_df<span class="ansi-blue-fg">.</span>copy<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> k_metadata <span class="ansi-blue-fg">=</span> bfrss_metadata<span class="ansi-blue-fg">.</span>copy<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> 
-<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># Metadata Tests</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-red-fg">##</span>
-
-<span class="ansi-red-fg">NameError</span>: name 'bfrss_raw_df' is not defined</pre>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Index: 344 entries, _STATE to _DRNKDRV
+Data columns (total 12 columns):
+ #   Column  Non-Null Count  Dtype 
+---  ------  --------------  ----- 
+ 0   0       344 non-null    object
+ 1   1       344 non-null    object
+ 2   2       344 non-null    object
+ 3   3       344 non-null    object
+ 4   4       344 non-null    object
+ 5   5       344 non-null    object
+ 6   6       344 non-null    object
+ 7   7       344 non-null    object
+ 8   8       344 non-null    object
+ 9   9       344 non-null    object
+ 10  10      344 non-null    object
+ 11  11      344 non-null    object
+dtypes: object(12)
+memory usage: 34.9+ KB
+</pre>
 </div>
 </div>
 </div>
