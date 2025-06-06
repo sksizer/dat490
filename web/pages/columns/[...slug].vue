@@ -157,6 +157,12 @@ const valueLookupColumns = ['value', 'count', 'description']
           >
             Codebook
           </a>
+          <a 
+            href="#json-data" 
+            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
+          >
+            JSON Data
+          </a>
         </nav>
       </div>
       
@@ -412,6 +418,15 @@ const valueLookupColumns = ['value', 'count', 'description']
               :title="`Codebook for ${columnData.label || columnData.key}`"
             />
           </div>
+        </UCard>
+        
+        <!-- JSON Data -->
+        <UCard id="json-data" :ui="{ body: { padding: 'p-2' }, header: { padding: 'p-2' } }">
+          <template #header>
+            <h2 class="text-base font-semibold">JSON Data</h2>
+          </template>
+          
+          <JSONView :data="columnData" max-height="400px" />
         </UCard>
       </div>
     </div>
