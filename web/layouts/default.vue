@@ -1,5 +1,32 @@
 <script setup lang="ts">
 const appName = "DAT490"
+
+// Use the page title composable
+const { pageTitle, breadcrumbs } = usePageTitle()
+
+// Computed title that shows page title or falls back to app name
+const displayTitle = computed(() => {
+  return pageTitle.value || appName
+})
+
+// Default breadcrumb items (always show home)
+const breadcrumbItems = computed(() => {
+  const defaultItems = [
+    {
+      label: appName,
+      to: '/',
+      icon: 'i-heroicons-home'
+    }
+  ]
+  
+  // Add page-specific breadcrumbs
+  if (breadcrumbs.value && breadcrumbs.value.length > 0) {
+    return [...defaultItems, ...breadcrumbs.value]
+  }
+  
+  return defaultItems
+})
+
 const { data: docPages } = await useAsyncData('docs', () => queryCollection('docs').find())
 const docNavItems = computed(() => {
   return docPages.value?.map(page => {
@@ -36,8 +63,19 @@ const menuItems = computed(() => [
               <UButton color="white" variant="ghost" icon="i-heroicons-bars-3-20-solid" aria-label="Menu" />
             </UDropdownMenu>
             
-            <!-- Title next to menu button -->
-            <NuxtLink to="/" class="text-xl font-bold ml-3">{{ appName }}  </NuxtLink>
+            <!-- Breadcrumbs -->
+            <div class="ml-3 flex-1">
+              <UBreadcrumb 
+                :items="breadcrumbItems"
+                :ui="{
+                  list: 'flex items-center',
+                  item: 'text-white',
+                  active: 'text-white font-semibold',
+                  inactive: 'text-gray-300 hover:text-white',
+                  separator: 'text-gray-400'
+                }"
+              />
+            </div>
           </div>
           
           <!-- Right section (empty for now) -->

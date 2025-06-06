@@ -552,13 +552,31 @@ const resetColumnsToDefault = () => {
 const handleColumnReorder = (newColumnOrder: string[]) => {
   columnDisplayOrder.value = newColumnOrder
 }
+
+// Set the breadcrumbs
+const { setBreadcrumbs, clearBreadcrumbs } = usePageTitle()
+
+// Set breadcrumbs when component mounts
+onMounted(() => {
+  setBreadcrumbs([
+    {
+      label: 'BFRSS Features',
+      to: '/columns'
+    }
+  ])
+})
+
+// Clear breadcrumbs when component unmounts
+onUnmounted(() => {
+  clearBreadcrumbs()
+})
 </script>
 
 <template>
   <div class="container mx-auto py-2 mobile-compact">
-    <h1 class="text-2xl font-bold mb-2">BRFSS Feature Metadatas</h1>
-    <UContainer id="bfrssLinks">Links: <ul><li><ULink to='/html/codebook_USCODE23_LLCP_021924.HTML' target="_blank">Codebook</ULink></li></ul></UContainer>
-    
+<!--    <h1 class="text-2xl font-bold mb-2">BRFSS Feature Metadatas</h1>-->
+<!--    <UContainer id="bfrssLinks">Links: <ul><li><ULink to='/html/codebook_USCODE23_LLCP_021924.HTML' target="_blank">Codebook</ULink></li></ul></UContainer>-->
+<!--    -->
     <ModelMetadataSummary :model-data="modelData" />
     
     <!-- Observation Count Chart -->

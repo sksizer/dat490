@@ -130,19 +130,35 @@ const scrollToTop = () => {
     container.scrollTop = 0
   })
 }
+
+// Set dynamic breadcrumbs based on column data
+const { setBreadcrumbs, clearBreadcrumbs } = usePageTitle()
+
+// Watch for column data changes and update breadcrumbs
+watchEffect(() => {
+  if (columnData.value) {
+    const title = columnData.value.label || columnData.value.key
+    setBreadcrumbs([
+      {
+        label: 'Features',
+        to: '/columns'
+      },
+      {
+        label: title,
+        icon: 'i-heroicons-chart-bar'
+      }
+    ])
+  }
+})
+
+// Clear breadcrumbs when leaving the page
+onUnmounted(() => {
+  clearBreadcrumbs()
+})
 </script>
 
 <template>
   <div class="container mx-auto py-2 mobile-compact">
-    <!-- Back button -->
-    <NuxtLink 
-      to="/columns" 
-      class="inline-flex items-center gap-2 mb-2 text-gray-600 hover:text-gray-900 transition-colors">
-    >
-      <UIcon name="i-heroicons-arrow-left" />
-      Back to features
-    </NuxtLink>
-    
     <div v-if="columnData" id="top">
       <!-- Header -->
       <div class="mb-3">
