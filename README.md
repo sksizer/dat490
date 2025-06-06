@@ -14,3 +14,16 @@
 
 ### Code
 [Github](https://github.com/sksizer/dat490)
+
+## Features
+
+### Data Visualization
+- **Interactive Charts**: Response distribution visualizations using ECharts
+  - Vertical bar charts for traditional value comparison
+  - Horizontal bar charts with overlay labels for better readability
+  - Responsive design that adapts to data size and screen width
+
+### Web Interface
+- **Column Browser**: Interactive table with filtering, sorting, and search
+- **Detailed Views**: Comprehensive column metadata with statistics
+- **JSON Export**: Raw data access for developers and researchers

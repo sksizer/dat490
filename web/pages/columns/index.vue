@@ -561,6 +561,36 @@ const handleColumnReorder = (newColumnOrder: string[]) => {
     
     <ModelMetadataSummary :model-data="modelData" />
     
+    <!-- Observation Count Chart -->
+    <div class="mb-4">
+      <UCard :ui="{ body: { padding: 'p-3' }, header: { padding: 'p-3' } }">
+        <template #header>
+          <div class="flex items-center justify-between">
+            <h2 class="text-base font-semibold">Observation Counts</h2>
+            <UBadge 
+              :color="selectedVisibleRows.length > 0 ? 'primary' : 'gray'" 
+              variant="soft"
+            >
+              {{ sortedFilteredData.length }} feature{{ sortedFilteredData.length !== 1 ? 's' : '' }}
+              <span v-if="selectedVisibleRows.length > 0">
+                ({{ selectedVisibleRows.length }} selected)
+              </span>
+              <span v-else-if="filters.sections.length > 0 || filters.types.length > 0 || filters.computed.length > 0 || search.length > 0">
+                (filtered)
+              </span>
+            </UBadge>
+          </div>
+        </template>
+        
+        <div class="bg-gray-50 rounded-lg p-3">
+          <ObservationCountChart 
+            :data="sortedFilteredData" 
+            :title="`Observation Counts${filters.sections.length > 0 || filters.types.length > 0 || filters.computed.length > 0 || search.length > 0 ? ' (Filtered)' : ''}`"
+          />
+        </div>
+      </UCard>
+    </div>
+
     <div class="mb-2">
       <UInput 
         v-model="search" 
