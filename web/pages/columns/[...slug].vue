@@ -56,6 +56,33 @@ const resetCodebook = () => {
     codebookIframe.value.src = `/html/codebook_USCODE23_LLCP_021924.HTML#${columnData.value.html_name}`
   }
 }
+
+// Transform value_lookup into table data
+const valueLookupTableData = computed(() => {
+  if (!columnData.value?.value_lookup) return []
+  
+  return columnData.value.value_lookup.map((value, index) => {
+    // Handle ValueRange (has start and end properties)
+    if ('start' in value && 'end' in value) {
+      return {
+        value: value.start === value.end ? value.start.toString() : `${value.start} - ${value.end}`,
+        count: 'count' in value ? value.count : 0,
+        description: value.description
+      }
+    } 
+    // Handle ValueDef (only has description)
+    else {
+      return {
+        value: `#${index + 1}`,
+        count: '-',
+        description: value.description
+      }
+    }
+  })
+})
+
+// Define columns for the value lookup table - use simple string array
+const valueLookupColumns = ['value', 'count', 'description']
 </script>
 
 <template>
@@ -195,24 +222,30 @@ const resetCodebook = () => {
             <h2 class="text-base font-semibold">Value Lookup</h2>
           </template>
           
-          <div class="space-y-0.5">
-            <div 
-              v-for="(value, index) in columnData.value_lookup" 
-              :key="index"
-              class="flex items-start gap-2 py-0.5 border-b border-gray-100 last:border-0 text-sm"
-            >
-              <!-- ValueRange has start and end properties -->
-              <template v-if="'start' in value && 'end' in value">
-                <span class="font-mono text-xs text-gray-600 min-w-[6rem]">
-                  {{ value.start === value.end ? value.start : `${value.start} - ${value.end}` }}
-                </span>
-              </template>
-              <!-- ValueDef has only description -->
-              <template v-else>
-                <span class="font-mono text-xs text-gray-600 min-w-[2.5rem]">{{ index + 1 }}</span>
-              </template>
-              <span class="text-gray-900 text-xs">{{ value.description }}</span>
-            </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead>
+                <tr>
+                  <th class="px-2 py-1 text-left text-xs font-medium text-gray-700">Value</th>
+                  <th class="px-2 py-1 text-right text-xs font-medium text-gray-700">Count</th>
+                  <th class="px-2 py-1 text-left text-xs font-medium text-gray-700">Description</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <tr v-for="(row, index) in valueLookupTableData" :key="index">
+                  <td class="px-2 py-1 text-xs font-mono text-gray-900">{{ row.value }}</td>
+                  <td class="px-2 py-1 text-xs text-right">
+                    <span v-if="row.count !== '-'" class="text-gray-900">
+                      {{ typeof row.count === 'number' ? row.count.toLocaleString() : row.count }}
+                    </span>
+                    <span v-else class="text-gray-400">
+                      {{ row.count }}
+                    </span>
+                  </td>
+                  <td class="px-2 py-1 text-xs text-gray-900">{{ row.description }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </UCard>
         

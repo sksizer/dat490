@@ -36,7 +36,8 @@ export default defineContentConfig({
                                 description: z.string(),
                                 missing: z.boolean().optional(),
                                 start: z.number(),
-                                end: z.number()
+                                end: z.number(),
+                                count: z.number()
                             })
                         ])
                     ),

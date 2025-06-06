@@ -22,6 +22,7 @@ class ValueRange(ValueDef):
     """Model for value definitions that have a numeric range (single value or range of values)."""
     start: int
     end: int
+    count: int  # How many values fall in this range
 
 
 class ColumnStatistics(BaseModel):
@@ -75,15 +76,18 @@ class SharedModel(BaseModel):
     columns: dict[str, ColumnMetadata]  # Map of SAS variable names to column metadata
 
 
-def get_value_def(tr:PageElement) -> ValueDef | ValueRange:
+def get_value_def(tr:PageElement, df: Optional[pd.DataFrame] = None, column_name: Optional[str] = None) -> ValueDef | ValueRange:
     """
     Extract value definition from a table row in the codebook.
     
     Parses a table row containing value codes and their descriptions. Handles both
-    single values and ranges (e.g., "1-30").
+    single values and ranges (e.g., "1-30"). If DataFrame and column name are provided,
+    calculates the count of values in the range.
     
     Args:
         tr: BeautifulSoup PageElement representing a table row with value information
+        df: Optional DataFrame containing the data
+        column_name: Optional column name to calculate counts for
         
     Returns:
         Either a ValueDef (for non-numeric or unparseable values) or
@@ -97,33 +101,66 @@ def get_value_def(tr:PageElement) -> ValueDef | ValueRange:
     # Check if the value is actually a range such as "1 - 30" or "1-30"
     range_match = re.match(r'^(\d+)\s*[-–]\s*(\d+)$', value_text)
     if range_match:
+        start = int(range_match.group(1))
+        end = int(range_match.group(2))
+        
+        # Calculate count if DataFrame and column are provided
+        count = 0
+        if df is not None and column_name is not None and column_name in df.columns:
+            try:
+                series = df[column_name]
+                # Count values in the range (inclusive)
+                count = int(series.between(start, end, inclusive='both').sum())
+            except Exception as e:
+                print(f"Error calculating count for range {start}-{end} in column {column_name}: {e}")
+                count = 0
+        
         return ValueRange(
-            start = int(range_match.group(1)),
-            end = int(range_match.group(2)),
-            description=description
+            start=start,
+            end=end,
+            description=description,
+            count=count
         )
     else:
         # Try to parse as single integer
         try:
+            value = int(value_text)
+            
+            # Calculate count if DataFrame and column are provided
+            count = 0
+            if df is not None and column_name is not None and column_name in df.columns:
+                try:
+                    series = df[column_name]
+                    # Count occurrences of this specific value
+                    count = int((series == value).sum())
+                except Exception as e:
+                    print(f"Error calculating count for value {value} in column {column_name}: {e}")
+                    count = 0
+            
             return ValueRange(
-                start = int(value_text),
-                end = int(value_text),
-                description=description)
+                start=value,
+                end=value,
+                description=description,
+                count=count
+            )
         except:
             return ValueDef(
                 description=description
             )
 
-def get_value_lookup(table:PageElement) -> list[ValueDef]:
+def get_value_lookup(table:PageElement, df: Optional[pd.DataFrame] = None, column_name: Optional[str] = None) -> list[ValueDef]:
     """
     Extract all possible values for a column from a codebook table.
     
     Given a table from the codebook HTML, extracts all value definitions
-    (codes and their descriptions) from the rows.
+    (codes and their descriptions) from the rows. If DataFrame and column name
+    are provided, calculates counts for ValueRange objects.
     
     Args:
         table: BeautifulSoup PageElement representing a table containing value codes
               and descriptions
+        df: Optional DataFrame containing the data
+        column_name: Optional column name to calculate counts for
     
     Returns:
         List of ValueDef/ValueRange objects containing all possible values
@@ -142,7 +179,7 @@ def get_value_lookup(table:PageElement) -> list[ValueDef]:
     value_ranges : list[ValueDef] = []
 
     for tr in table.find('tbody').find_all('tr'):
-        value_ranges.append(get_value_def(tr))
+        value_ranges.append(get_value_def(tr, df, column_name))
 
     return value_ranges
 
@@ -291,7 +328,7 @@ def parse_codebook_html(html_path: Path, df: Optional[pd.DataFrame] = None) -> D
                             for value, count in value_counts.items():
                                 # Try to get description from value_lookup
                                 description = None
-                                value_lookup_list = get_value_lookup(table)
+                                value_lookup_list = get_value_lookup(table, df, sas_variable_name)
                                 if isinstance(value, (int, float)) and not pd.isna(value):
                                     value_int = int(value) if hasattr(value, 'is_integer') and value.is_integer() else int(value) if isinstance(value, int) else None
                                     # Search through ValueRange objects to find a match
@@ -329,7 +366,7 @@ def parse_codebook_html(html_path: Path, df: Optional[pd.DataFrame] = None) -> D
                     type_of_variable=type_of_variable,
                     question_prologue=question_prologue,
                     question=question,
-                    value_lookup=get_value_lookup(table),
+                    value_lookup=get_value_lookup(table, df, sas_variable_name),
                     computed= True if section_name == 'Calculated Variables' or section_name == 'Calculated Race Variables' else False,
                     html_name=html_name,
                     statistics=statistics
