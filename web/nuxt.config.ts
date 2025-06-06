@@ -14,9 +14,16 @@ export default defineNuxtConfig({
     '@nuxt/scripts',
     '@nuxt/test-utils',
     '@nuxt/ui',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    'nuxt-echarts',
   ],
   css: ['~/assets/css/main.css'],
+  echarts: {
+    ssr: false,
+    renderer: ['svg'],
+    charts: ['BarChart'],
+    components: ['TitleComponent', 'TooltipComponent', 'GridComponent', 'LegendComponent']
+  },
   vite: {
     plugins: [
       tailwindcss(),

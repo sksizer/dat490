@@ -84,6 +84,12 @@ const valueLookupTableData = computed(() => {
 // Define columns for the value lookup table - use simple string array
 const valueLookupColumns = ['value', 'count', 'description']
 
+// Define chart tabs for UTabs component
+const chartTabs = [
+  { label: 'Vertical Chart', value: 'vertical', icon: 'i-heroicons-chart-bar' },
+  { label: 'Horizontal Chart', value: 'horizontal', icon: 'i-heroicons-chart-bar-square' }
+]
+
 /**
  * Scroll to absolute top of page - handles complex Nuxt/Vue layouts
  * 
@@ -176,7 +182,7 @@ const scrollToTop = () => {
             href="#value-lookup" 
             class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
           >
-            Value Lookup
+            Values
           </a>
           <a 
             v-if="columnData.statistics"
@@ -266,8 +272,37 @@ const scrollToTop = () => {
         <!-- Value Lookup -->
         <UCard id="value-lookup" v-if="columnData.value_lookup && columnData.value_lookup.length > 0" :ui="{ body: { padding: 'p-2' }, header: { padding: 'p-2' } }">
           <template #header>
-            <h2 class="text-base font-semibold">Value Lookup</h2>
+            <h2 class="text-base font-semibold">Values</h2>
           </template>
+          
+          <!-- Charts Section -->
+          <div v-if="valueLookupTableData.some(item => typeof item.count === 'number' && item.count > 0)" class="mb-4">
+            <UTabs 
+              :items="[
+                { label: 'Vertical Chart', slot: 'vertical', icon: 'i-heroicons-chart-bar' },
+                { label: 'Horizontal Chart', slot: 'horizontal', icon: 'i-heroicons-chart-bar-square' }
+              ]"
+              class="mb-3"
+            >
+              <template #vertical>
+                <div class="bg-gray-50 rounded-lg p-3">
+                  <ResponseChartVertical 
+                    :value-data="valueLookupTableData" 
+                    title="Response Counts by Value"
+                  />
+                </div>
+              </template>
+              
+              <template #horizontal>
+                <div class="bg-gray-50 rounded-lg p-3">
+                  <ResponseChartHorizontal 
+                    :value-data="valueLookupTableData" 
+                    title="Response Distribution"
+                  />
+                </div>
+              </template>
+            </UTabs>
+          </div>
           
           <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
