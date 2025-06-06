@@ -83,6 +83,47 @@ const valueLookupTableData = computed(() => {
 
 // Define columns for the value lookup table - use simple string array
 const valueLookupColumns = ['value', 'count', 'description']
+
+/**
+ * Scroll to absolute top of page - handles complex Nuxt/Vue layouts
+ * 
+ * Problem: Standard window.scrollTo(0, 0) was not working because the actual 
+ * scrolling was being handled by CSS overflow containers rather than the main window.
+ * 
+ * Solution: This function resets scroll position on multiple possible scroll containers:
+ * 1. Standard DOM elements (document.documentElement, document.body)
+ * 2. The window object itself
+ * 3. Any CSS containers with overflow properties that might be handling scroll
+ * 
+ * Why this was needed:
+ * - Modern CSS frameworks (Tailwind) and component libraries (Nuxt UI) often use
+ *   overflow containers for layout and responsive design
+ * - The page scroll might be handled by a parent container with overflow-y-auto
+ *   rather than the browser's native window scroll
+ * - Standard anchor navigation and window.scrollTo() only work on window-level scroll
+ * 
+ * Debugging approach used:
+ * - Added console.log to verify function was being called
+ * - Logged current scroll positions to identify which element was actually scrolled
+ * - Used querySelector to find all possible scrollable containers
+ * - Reset scroll on any container that had a scroll position > 0
+ * 
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollTo
+ */
+const scrollToTop = () => {
+  // Reset scroll on standard DOM elements (covers most cases)
+  document.documentElement.scrollTop = 0
+  document.body.scrollTop = 0
+  window.scrollTo(0, 0)
+  
+  // Handle CSS overflow containers that might control page scroll
+  // This targets elements with overflow CSS properties that could be scrollable
+  const containers = document.querySelectorAll('[style*="overflow"], .overflow-auto, .overflow-y-auto, .overflow-scroll, .overflow-y-scroll')
+  containers.forEach((container: Element) => {
+    container.scrollTop = 0
+  })
+}
 </script>
 
 <template>
@@ -111,12 +152,12 @@ const valueLookupColumns = ['value', 'count', 'description']
       <!-- Table of Contents -->
       <div class="mb-3 sticky top-0 z-10 bg-white border-b border-gray-200">
         <nav class="flex items-center gap-3 py-2 overflow-x-auto">
-          <a 
-            href="#top" 
-            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
+          <button 
+            @click="scrollToTop"
+            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors cursor-pointer bg-transparent border-none p-0"
           >
             Start
-          </a>
+          </button>
           <a 
             href="#basic-information" 
             class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
