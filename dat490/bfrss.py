@@ -6,6 +6,7 @@ Provides a convenient interface for working with BRFSS data and metadata.
 import os
 import logging
 import pandas as pd
+import numpy as np
 from pathlib import Path
 from typing import Dict, List, Optional, Union, Any, Tuple
 from .parser import parse_codebook_html, ColumnMetadata, ValueRange
@@ -59,12 +60,14 @@ class BFRSS:
     - Parsing and accessing codebook metadata
     - Looking up value descriptions
     - Filtering columns by sections
+    - Converting semantic nulls to NaN
     """
     
     def __init__(self, 
                  data_path: Optional[Union[str, Path]] = None,
                  codebook_path: Optional[Union[str, Path]] = None,
                  exclude_desc_columns: bool = True,
+                 semantically_null: bool = False,
                  root_dir: Optional[Union[str, Path]] = None):
         """
         Initialize BFRSS wrapper.
@@ -73,6 +76,7 @@ class BFRSS:
             data_path: Path to LLCP2023_desc_categorized.parquet file
             codebook_path: Path to codebook HTML file
             exclude_desc_columns: Whether to exclude _DESC columns from metadata generation
+            semantically_null: Whether to convert values marked as indicates_missing to NaN
             root_dir: Root directory to search for data files (optional)
         """
         # Set root directory for file searching
@@ -82,10 +86,12 @@ class BFRSS:
         self.data_path = Path(data_path) if data_path else self._find_data_file('LLCP2023_desc_categorized.parquet')
         self.codebook_path = Path(codebook_path) if codebook_path else self._find_data_file('codebook_USCODE23_LLCP_021924.HTML')
         self.exclude_desc_columns = exclude_desc_columns
+        self.semantically_null = semantically_null
         
         # Lazy loading - data loaded on first access
         self._df = None
         self._metadata = None
+        self._semantic_null_mapping = None
         
     def _find_data_file(self, filename: str) -> Path:
         """Find data file in common locations."""
@@ -118,6 +124,11 @@ class BFRSS:
             logger.info(f"Loading data from {self.data_path}...")
             self._df = pd.read_parquet(self.data_path)
             logger.info(f"Loaded {len(self._df)} rows and {len(self._df.columns)} columns")
+            
+            # Apply semantic null conversion if requested
+            if self.semantically_null:
+                self._apply_semantic_nulls()
+                
         return self._df
     
     
@@ -268,28 +279,129 @@ class BFRSS:
         """
         logger = setup_bfrss_logger()
         return self.cloneDF(), self.cloneMetadata(), logger
+    
+    def get_semantic_null_values(self, column_name: str) -> set:
+        """
+        Get values that indicate missing/null for a specific column.
+        
+        Args:
+            column_name: Name of the column
+            
+        Returns:
+            Set of values that indicate missing data
+        """
+        if column_name not in self.metadata:
+            return set()
+            
+        missing_values = set()
+        column_meta = self.metadata[column_name]
+        
+        # Check value_ranges for values marked as indicates_missing=True
+        for value_def in column_meta.value_ranges:
+            if hasattr(value_def, 'indicates_missing') and value_def.indicates_missing:
+                if hasattr(value_def, 'start') and hasattr(value_def, 'end'):
+                    # ValueRange - add all values in the range
+                    for val in range(value_def.start, value_def.end + 1):
+                        missing_values.add(val)
+                        
+        return missing_values
+    
+    def get_semantic_null_mapping(self) -> Dict[str, set]:
+        """
+        Get mapping of all columns to their semantic null values.
+        
+        Returns:
+            Dictionary mapping column names to sets of missing indicator values
+        """
+        if self._semantic_null_mapping is None:
+            self._semantic_null_mapping = {}
+            for col_name in self.metadata:
+                missing_vals = self.get_semantic_null_values(col_name)
+                if missing_vals:
+                    self._semantic_null_mapping[col_name] = missing_vals
+                    
+        return self._semantic_null_mapping
+    
+    def _apply_semantic_nulls(self) -> None:
+        """Apply semantic null conversion to the internal DataFrame."""
+        logger.info("Applying semantic null conversion...")
+        
+        # Get mapping of columns to missing values
+        semantic_mapping = self.get_semantic_null_mapping()
+        
+        # Apply conversions
+        total_conversions = 0
+        for col_name, missing_values in semantic_mapping.items():
+            if col_name in self._df.columns:
+                # Count how many values will be converted
+                count_before = self._df[col_name].isin(missing_values).sum()
+                if count_before > 0:
+                    # Replace missing indicator values with NaN
+                    self._df.loc[self._df[col_name].isin(missing_values), col_name] = np.nan
+                    total_conversions += count_before
+                    logger.debug(f"Converted {count_before} semantic nulls in column {col_name}")
+        
+        logger.info(f"Converted {total_conversions} total semantic null values to NaN")
+    
+    def convert_semantic_nulls(self, df: pd.DataFrame, columns: Optional[List[str]] = None) -> pd.DataFrame:
+        """
+        Convert semantic null values to NaN in a DataFrame.
+        
+        Args:
+            df: DataFrame to process
+            columns: List of column names to process. If None, processes all columns with metadata.
+            
+        Returns:
+            DataFrame with semantic nulls converted to NaN
+        """
+        # Work on a copy
+        df_converted = df.copy()
+        
+        # Get columns to process
+        if columns is None:
+            columns = [col for col in df_converted.columns if col in self.metadata]
+        else:
+            # Validate columns exist
+            columns = [col for col in columns if col in df_converted.columns and col in self.metadata]
+        
+        # Get semantic null mapping
+        semantic_mapping = self.get_semantic_null_mapping()
+        
+        # Apply conversions
+        for col_name in columns:
+            if col_name in semantic_mapping:
+                missing_values = semantic_mapping[col_name]
+                # Replace missing indicator values with NaN
+                mask = df_converted[col_name].isin(missing_values)
+                if mask.any():
+                    df_converted.loc[mask, col_name] = np.nan
+                    logger.debug(f"Converted {mask.sum()} semantic nulls in column {col_name}")
+        
+        return df_converted
 
 
-def load_bfrss(exclude_desc_columns: bool = True, root_dir: Optional[Union[str, Path]] = None) -> BFRSS:
+def load_bfrss(exclude_desc_columns: bool = True, semantically_null: bool = False, root_dir: Optional[Union[str, Path]] = None) -> BFRSS:
     """
     Convenience function to load BFRSS data with default settings.
     
     Args:
         exclude_desc_columns: Whether to exclude _DESC columns from metadata generation
+        semantically_null: Whether to convert values marked as indicates_missing to NaN
         root_dir: Root directory to search for data files (optional)
         
     Returns:
         BFRSS wrapper object
     """
-    return BFRSS(exclude_desc_columns=exclude_desc_columns, root_dir=root_dir)
+    return BFRSS(exclude_desc_columns=exclude_desc_columns, semantically_null=semantically_null, root_dir=root_dir)
 
 
-def load_bfrss_components(exclude_desc_columns: bool = True, root_dir: Optional[Union[str, Path]] = None) -> Tuple[pd.DataFrame, Dict[str, ColumnMetadata], logging.Logger]:
+def load_bfrss_components(exclude_desc_columns: bool = True, semantically_null: bool = False, root_dir: Optional[Union[str, Path]] = None) -> Tuple[pd.DataFrame, Dict[str, ColumnMetadata], logging.Logger]:
     """
     Convenience function to load BFRSS data and return components for destructured assignment.
     
     Args:
         exclude_desc_columns: Whether to exclude _DESC columns from metadata generation
+        semantically_null: Whether to convert values marked as indicates_missing to NaN
         root_dir: Root directory to search for data files (optional)
         
     Returns:
@@ -297,6 +409,7 @@ def load_bfrss_components(exclude_desc_columns: bool = True, root_dir: Optional[
         
     Example:
         df, metadata, logger = load_bfrss_components()
+        df, metadata, logger = load_bfrss_components(semantically_null=True)
     """
-    bfrss = load_bfrss(exclude_desc_columns=exclude_desc_columns, root_dir=root_dir)
+    bfrss = load_bfrss(exclude_desc_columns=exclude_desc_columns, semantically_null=semantically_null, root_dir=root_dir)
     return bfrss.get_components()
