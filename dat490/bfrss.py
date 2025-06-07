@@ -24,26 +24,27 @@ class BFRSS:
     def __init__(self, 
                  data_path: Optional[Union[str, Path]] = None,
                  codebook_path: Optional[Union[str, Path]] = None,
-                 desc_path: Optional[Union[str, Path]] = None,
-                 exclude_desc_columns: bool = True):
+                 exclude_desc_columns: bool = True,
+                 root_dir: Optional[Union[str, Path]] = None):
         """
         Initialize BFRSS wrapper.
         
         Args:
-            data_path: Path to LLCP2023.parquet file
+            data_path: Path to LLCP2023_desc_categorized.parquet file
             codebook_path: Path to codebook HTML file
-            desc_path: Path to LLCP2023_desc.parquet file (optional)
             exclude_desc_columns: Whether to exclude _DESC columns from metadata generation
+            root_dir: Root directory to search for data files (optional)
         """
+        # Set root directory for file searching
+        self.root_dir = Path(root_dir) if root_dir else None
+        
         # Set default paths if not provided
-        self.data_path = Path(data_path) if data_path else self._find_data_file('LLCP2023.parquet')
+        self.data_path = Path(data_path) if data_path else self._find_data_file('LLCP2023_desc_categorized.parquet')
         self.codebook_path = Path(codebook_path) if codebook_path else self._find_data_file('codebook_USCODE23_LLCP_021924.HTML')
-        self.desc_path = Path(desc_path) if desc_path else self._find_data_file('LLCP2023_desc.parquet')
         self.exclude_desc_columns = exclude_desc_columns
         
         # Lazy loading - data loaded on first access
         self._df = None
-        self._desc_df = None
         self._metadata = None
         
     def _find_data_file(self, filename: str) -> Path:
@@ -55,6 +56,14 @@ class BFRSS:
             Path('dat490') / 'data' / filename,
             Path.cwd() / 'data' / filename,
         ]
+        
+        # If root_dir is specified, check there first
+        if self.root_dir:
+            root_paths = [
+                self.root_dir / 'data' / filename,
+                self.root_dir / filename,
+            ]
+            possible_paths = root_paths + possible_paths
         
         for path in possible_paths:
             if path.exists():
@@ -71,13 +80,6 @@ class BFRSS:
             print(f"Loaded {len(self._df)} rows and {len(self._df.columns)} columns")
         return self._df
     
-    @property
-    def desc_df(self) -> Optional[pd.DataFrame]:
-        """Load and return the description DataFrame if available."""
-        if self._desc_df is None and self.desc_path and self.desc_path.exists():
-            print(f"Loading description data from {self.desc_path}...")
-            self._desc_df = pd.read_parquet(self.desc_path)
-        return self._desc_df
     
     @property
     def metadata(self) -> Dict[str, ColumnMetadata]:
@@ -218,14 +220,15 @@ class BFRSS:
         return matches
 
 
-def load_bfrss(exclude_desc_columns: bool = True) -> BFRSS:
+def load_bfrss(exclude_desc_columns: bool = True, root_dir: Optional[Union[str, Path]] = None) -> BFRSS:
     """
     Convenience function to load BFRSS data with default settings.
     
     Args:
         exclude_desc_columns: Whether to exclude _DESC columns from metadata generation
+        root_dir: Root directory to search for data files (optional)
         
     Returns:
         BFRSS wrapper object
     """
-    return BFRSS(exclude_desc_columns=exclude_desc_columns)
+    return BFRSS(exclude_desc_columns=exclude_desc_columns, root_dir=root_dir)
