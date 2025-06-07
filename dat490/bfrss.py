@@ -7,11 +7,47 @@ import os
 import logging
 import pandas as pd
 from pathlib import Path
-from typing import Dict, List, Optional, Union, Any
+from typing import Dict, List, Optional, Union, Any, Tuple
 from .parser import parse_codebook_html, ColumnMetadata, ValueRange
 
 # Configure logger for this module
 logger = logging.getLogger(__name__)
+
+
+def setup_bfrss_logger(level: int = logging.INFO) -> logging.Logger:
+    """
+    Set up a clean logger for BFRSS data operations.
+    
+    Args:
+        level: Logging level (default: logging.INFO)
+        
+    Returns:
+        Configured logger instance
+    """
+    # Create or get logger
+    bfrss_logger = logging.getLogger('bfrss_analysis')
+    
+    # Clear any existing handlers to avoid duplicates
+    bfrss_logger.handlers.clear()
+    
+    # Set level
+    bfrss_logger.setLevel(level)
+    
+    # Create formatter for clean output
+    formatter = logging.Formatter(
+        '%(asctime)s - %(levelname)s - %(message)s',
+        datefmt='%H:%M:%S'
+    )
+    
+    # Create handler for console output
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+    bfrss_logger.addHandler(handler)
+    
+    # Prevent propagation to avoid duplicate messages
+    bfrss_logger.propagate = False
+    
+    return bfrss_logger
 
 
 class BFRSS:
@@ -222,6 +258,16 @@ class BFRSS:
                 matches.append(col_name)
                 
         return matches
+    
+    def get_components(self) -> Tuple[pd.DataFrame, Dict[str, ColumnMetadata], logging.Logger]:
+        """
+        Get DataFrame, metadata, and logger for destructured assignment.
+        
+        Returns:
+            Tuple of (DataFrame, metadata dict, logger)
+        """
+        logger = setup_bfrss_logger()
+        return self.cloneDF(), self.cloneMetadata(), logger
 
 
 def load_bfrss(exclude_desc_columns: bool = True, root_dir: Optional[Union[str, Path]] = None) -> BFRSS:
@@ -236,3 +282,21 @@ def load_bfrss(exclude_desc_columns: bool = True, root_dir: Optional[Union[str, 
         BFRSS wrapper object
     """
     return BFRSS(exclude_desc_columns=exclude_desc_columns, root_dir=root_dir)
+
+
+def load_bfrss_components(exclude_desc_columns: bool = True, root_dir: Optional[Union[str, Path]] = None) -> Tuple[pd.DataFrame, Dict[str, ColumnMetadata], logging.Logger]:
+    """
+    Convenience function to load BFRSS data and return components for destructured assignment.
+    
+    Args:
+        exclude_desc_columns: Whether to exclude _DESC columns from metadata generation
+        root_dir: Root directory to search for data files (optional)
+        
+    Returns:
+        Tuple of (DataFrame, metadata dict, logger)
+        
+    Example:
+        df, metadata, logger = load_bfrss_components()
+    """
+    bfrss = load_bfrss(exclude_desc_columns=exclude_desc_columns, root_dir=root_dir)
+    return bfrss.get_components()
