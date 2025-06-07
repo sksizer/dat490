@@ -76,22 +76,14 @@ if __name__ == '__main__':
        - model.json: The actual data model with all column metadata
     5. Converts all Jupyter notebooks to HTML for website viewing
     """
-    # Load the BRFSS data
-    try:
-        print("Loading BRFSS data...")
-        df = pd.read_parquet(Path('data', 'LLCP2023.parquet'))
-        print(f"Loaded data with {len(df)} rows and {len(df.columns)} columns")
-    except Exception as e:
-        print(f"Error loading data: {e}")
-        print("Continuing without statistical information")
-        df = None
+    # Use BFRSS wrapper to load data and metadata
+    from dat490 import load_bfrss
     
-    # Parse the codebook HTML file with data for statistics
-    print("Parsing codebook and calculating statistics...")
-    column_metadatas = parse_codebook_html(
-        Path('data', 'codebook_USCODE23_LLCP_021924.HTML'),
-        df
-    )
+    print("Loading BRFSS data and metadata...")
+    bfrss = load_bfrss(exclude_desc_columns=True)
+    
+    # Get metadata (this will trigger loading and parsing)
+    column_metadatas = bfrss.metadata
 
     # Create the shared model with all column metadata
     model = SharedModel(
