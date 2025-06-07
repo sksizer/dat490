@@ -67,7 +67,8 @@ const valueLookupTableData = computed(() => {
       return {
         value: value.start === value.end ? value.start.toString() : `${value.start} - ${value.end}`,
         count: 'count' in value ? value.count : 0,
-        description: value.description
+        description: value.description,
+        indicates_missing: value.indicates_missing || false
       }
     } 
     // Handle ValueDef (only has description)
@@ -75,7 +76,8 @@ const valueLookupTableData = computed(() => {
       return {
         value: `#${index + 1}`,
         count: '-',
-        description: value.description
+        description: value.description,
+        indicates_missing: value.indicates_missing || false
       }
     }
   })
@@ -314,6 +316,16 @@ onUnmounted(() => {
             </UTabs>
           </div>
           
+          <!-- Legend for missing values -->
+          <div v-if="valueLookupTableData.some(row => row.indicates_missing)" class="mb-3 p-2 bg-gray-50 rounded-lg">
+            <div class="flex items-center gap-2 text-xs">
+              <div class="flex items-center gap-1">
+                <div class="w-3 h-3 bg-red-100 border border-red-200 rounded"></div>
+                <span class="text-gray-600">Missing/Refused/Unknown values</span>
+              </div>
+            </div>
+          </div>
+
           <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
               <thead>
@@ -324,7 +336,14 @@ onUnmounted(() => {
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200">
-                <tr v-for="(row, index) in valueLookupTableData" :key="index">
+                <tr 
+                  v-for="(row, index) in valueLookupTableData" 
+                  :key="index"
+                  :class="{
+                    'bg-red-50 hover:bg-red-100': row.indicates_missing,
+                    'hover:bg-gray-50': !row.indicates_missing
+                  }"
+                >
                   <td class="px-2 py-1 text-xs font-mono text-gray-900">{{ row.value }}</td>
                   <td class="px-2 py-1 text-xs text-right">
                     <span v-if="row.count !== '-'" class="text-gray-900">
@@ -348,21 +367,41 @@ onUnmounted(() => {
           </template>
           
           <div class="space-y-2">
-            <!-- Basic statistics (common to both types) -->
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
+            <!-- Enhanced response statistics -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
               <div>
-                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Count</h3>
-                <p class="text-gray-900 text-sm">{{ columnData.statistics.count.toLocaleString() }}</p>
+                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Valid Responses</h3>
+                <p class="text-gray-900 text-sm font-medium">{{ columnData.statistics.count.toLocaleString() }}</p>
               </div>
               
               <div>
-                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Null Count</h3>
-                <p class="text-gray-900 text-sm">{{ columnData.statistics.null_count.toLocaleString() }}</p>
+                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Total Responses</h3>
+                <p class="text-gray-900 text-sm">{{ columnData.statistics.total_responses.toLocaleString() }}</p>
+              </div>
+              
+              <div v-if="columnData.statistics.missing_count > 0">
+                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Missing/Refused</h3>
+                <p class="text-orange-600 text-sm">{{ columnData.statistics.missing_count.toLocaleString() }}</p>
+              </div>
+              
+              <div v-if="columnData.statistics.null_count > 0">
+                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Null Values</h3>
+                <p class="text-gray-500 text-sm">{{ columnData.statistics.null_count.toLocaleString() }}</p>
               </div>
               
               <div v-if="columnData.statistics.unique_count !== undefined">
                 <h3 class="text-xs font-medium text-gray-700 mb-0.5">Unique Values</h3>
                 <p class="text-gray-900 text-sm">{{ columnData.statistics.unique_count.toLocaleString() }}</p>
+              </div>
+            </div>
+            
+            <!-- Data quality indicator -->
+            <div v-if="columnData.statistics.missing_count > 0" class="mt-2 p-2 bg-amber-50 rounded-lg border border-amber-200">
+              <div class="flex items-center gap-2 text-xs">
+                <div class="w-2 h-2 bg-amber-400 rounded-full"></div>
+                <span class="text-amber-700">
+                  {{ ((columnData.statistics.missing_count / columnData.statistics.total_responses) * 100).toFixed(1) }}% of responses are missing/refused values
+                </span>
               </div>
             </div>
             

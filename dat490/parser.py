@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 class ValueDef(BaseModel):
     """Base model for representing value definitions in BRFSS survey data."""
     description: str
-    missing: bool = Field(default=False)
+    indicates_missing: bool = Field(default=False)
 
 
 class ValueRange(ValueDef):
@@ -23,9 +23,11 @@ class ValueRange(ValueDef):
 
 class ColumnStatistics(BaseModel):
     """Base model for statistical information about a column."""
-    count: int                          # Number of non-null values
-    null_count: int                     # Number of null values
+    count: int                          # Number of non-null, non-missing values
+    null_count: int                     # Number of pandas null/NaN values
+    missing_count: int                  # Number of values marked indicates_missing=True
     unique_count: Optional[int] = None  # Number of unique values
+    total_responses: int                # Total non-null responses (count + missing_count)
 
 
 class NumericStatistics(ColumnStatistics):
@@ -67,6 +69,40 @@ class ColumnMetadata(BaseModel):
     statistics: Optional[Union[NumericStatistics, CategoricalStatistics]] = None  # Statistical information
 
 
+def is_missing_value(description: str) -> bool:
+    """
+    Determine if a value description indicates missing data.
+    
+    Checks for common patterns in BRFSS codebook descriptions that indicate
+    the value represents missing, refused, or unknown responses.
+    
+    Args:
+        description: The description text for a value
+        
+    Returns:
+        True if the description indicates missing data, False otherwise
+    """
+    # Convert to lowercase for case-insensitive matching
+    desc_lower = description.lower()
+    
+    # Common patterns that indicate missing data
+    missing_patterns = [
+        "don't know",
+        "not sure", 
+        "refused",
+        "missing",
+        "not asked",
+        "blank",
+        "not applicable",
+        "n/a",
+        "skip",
+        "skipped"
+    ]
+    
+    # Check if any missing pattern is found in the description
+    return any(pattern in desc_lower for pattern in missing_patterns)
+
+
 def get_value_def(tr:PageElement, df: Optional[pd.DataFrame] = None, column_name: Optional[str] = None) -> ValueDef | ValueRange:
     """
     Extract value definition from a table row in the codebook.
@@ -89,6 +125,9 @@ def get_value_def(tr:PageElement, df: Optional[pd.DataFrame] = None, column_name
     value_text = cells[0].text.strip()
     description = cells[1].text.strip()
 
+    # Determine if this value indicates missing data
+    indicates_missing = is_missing_value(description)
+
     # Check if the value is actually a range such as "1 - 30" or "1-30"
     range_match = re.match(r'^(\d+)\s*[-–]\s*(\d+)$', value_text)
     if range_match:
@@ -110,7 +149,8 @@ def get_value_def(tr:PageElement, df: Optional[pd.DataFrame] = None, column_name
             start=start,
             end=end,
             description=description,
-            count=count
+            count=count,
+            indicates_missing=indicates_missing
         )
     else:
         # Try to parse as single integer
@@ -132,12 +172,35 @@ def get_value_def(tr:PageElement, df: Optional[pd.DataFrame] = None, column_name
                 start=value,
                 end=value,
                 description=description,
-                count=count
+                count=count,
+                indicates_missing=indicates_missing
             )
         except:
             return ValueDef(
-                description=description
+                description=description,
+                indicates_missing=indicates_missing
             )
+
+
+def get_missing_value_codes(value_ranges: list[ValueDef]) -> set[int]:
+    """
+    Extract numeric codes that represent missing values.
+    
+    Args:
+        value_ranges: List of ValueDef/ValueRange objects
+        
+    Returns:
+        Set of numeric codes that indicate missing data
+    """
+    missing_codes = set()
+    
+    for value_def in value_ranges:
+        if value_def.indicates_missing and isinstance(value_def, ValueRange):
+            # Add all values in the range
+            for code in range(value_def.start, value_def.end + 1):
+                missing_codes.add(code)
+    
+    return missing_codes
 
 
 def get_value_ranges(table:PageElement, df: Optional[pd.DataFrame] = None, column_name: Optional[str] = None) -> list[ValueDef]:
@@ -320,32 +383,55 @@ def parse_codebook_html(html_path: Path, df: Optional[pd.DataFrame] = None) -> D
                 if df is not None and sas_variable_name in df.columns:
                     series = df[sas_variable_name]
 
-                    # Common statistics for all columns
-                    count = series.count()
-                    null_count = series.isna().sum()
+                    # Get value ranges first to identify missing codes
+                    value_ranges_temp = get_value_ranges(table, df, sas_variable_name)
+                    missing_codes = get_missing_value_codes(value_ranges_temp)
+
+                    # Calculate basic counts
+                    null_count = int(series.isna().sum())
+                    total_non_null = int(series.count())
+                    
+                    # Count missing values (those marked as indicates_missing=True)
+                    missing_count = 0
+                    if missing_codes:
+                        missing_count = int(series.isin(missing_codes).sum())
+                    
+                    # Count meaningful (non-null, non-missing) values
+                    meaningful_count = total_non_null - missing_count
+                    total_responses = total_non_null  # All non-null responses
                     unique_count = series.nunique()
 
                     # Determine if column should be treated as numeric or categorical
                     is_numeric = False
                     if type_of_variable == "Num" and pd.api.types.is_numeric_dtype(series):
                         try:
-                            # Calculate numeric statistics
-                            desc = series.describe()
+                            # Filter out missing values for numeric calculations
+                            meaningful_series = series.dropna()
+                            if missing_codes:
+                                meaningful_series = meaningful_series[~meaningful_series.isin(missing_codes)]
+                            
+                            if len(meaningful_series) > 0:
+                                # Calculate numeric statistics on meaningful data only
+                                desc = meaningful_series.describe()
 
-                            # Create numeric statistics
-                            statistics = NumericStatistics(
-                                count=count,
-                                null_count=null_count,
-                                unique_count=unique_count,
-                                mean=float(desc['mean']) if not pd.isna(desc['mean']) else None,
-                                std=float(desc['std']) if not pd.isna(desc['std']) else None,
-                                min=float(desc['min']) if not pd.isna(desc['min']) else None,
-                                q25=float(desc['25%']) if not pd.isna(desc['25%']) else None,
-                                median=float(desc['50%']) if not pd.isna(desc['50%']) else None,
-                                q75=float(desc['75%']) if not pd.isna(desc['75%']) else None,
-                                max=float(desc['max']) if not pd.isna(desc['max']) else None
-                            )
-                            is_numeric = True
+                                # Create numeric statistics
+                                statistics = NumericStatistics(
+                                    count=meaningful_count,
+                                    null_count=null_count,
+                                    missing_count=missing_count,
+                                    unique_count=unique_count,
+                                    total_responses=total_responses,
+                                    mean=float(desc['mean']) if not pd.isna(desc['mean']) else None,
+                                    std=float(desc['std']) if not pd.isna(desc['std']) else None,
+                                    min=float(desc['min']) if not pd.isna(desc['min']) else None,
+                                    q25=float(desc['25%']) if not pd.isna(desc['25%']) else None,
+                                    median=float(desc['50%']) if not pd.isna(desc['50%']) else None,
+                                    q75=float(desc['75%']) if not pd.isna(desc['75%']) else None,
+                                    max=float(desc['max']) if not pd.isna(desc['max']) else None
+                                )
+                                is_numeric = True
+                            else:
+                                print(f"No meaningful values found for numeric column {sas_variable_name}")
                         except Exception as e:
                             print(f"Error calculating numeric stats for {sas_variable_name}: {e}")
                             is_numeric = False
@@ -353,22 +439,26 @@ def parse_codebook_html(html_path: Path, df: Optional[pd.DataFrame] = None) -> D
                     # If not numeric or numeric calculation failed, treat as categorical
                     if not is_numeric:
                         try:
-                            # Get value counts (limited to top 20 for brevity)
-                            value_counts = series.value_counts().head(20).to_dict()
+                            # Get value counts for all values (limited to top 20 for brevity)
+                            all_value_counts = series.value_counts().head(20).to_dict()
 
                             # Convert all keys to strings for JSON compatibility
-                            value_counts_str = {str(k): int(v) for k, v in value_counts.items()}
+                            value_counts_str = {str(k): int(v) for k, v in all_value_counts.items()}
 
                             # Create list of top values with counts and descriptions
                             top_values = []
-                            for value, count in value_counts.items():
+                            for value, count in all_value_counts.items():
                                 # Try to get description from value_lookup
                                 description = None
-                                value_ranges_list = get_value_ranges(table, df, sas_variable_name)
+                                is_missing = False
+                                
                                 if isinstance(value, (int, float)) and not pd.isna(value):
                                     value_int = int(value) if hasattr(value, 'is_integer') and value.is_integer() else int(value) if isinstance(value, int) else None
+                                    # Check if this value indicates missing data
+                                    is_missing = value_int in missing_codes if value_int is not None else False
+                                    
                                     # Search through ValueRange objects to find a match
-                                    for val_def in value_ranges_list:
+                                    for val_def in value_ranges_temp:
                                         if isinstance(val_def, ValueRange) and value_int is not None and val_def.start <= value_int <= val_def.end:
                                             description = val_def.description
                                             break
@@ -376,19 +466,29 @@ def parse_codebook_html(html_path: Path, df: Optional[pd.DataFrame] = None) -> D
                                 top_values.append({
                                     "value": str(value),
                                     "count": int(count),
-                                    "description": description if description else "Unknown"
+                                    "description": description if description else "Unknown",
+                                    "is_missing": is_missing
                                 })
 
                             # Create categorical statistics
                             statistics = CategoricalStatistics(
-                                count=count,
+                                count=meaningful_count,
                                 null_count=null_count,
+                                missing_count=missing_count,
                                 unique_count=unique_count,
+                                total_responses=total_responses,
                                 value_counts=value_counts_str,
                                 top_values=top_values
                             )
                         except Exception as e:
                             print(f"Error calculating categorical stats for {sas_variable_name}: {e}")
+
+                # Get value ranges and validate they exist
+                value_ranges = get_value_ranges(table, df, sas_variable_name)
+                if not value_ranges or len(value_ranges) == 0:
+                    raise ValueError(f"Column '{sas_variable_name}' has no value ranges defined in codebook table. "
+                                    f"This may indicate a parsing issue or missing value definitions. "
+                                    f"HTML anchor: {html_name}")
 
                 # Create ColumnMetadata object
                 metadata = ColumnMetadata(
@@ -402,7 +502,7 @@ def parse_codebook_html(html_path: Path, df: Optional[pd.DataFrame] = None) -> D
                     type_of_variable=type_of_variable,
                     question_prologue=question_prologue,
                     question=question,
-                    value_ranges=get_value_ranges(table, df, sas_variable_name),
+                    value_ranges=value_ranges,
                     value_lookup=get_value_lookup(table),
                     computed= True if section_name == 'Calculated Variables' or section_name == 'Calculated Race Variables' else False,
                     html_name=html_name,

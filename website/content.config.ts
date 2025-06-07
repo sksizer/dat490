@@ -29,12 +29,12 @@ export default defineContentConfig({
                             // ValueDef
                             z.object({
                                 description: z.string(),
-                                missing: z.boolean().optional()
+                                indicates_missing: z.boolean().optional()
                             }),
                             // ValueRange
                             z.object({
                                 description: z.string(),
-                                missing: z.boolean().optional(),
+                                indicates_missing: z.boolean().optional(),
                                 start: z.number(),
                                 end: z.number(),
                                 count: z.number()
@@ -52,7 +52,9 @@ export default defineContentConfig({
                         z.object({
                             count: z.number(),
                             null_count: z.number(),
+                            missing_count: z.number(),
                             unique_count: z.number().nullable().optional(),
+                            total_responses: z.number(),
                             mean: z.number().nullable().optional(),
                             std: z.number().nullable().optional(),
                             min: z.number().nullable().optional(),
@@ -65,13 +67,16 @@ export default defineContentConfig({
                         z.object({
                             count: z.number(),
                             null_count: z.number(),
+                            missing_count: z.number(),
                             unique_count: z.number().nullable().optional(),
+                            total_responses: z.number(),
                             value_counts: z.record(z.string(), z.number()),
                             top_values: z.array(
                                 z.object({
                                     value: z.string(),
                                     count: z.number(),
-                                    description: z.string().optional()
+                                    description: z.string().optional(),
+                                    is_missing: z.boolean().optional()
                                 })
                             )
                         })

@@ -104,7 +104,7 @@ const columnMetadata = {
   sas_variable_name: 'SAS Variable',
   section_name: 'Section',
   type_of_variable: 'Type',
-  count: 'Response Count',
+  count: 'Valid Responses',
   question: 'Question',
   computed: 'Computed'
 }
@@ -200,10 +200,25 @@ const columns: ColumnDef<any>[] = [
   },
   {
     accessorKey: 'count',
-    header: createSortableHeader('count', 'Count'),
+    header: createSortableHeader('count', 'Valid Responses'),
     cell: ({ row }) => {
       if (!row.original.statistics) return '-'
-      return row.original.statistics.count.toLocaleString()
+      
+      const stats = row.original.statistics
+      const validCount = stats.count
+      const totalResponses = stats.total_responses
+      const missingCount = stats.missing_count || 0
+      
+      // Show valid count prominently, with total and missing info in tooltip
+      return h('span', {
+        title: `Valid responses: ${validCount.toLocaleString()}\nTotal responses: ${totalResponses.toLocaleString()}\nMissing/refused: ${missingCount.toLocaleString()}\nNull values: ${stats.null_count.toLocaleString()}`,
+        class: 'cursor-help'
+      }, [
+        h('span', { class: 'font-medium' }, validCount.toLocaleString()),
+        missingCount > 0 ? h('span', { 
+          class: 'text-xs text-gray-500 ml-1' 
+        }, `(${totalResponses.toLocaleString()})`) : null
+      ])
     },
   },
   {
