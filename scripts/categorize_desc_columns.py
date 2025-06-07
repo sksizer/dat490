@@ -89,7 +89,7 @@ def categorize_desc_columns():
     
     # Step 3: Save modified DataFrame to a new Parquet file (using exact same approach)
     logger.info(f"Saving categorized data to {output_file}...")
-    df.to_parquet(output_file, engine='pyarrow', index=False)
+    df.to_parquet(output_file, engine='pyarrow', index=True)
     
     # Verification
     logger.info("Verifying saved file...")
