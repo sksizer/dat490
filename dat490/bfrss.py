@@ -4,10 +4,14 @@ Provides a convenient interface for working with BRFSS data and metadata.
 """
 
 import os
+import logging
 import pandas as pd
 from pathlib import Path
 from typing import Dict, List, Optional, Union, Any
 from .parser import parse_codebook_html, ColumnMetadata, ValueRange
+
+# Configure logger for this module
+logger = logging.getLogger(__name__)
 
 
 class BFRSS:
@@ -75,9 +79,9 @@ class BFRSS:
     def df(self) -> pd.DataFrame:
         """Load and return the main DataFrame (lazy loading)."""
         if self._df is None:
-            print(f"Loading data from {self.data_path}...")
+            logger.info(f"Loading data from {self.data_path}...")
             self._df = pd.read_parquet(self.data_path)
-            print(f"Loaded {len(self._df)} rows and {len(self._df.columns)} columns")
+            logger.info(f"Loaded {len(self._df)} rows and {len(self._df.columns)} columns")
         return self._df
     
     
@@ -85,7 +89,7 @@ class BFRSS:
     def metadata(self) -> Dict[str, ColumnMetadata]:
         """Parse and return metadata (lazy loading)."""
         if self._metadata is None:
-            print(f"Parsing codebook from {self.codebook_path}...")
+            logger.info(f"Parsing codebook from {self.codebook_path}...")
             
             # Determine which DataFrame to use for statistics
             df_for_stats = self.df
@@ -93,10 +97,10 @@ class BFRSS:
                 # Filter out _DESC columns for statistics calculation
                 non_desc_columns = [col for col in df_for_stats.columns if not col.endswith('_DESC')]
                 df_for_stats = df_for_stats[non_desc_columns]
-                print(f"Excluding {len(self.df.columns) - len(non_desc_columns)} _DESC columns from metadata generation")
+                logger.info(f"Excluding {len(self.df.columns) - len(non_desc_columns)} _DESC columns from metadata generation")
             
             self._metadata = parse_codebook_html(self.codebook_path, df_for_stats)
-            print(f"Parsed metadata for {len(self._metadata)} columns")
+            logger.info(f"Parsed metadata for {len(self._metadata)} columns")
         return self._metadata
     
     def cloneDF(self) -> pd.DataFrame:

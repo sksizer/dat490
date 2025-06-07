@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 import pandas as pd
 import subprocess
 import glob
@@ -9,6 +10,10 @@ from pathlib import Path
 from typing import List
 
 from dat490.parser import ColumnMetadata, parse_codebook_html
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%H:%M:%S')
+logger = logging.getLogger(__name__)
 
 
 class SharedModel(BaseModel):
@@ -34,17 +39,17 @@ def convert_notebooks_to_html(output_dir: Path) -> List[str]:
     generated_files = []
     
     if not notebook_files:
-        print("No Jupyter notebooks found in the current directory")
+        logger.info("No Jupyter notebooks found in the current directory")
         return generated_files
     
-    print(f"Found {len(notebook_files)} Jupyter notebooks to convert")
+    logger.info(f"Found {len(notebook_files)} Jupyter notebooks to convert")
     
     for notebook_file in notebook_files:
         output_filename = os.path.splitext(os.path.basename(notebook_file))[0] + ".html"
         output_path = output_dir / output_filename
         
         try:
-            print(f"Converting {notebook_file} to HTML...")
+            logger.info(f"Converting {notebook_file} to HTML...")
             subprocess.run(
                 ["jupyter", "nbconvert", "--to", "html", "--no-input", 
                  f"--output-dir={output_dir}", f"--output={output_filename}", notebook_file],
@@ -52,13 +57,13 @@ def convert_notebooks_to_html(output_dir: Path) -> List[str]:
                 capture_output=True
             )
             generated_files.append(str(output_path))
-            print(f"Successfully generated {output_path}")
+            logger.info(f"Successfully generated {output_path}")
         except subprocess.CalledProcessError as e:
-            print(f"Error converting {notebook_file}: {e}")
-            print(f"Command output: {e.stdout.decode()}")
-            print(f"Command error: {e.stderr.decode()}")
+            logger.error(f"Error converting {notebook_file}: {e}")
+            logger.error(f"Command output: {e.stdout.decode()}")
+            logger.error(f"Command error: {e.stderr.decode()}")
         except Exception as e:
-            print(f"Unexpected error converting {notebook_file}: {e}")
+            logger.error(f"Unexpected error converting {notebook_file}: {e}")
     
     return generated_files
 
@@ -79,7 +84,7 @@ if __name__ == '__main__':
     # Use BFRSS wrapper to load data and metadata
     from dat490 import load_bfrss
     
-    print("Loading BRFSS data and metadata...")
+    logger.info("Loading BRFSS data and metadata...")
     bfrss = load_bfrss(exclude_desc_columns=True)
     
     # Get metadata (this will trigger loading and parsing)
@@ -97,28 +102,28 @@ if __name__ == '__main__':
     web_data_path = web_data_dir / 'model.json'
 
     # Write JSON schema to file
-    print("Writing schema.json...")
+    logger.info("Writing schema.json...")
     with open(web_data_schem_path, 'w') as f:
         f.write(json.dumps(model.model_json_schema(
             mode='serialization'
         )))
 
     # Write model data to file
-    print("Writing model.json...")
+    logger.info("Writing model.json...")
     with open(web_data_path, 'w') as f:
         f.write(model.model_dump_json(exclude={'columns': {'__all__': {'value_lookup'}}}))
 
     # Output summary of parsing results
-    print(f"Successfully processed {len(column_metadatas.keys())} columns from BRFSS codebook")
+    logger.info(f"Successfully processed {len(column_metadatas.keys())} columns from BRFSS codebook")
     
     # Convert notebooks to HTML
-    print("\nConverting Jupyter notebooks to HTML...")
+    logger.info("Converting Jupyter notebooks to HTML...")
     html_output_dir = Path('website', 'public', 'html', 'notebooks')
     generated_files = convert_notebooks_to_html(html_output_dir)
     
     if generated_files:
-        print(f"\nSuccessfully generated {len(generated_files)} HTML files:")
+        logger.info(f"Successfully generated {len(generated_files)} HTML files:")
         for html_file in generated_files:
-            print(f" - {html_file}")
+            logger.info(f" - {html_file}")
     else:
-        print("No HTML files were generated from notebooks")
+        logger.info("No HTML files were generated from notebooks")

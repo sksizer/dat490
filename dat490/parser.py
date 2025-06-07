@@ -246,7 +246,6 @@ def parse_codebook_html(html_path: Path, df: Optional[pd.DataFrame] = None) -> D
 
     for branch in branches:
         html_name = branch.find('a')['name']
-        print('html_name' + html_name)
         # Find the table with summary="Procedure Report: Report"
         table = branch.find('table', attrs={'summary': 'Procedure Report: Report'})
         if not table:
