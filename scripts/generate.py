@@ -4,12 +4,27 @@ import logging
 import pandas as pd
 import subprocess
 import glob
+import time
+import argparse
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 from pydantic import BaseModel
 from pathlib import Path
-from typing import List
+from typing import List, Dict, Optional
 
 from dat490.parser import ColumnMetadata, parse_codebook_html
+from scripts.demographic_analysis import perform_demographic_analysis, generate_analysis_visualizations
+
+# Demographic feature columns for analysis (26 total features)
+DEMOGRAPHIC_FEATURE_COLUMNS = [
+    # Demographics section columns (13 total)
+    'MARITAL', 'EDUCA', 'RENTHOM1', 'NUMHHOL4', 'NUMPHON4', 'CPDEMO1C', 
+    'VETERAN3', 'EMPLOY1', 'CHILDREN', 'INCOME3', 'PREGNANT', 'WEIGHT2', 'HEIGHT3',
+    
+    # Calculated demographic variables (13 total) 
+    '_IMPRACE', '_CRACE1', '_MRACE1', '_RACE', '_RACEG21', '_RACEGR3', '_RACEPRV', 
+    '_SEX', '_AGEG5YR', '_AGE65YR', '_AGE80', '_AGE_G', '_EDUCAG'
+]
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%H:%M:%S')
@@ -51,7 +66,7 @@ def convert_notebooks_to_html(output_dir: Path) -> List[str]:
         try:
             logger.info(f"Converting {notebook_file} to HTML...")
             subprocess.run(
-                ["jupyter", "nbconvert", "--to", "html", "--no-input", 
+                ["jupyter", "nbconvert", "--to", "html", "--no-input", "--allow-errors",
                  f"--output-dir={output_dir}", f"--output={output_filename}", notebook_file],
                 check=True,
                 capture_output=True
@@ -62,10 +77,306 @@ def convert_notebooks_to_html(output_dir: Path) -> List[str]:
             logger.error(f"Error converting {notebook_file}: {e}")
             logger.error(f"Command output: {e.stdout.decode()}")
             logger.error(f"Command error: {e.stderr.decode()}")
+            
+            # Try alternative approach: fix notebook format first
+            try:
+                logger.info(f"Attempting to fix notebook format for {notebook_file}...")
+                import nbformat
+                
+                # Read and validate/fix the notebook
+                with open(notebook_file, 'r') as f:
+                    nb = nbformat.read(f, as_version=4)
+                
+                # Fix missing execution_count fields
+                for cell in nb.cells:
+                    if cell.cell_type == 'code' and 'execution_count' not in cell:
+                        cell.execution_count = None
+                
+                # Write the fixed notebook to a temporary file
+                import tempfile
+                with tempfile.NamedTemporaryFile(mode='w', suffix='.ipynb', delete=False) as temp_file:
+                    nbformat.write(nb, temp_file)
+                    temp_filename = temp_file.name
+                
+                # Try converting the fixed notebook
+                subprocess.run(
+                    ["jupyter", "nbconvert", "--to", "html", "--no-input", "--allow-errors",
+                     f"--output-dir={output_dir}", f"--output={output_filename}", temp_filename],
+                    check=True,
+                    capture_output=True
+                )
+                
+                # Clean up temp file
+                os.unlink(temp_filename)
+                
+                generated_files.append(str(output_path))
+                logger.info(f"Successfully generated {output_path} after fixing notebook format")
+                
+            except Exception as fix_error:
+                logger.error(f"Failed to fix and convert {notebook_file}: {fix_error}")
+                
         except Exception as e:
             logger.error(f"Unexpected error converting {notebook_file}: {e}")
     
     return generated_files
+
+
+def run_demographic_analysis_for_column(args):
+    """
+    Worker function for parallel demographic analysis.
+    
+    Args:
+        args: Tuple of (target_column, df_dict, metadata_dict, min_samples)
+        
+    Returns:
+        Tuple of (target_column, result_dict, analysis_time)
+    """
+    target_column, df_dict, metadata_dict, min_samples = args
+    
+    start_time = time.time()
+    try:
+        # Reconstruct DataFrame and metadata from serializable dictionaries
+        df = pd.DataFrame(df_dict)
+        
+        # Reconstruct metadata objects 
+        from dat490.parser import ColumnMetadata
+        metadata = {}
+        for col_name, meta_dict in metadata_dict.items():
+            metadata[col_name] = ColumnMetadata(**meta_dict)
+        
+        result = perform_demographic_analysis(
+            df=df,
+            metadata=metadata,
+            target_column=target_column,
+            feature_columns=DEMOGRAPHIC_FEATURE_COLUMNS,
+            min_samples=min_samples,
+            hyperparameter_tuning=False,  # Skip for speed during bulk analysis
+            logger=None  # Use default logger to avoid serialization issues
+        )
+        
+        analysis_time = time.time() - start_time
+        
+        # Convert result to dictionary for serialization
+        result_dict = result.model_dump()
+        
+        return target_column, result_dict, analysis_time
+        
+    except Exception as e:
+        analysis_time = time.time() - start_time
+        
+        # Return failed result as dictionary
+        failed_result_dict = {
+            'target_column': target_column,
+            'accuracy': 0.0,
+            'classification_report': {},
+            'feature_importance': [],
+            'confusion_matrix': [],
+            'class_labels': [],
+            'model_parameters': {},
+            'analysis_metadata': {},
+            'successful': False,
+            'error_message': str(e)
+        }
+        
+        return target_column, failed_result_dict, analysis_time
+
+
+def generate_demographic_analyses(df: pd.DataFrame, metadata: Dict[str, ColumnMetadata], 
+                                output_dir: Path, min_samples: int = 1000,
+                                max_workers: int = 4, sequential: bool = False) -> Dict[str, float]:
+    """
+    Generate demographic analyses for all applicable columns.
+    
+    Args:
+        df: BRFSS DataFrame
+        metadata: Column metadata dictionary
+        output_dir: Directory to save analysis results
+        min_samples: Minimum sample size for analysis
+        max_workers: Number of parallel workers
+        
+    Returns:
+        Dictionary mapping column names to accuracy scores
+    """
+    analysis_start_time = time.time()
+    
+    # Identify candidate columns for analysis
+    candidate_columns = []
+    
+    for col_name, col_meta in metadata.items():
+        if col_name not in df.columns:
+            continue
+            
+        # Skip if this is a demographic feature column (don't analyze predictors)
+        if col_name in DEMOGRAPHIC_FEATURE_COLUMNS:
+            continue
+            
+        # Check if column has enough valid data
+        valid_count = df[col_name].dropna().shape[0]
+        if valid_count < min_samples:
+            continue
+            
+        # Skip categorical columns that are too sparse (>50% categories)
+        unique_values = df[col_name].dropna().nunique()
+        if unique_values > valid_count * 0.5:
+            continue
+            
+        # Skip columns with too few categories for classification (need at least 2)
+        if unique_values < 2:
+            continue
+            
+        candidate_columns.append(col_name)
+    
+    logger.info(f"Identified {len(candidate_columns)} candidate columns for demographic analysis")
+    logger.info(f"Analysis criteria: min_samples={min_samples}, excluding {len(DEMOGRAPHIC_FEATURE_COLUMNS)} demographic features")
+    
+    if len(candidate_columns) == 0:
+        logger.warning("No candidate columns found for demographic analysis")
+        return {}
+    
+    # Prepare serializable data for parallel processing
+    df_dict = df.to_dict()
+    metadata_dict = {col_name: col_meta.model_dump() for col_name, col_meta in metadata.items()}
+    
+    # Prepare arguments for parallel processing  
+    analysis_args = [
+        (col, df_dict, metadata_dict, min_samples) 
+        for col in candidate_columns
+    ]
+    
+    results = {}
+    successful_analyses = 0
+    total_analysis_time = 0
+    
+    if sequential or len(candidate_columns) <= 5:
+        # Run sequentially for debugging or small datasets
+        logger.info(f"Starting sequential demographic analysis...")
+        
+        for i, target_column in enumerate(candidate_columns, 1):
+            start_time = time.time()
+            
+            try:
+                result = perform_demographic_analysis(
+                    df=df,
+                    metadata=metadata,
+                    target_column=target_column,
+                    feature_columns=DEMOGRAPHIC_FEATURE_COLUMNS,
+                    min_samples=min_samples,
+                    hyperparameter_tuning=False,
+                    logger=logger
+                )
+                
+                analysis_time = time.time() - start_time
+                total_analysis_time += analysis_time
+                
+                if result.successful:
+                    successful_analyses += 1
+                    results[target_column] = result.accuracy
+                    
+                    # Save individual analysis results
+                    analysis_file = output_dir / f"{target_column}_demographic_analysis.json"
+                    with open(analysis_file, 'w') as f:
+                        f.write(result.model_dump_json(indent=2))
+                    
+                    # Generate visualizations
+                    viz_dir = Path('website/public/images')
+                    viz_files = generate_analysis_visualizations(
+                        result=result,
+                        output_dir=viz_dir,
+                        format='svg'
+                    )
+                    
+                    logger.info(f"[{i:3d}/{len(candidate_columns)}] {target_column}: accuracy={result.accuracy:.3f}, time={analysis_time:.1f}s")
+                    
+                else:
+                    logger.warning(f"[{i:3d}/{len(candidate_columns)}] {target_column}: FAILED - {result.error_message}")
+                    
+            except Exception as e:
+                analysis_time = time.time() - start_time
+                total_analysis_time += analysis_time
+                logger.error(f"[{i:3d}/{len(candidate_columns)}] {target_column}: ERROR - {str(e)}")
+    
+    else:
+        # Run analyses in parallel
+        logger.info(f"Starting parallel demographic analysis with {max_workers} workers...")
+        
+        with ProcessPoolExecutor(max_workers=max_workers) as executor:
+            # Submit all jobs
+            future_to_column = {
+                executor.submit(run_demographic_analysis_for_column, args): args[0] 
+                for args in analysis_args
+            }
+            
+            # Process completed analyses
+            for i, future in enumerate(as_completed(future_to_column), 1):
+                column_name = future_to_column[future]
+                
+                try:
+                    target_column, result_dict, analysis_time = future.result()
+                    total_analysis_time += analysis_time
+                    
+                    if result_dict['successful']:
+                        successful_analyses += 1
+                        results[target_column] = result_dict['accuracy']
+                        
+                        # Save individual analysis results
+                        analysis_file = output_dir / f"{target_column}_demographic_analysis.json"
+                        with open(analysis_file, 'w') as f:
+                            json.dump(result_dict, f, indent=2)
+                        
+                        # Generate visualizations
+                        from scripts.demographic_analysis import DemographicAnalysisResult
+                        result_obj = DemographicAnalysisResult(**result_dict)
+                        
+                        viz_dir = Path('website/public/images')
+                        viz_files = generate_analysis_visualizations(
+                            result=result_obj,
+                            output_dir=viz_dir,
+                            format='svg'
+                        )
+                        
+                        logger.info(f"[{i:3d}/{len(candidate_columns)}] {target_column}: accuracy={result_dict['accuracy']:.3f}, time={analysis_time:.1f}s")
+                        
+                    else:
+                        logger.warning(f"[{i:3d}/{len(candidate_columns)}] {target_column}: FAILED - {result_dict['error_message']}")
+                        
+                except Exception as e:
+                    logger.error(f"[{i:3d}/{len(candidate_columns)}] {column_name}: ERROR - {str(e)}")
+    
+    # Summary statistics
+    total_time = time.time() - analysis_start_time
+    avg_analysis_time = total_analysis_time / len(candidate_columns) if candidate_columns else 0
+    
+    logger.info(f"Demographic analysis completed:")
+    logger.info(f"  Successful analyses: {successful_analyses}/{len(candidate_columns)} ({successful_analyses/len(candidate_columns)*100:.1f}%)")
+    logger.info(f"  Total time: {total_time:.1f}s")
+    logger.info(f"  Analysis time: {total_analysis_time:.1f}s")
+    logger.info(f"  Average per column: {avg_analysis_time:.1f}s")
+    logger.info(f"  Parallel efficiency: {total_analysis_time/total_time:.1f}x")
+    
+    return results
+
+
+def update_metadata_with_analysis_scores(metadata: Dict[str, ColumnMetadata], 
+                                        analysis_scores: Dict[str, float]) -> Dict[str, ColumnMetadata]:
+    """
+    Update column metadata with demographic analysis scores.
+    
+    Args:
+        metadata: Column metadata dictionary
+        analysis_scores: Dictionary mapping column names to accuracy scores
+        
+    Returns:
+        Updated metadata dictionary
+    """
+    updated_metadata = metadata.copy()
+    
+    for col_name, score in analysis_scores.items():
+        if col_name in updated_metadata:
+            updated_metadata[col_name].demographic_analysis_score = score
+            
+    logger.info(f"Updated {len(analysis_scores)} columns with demographic analysis scores")
+    
+    return updated_metadata
 
 
 if __name__ == '__main__':
@@ -81,6 +392,19 @@ if __name__ == '__main__':
        - model.json: The actual data model with all column metadata
     5. Converts all Jupyter notebooks to HTML for website viewing
     """
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Generate BRFSS metadata and analysis files')
+    parser.add_argument('--demographic-analysis', action='store_true', 
+                       help='Generate demographic analysis for applicable columns')
+    parser.add_argument('--test-mode', action='store_true',
+                       help='Run in test mode with limited columns (GENHLTH, ASTHMS1, MICHD)')
+    parser.add_argument('--sequential', action='store_true',
+                       help='Run analysis sequentially instead of in parallel')
+    parser.add_argument('--max-workers', type=int, default=4,
+                       help='Maximum number of parallel workers (default: 4)')
+    
+    args = parser.parse_args()
+    
     # Use BFRSS wrapper to load data and metadata
     from dat490 import load_bfrss
     
@@ -89,6 +413,49 @@ if __name__ == '__main__':
     
     # Get metadata (this will trigger loading and parsing)
     column_metadatas = bfrss.metadata
+    
+    # Run demographic analysis if requested
+    demographic_analysis_enabled = args.demographic_analysis
+    
+    if demographic_analysis_enabled:
+        logger.info("Starting demographic analysis generation...")
+        
+        # Generate demographic analyses for all applicable columns
+        web_content_dir = Path('website', 'content')
+        web_content_dir.mkdir(parents=True, exist_ok=True)
+        
+        if args.test_mode:
+            # Test with just a few known good columns
+            test_columns = ['GENHLTH', 'ASTHMS1', 'MICHD']
+            test_metadata = {col: meta for col, meta in column_metadatas.items() if col in test_columns}
+            logger.info(f"Test mode: analyzing {len(test_columns)} columns: {test_columns}")
+            
+            analysis_scores = generate_demographic_analyses(
+                df=bfrss.df,
+                metadata=test_metadata,
+                output_dir=web_content_dir,
+                min_samples=1000,
+                max_workers=min(2, args.max_workers),
+                sequential=args.sequential or True  # Default to sequential in test mode
+            )
+        else:
+            # Full analysis
+            analysis_scores = generate_demographic_analyses(
+                df=bfrss.df,
+                metadata=column_metadatas,
+                output_dir=web_content_dir,
+                min_samples=1000,
+                max_workers=args.max_workers,
+                sequential=args.sequential
+            )
+        
+        # Update metadata with analysis scores
+        column_metadatas = update_metadata_with_analysis_scores(
+            metadata=column_metadatas,
+            analysis_scores=analysis_scores
+        )
+    else:
+        logger.info("Demographic analysis disabled (use --demographic-analysis to enable)")
 
     # Create the shared model with all column metadata
     model = SharedModel(

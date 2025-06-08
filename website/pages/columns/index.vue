@@ -23,6 +23,7 @@ const tableData = computed(() => {
 const defaultVisibleColumns = [
   'count',
   'key',
+  'demographic_analysis_score',
   'label',
   'section_name',
   // 'sas_variable_name', // Excluded by default
@@ -40,6 +41,7 @@ const defaultColumnOrdering = [
 const defaultColumnOrder = [
   'count',
   'key',
+  'demographic_analysis_score',
   'label',
   'section_name',
   'sas_variable_name',
@@ -100,6 +102,7 @@ const createSortableHeader = (columnId: string, label: string) => {
 // Column metadata for labels
 const columnMetadata = {
   key: 'Column/Feature',
+  demographic_analysis_score: 'Demographic Analysis',
   label: 'Label',
   sas_variable_name: 'SAS Variable',
   section_name: 'Section',
@@ -164,6 +167,29 @@ const columns: ColumnDef<any>[] = [
     accessorKey: 'key',
     header: createSortableHeader('key', 'Column/Feature'),
     cell: ({ row }) => h('span', { class: 'font-mono text-xs' }, row.original.key),
+  },
+  {
+    accessorKey: 'demographic_analysis_score',
+    header: createSortableHeader('demographic_analysis_score', 'Demographic Analysis'),
+    cell: ({ row }) => {
+      const score = row.original.demographic_analysis_score
+      const columnKey = row.original.key
+      
+      if (score === null || score === undefined) return '-'
+      
+      // Create clickable link to analysis results
+      return h(resolveComponent('NuxtLink'), {
+        to: `/columns/${columnKey}/demographic-analysis`,
+        class: 'inline-flex items-center gap-1 font-medium text-sm text-blue-600 hover:text-blue-800 hover:underline transition-colors',
+        title: `View demographic analysis details for ${columnKey}\nRandom Forest accuracy: ${(score * 100).toFixed(1)}%`
+      }, [
+        h('span', `${(score * 100).toFixed(1)}%`),
+        h(resolveComponent('UIcon'), { 
+          name: 'i-heroicons-arrow-top-right-on-square',
+          class: 'w-3 h-3'
+        })
+      ])
+    },
   },
   {
     accessorKey: 'label',

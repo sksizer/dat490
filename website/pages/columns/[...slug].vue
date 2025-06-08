@@ -8,6 +8,18 @@ const { data: modelData } = await useAsyncData('model', () => {
   return queryCollection('columns').first()
 })
 
+// Fetch demographic analysis data for this column
+const { data: demographicAnalysis } = await useAsyncData(`demographic-analysis-${columnId}`, async () => {
+  try {
+    return await queryCollection('demographic_analysis')
+      .where('target_column', columnId)
+      .first()
+  } catch (err) {
+    // Return null if no analysis found
+    return null
+  }
+})
+
 // Find the specific column by sas_variable_name or key
 const columnData = computed(() => {
   if (!modelData.value?.columns || !columnId) return null
@@ -208,6 +220,13 @@ onUnmounted(() => {
             class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
           >
             Statistics
+          </a>
+          <a 
+            v-if="demographicAnalysis"
+            href="#demographic-analysis" 
+            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
+          >
+            Demographic Analysis
           </a>
           <a 
             v-if="columnData.html_name"
@@ -479,6 +498,81 @@ onUnmounted(() => {
           </div>
         </UCard>
         
+        <!-- Demographic Analysis -->
+        <UCard id="demographic-analysis" v-if="demographicAnalysis" :ui="{ body: { padding: 'p-2' }, header: { padding: 'p-2' } }">
+          <template #header>
+            <div class="flex items-center justify-between">
+              <h2 class="text-base font-semibold">Demographic Analysis</h2>
+              <NuxtLink 
+                :to="`/columns/${columnId}/demographic-analysis`"
+                class="text-xs text-primary-600 hover:text-primary-700 flex items-center gap-0.5"
+              >
+                View full analysis
+                <UIcon name="i-heroicons-arrow-top-right-on-square" class="w-3 h-3" />
+              </NuxtLink>
+            </div>
+          </template>
+          
+          <div class="space-y-3">
+            <!-- Summary Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div class="text-center p-3 bg-blue-50 rounded-lg">
+                <div class="text-lg font-bold text-blue-700">
+                  {{ (demographicAnalysis.accuracy * 100).toFixed(1) }}%
+                </div>
+                <div class="text-xs text-blue-600">Model Accuracy</div>
+              </div>
+              <div class="text-center p-3 bg-green-50 rounded-lg">
+                <div class="text-lg font-bold text-green-700">
+                  {{ demographicAnalysis.analysis_metadata.training_samples.toLocaleString() }}
+                </div>
+                <div class="text-xs text-green-600">Training Samples</div>
+              </div>
+              <div class="text-center p-3 bg-purple-50 rounded-lg">
+                <div class="text-lg font-bold text-purple-700">
+                  {{ demographicAnalysis.analysis_metadata.test_samples.toLocaleString() }}
+                </div>
+                <div class="text-xs text-purple-600">Test Samples</div>
+              </div>
+              <div class="text-center p-3 bg-orange-50 rounded-lg">
+                <div class="text-lg font-bold text-orange-700">
+                  {{ demographicAnalysis.analysis_metadata.analysis_time_seconds.toFixed(1) }}s
+                </div>
+                <div class="text-xs text-orange-600">Analysis Time</div>
+              </div>
+            </div>
+
+            <!-- Top Features -->
+            <div>
+              <h3 class="text-sm font-medium text-gray-700 mb-2">Top Predictive Features</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div 
+                  v-for="feature in demographicAnalysis.feature_importance.slice(0, 8)" 
+                  :key="feature.feature" 
+                  class="flex justify-between items-center p-2 bg-gray-50 rounded text-xs"
+                >
+                  <span class="font-mono">{{ feature.feature }}</span>
+                  <span class="font-medium">{{ (feature.importance * 100).toFixed(1) }}%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Performance Summary -->
+            <div>
+              <h3 class="text-sm font-medium text-gray-700 mb-2">Model Performance</h3>
+              <div class="bg-gray-50 rounded-lg p-3 text-xs">
+                <p class="text-gray-600 mb-1">
+                  Random Forest model trained on {{ demographicAnalysis.analysis_metadata.features_used.length }} demographic features 
+                  to predict {{ columnData?.label || columnId }} values.
+                </p>
+                <p class="text-gray-600">
+                  Achieved {{ (demographicAnalysis.accuracy * 100).toFixed(1) }}% accuracy on 
+                  {{ demographicAnalysis.analysis_metadata.test_samples.toLocaleString() }} test samples.
+                </p>
+              </div>
+            </div>
+          </div>
+        </UCard>
         
         <!-- Codebook -->
         <UCard id="codebook" v-if="columnData.html_name" :ui="{ body: { padding: 'p-1' }, header: { padding: 'p-2' } }">

@@ -6,6 +6,25 @@ export default defineContentConfig({
             source: '*.md',
             type: 'page'
         }),
+        demographic_analysis: defineCollection({
+            source: '*_demographic_analysis.json',
+            type: 'data',
+            schema: z.object({
+                target_column: z.string(),
+                accuracy: z.number(),
+                classification_report: z.record(z.string(), z.any()),
+                feature_importance: z.array(z.object({
+                    feature: z.string(),
+                    importance: z.number()
+                })),
+                confusion_matrix: z.array(z.array(z.number().int())),
+                class_labels: z.array(z.string()),
+                model_parameters: z.record(z.string(), z.any()),
+                analysis_metadata: z.record(z.string(), z.any()),
+                successful: z.boolean().default(true),
+                error_message: z.string().nullable().optional()
+            })
+        }),
         columns: defineCollection({
             // Load every file inside the `content` directory
             source: 'model.json',
@@ -80,7 +99,8 @@ export default defineContentConfig({
                                 })
                             )
                         })
-                    ]).optional()
+                    ]).optional(),
+                    demographic_analysis_score: z.number().nullable().optional()
                 }))
             })
         })

@@ -1,0 +1,91 @@
+{
+  "description": "Comprehensive demographic analysis results for a target column.",
+  "properties": {
+    "target_column": {
+      "title": "Target Column",
+      "type": "string"
+    },
+    "accuracy": {
+      "title": "Accuracy",
+      "type": "number"
+    },
+    "classification_report": {
+      "additionalProperties": true,
+      "title": "Classification Report",
+      "type": "object"
+    },
+    "feature_importance": {
+      "items": {
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "type": "object"
+      },
+      "title": "Feature Importance",
+      "type": "array"
+    },
+    "confusion_matrix": {
+      "items": {
+        "items": {
+          "type": "integer"
+        },
+        "type": "array"
+      },
+      "title": "Confusion Matrix",
+      "type": "array"
+    },
+    "class_labels": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Class Labels",
+      "type": "array"
+    },
+    "model_parameters": {
+      "additionalProperties": true,
+      "title": "Model Parameters",
+      "type": "object"
+    },
+    "analysis_metadata": {
+      "additionalProperties": true,
+      "title": "Analysis Metadata",
+      "type": "object"
+    },
+    "successful": {
+      "default": true,
+      "title": "Successful",
+      "type": "boolean"
+    },
+    "error_message": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Message"
+    }
+  },
+  "required": [
+    "target_column",
+    "accuracy",
+    "classification_report",
+    "feature_importance",
+    "confusion_matrix",
+    "class_labels",
+    "model_parameters",
+    "analysis_metadata"
+  ],
+  "title": "DemographicAnalysis",
+  "type": "object"
+}

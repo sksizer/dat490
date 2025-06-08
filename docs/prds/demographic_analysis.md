@@ -310,6 +310,11 @@ The phased approach ensures we can deliver value incrementally while maintaining
 5. ✅ **Visualization Format**: Prioritize SVG format for space efficiency
 6. **UI/UX Preferences**: Confirm design direction for analysis display
 
+
+# Backlog
+Backlog for additional things to do after we complete core above.
+- [ ] Add a filter for only showing columns that have a demographic analysis
+- [ ] Ensure prior notebooks still work
 ---
 
 *Last Updated: [Current Date]*  

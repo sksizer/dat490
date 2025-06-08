@@ -47,6 +47,20 @@ class CategoricalStatistics(ColumnStatistics):
     top_values: List[Dict[str, Any]]    # List of most common values with counts
 
 
+class DemographicAnalysis(BaseModel):
+    """Comprehensive demographic analysis results for a target column."""
+    target_column: str                  # Name of the target variable analyzed
+    accuracy: float                     # Random Forest model accuracy score
+    classification_report: Dict[str, Any]  # Detailed classification metrics
+    feature_importance: List[Dict[str, Union[str, float]]]  # Feature importance rankings
+    confusion_matrix: List[List[int]]   # Confusion matrix as nested lists
+    class_labels: List[str]             # Human-readable class labels
+    model_parameters: Dict[str, Any]    # Model hyperparameters used
+    analysis_metadata: Dict[str, Any]   # Analysis configuration and statistics
+    successful: bool = True             # Whether analysis completed successfully
+    error_message: Optional[str] = None # Error details if analysis failed
+
+
 class ColumnMetadata(BaseModel):
     """
     Model representing metadata for a single column in the BRFSS dataset.
@@ -65,8 +79,10 @@ class ColumnMetadata(BaseModel):
     question_prologue: Optional[str] = None # Text before the actual question
     question: Optional[str] = None      # The actual question text from survey
     value_ranges: list[ValueDef | ValueRange]        # Possible values for this variable (ranges)
-    value_lookup: Optional[Dict[Union[None, int], str]]     # Simple value to desc]tion mappi]    html_name: str         ]          # HTML anchor name for linking to codebook
+    value_lookup: Optional[Dict[Union[None, int], str]]     # Simple value to description mapping
+    html_name: str                      # HTML anchor name for linking to codebook
     statistics: Optional[Union[NumericStatistics, CategoricalStatistics]] = None  # Statistical information
+    demographic_analysis_score: Optional[float] = None  # Random Forest accuracy score for demographic prediction
 
 
 def is_missing_value(description: str) -> bool:
