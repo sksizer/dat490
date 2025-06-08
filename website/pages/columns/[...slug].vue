@@ -185,7 +185,54 @@ onMounted(() => {
     <div v-if="columnData" id="top">
       <!-- Header -->
       <div class="mb-3">
-        <h1 class="text-xl font-bold mb-1">{{ columnData.label || columnData.key }}</h1>
+        <h1 class="text-xl font-bold mb-3">{{ columnData.label || columnData.key }}</h1>
+        
+        <!-- Table of Contents -->
+        <div class="mb-3 sticky top-0 z-10 bg-white border-b border-gray-200">
+          <nav class="flex items-center gap-3 py-2 overflow-x-auto">
+            <button 
+              @click="scrollToTop"
+              class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors cursor-pointer bg-transparent border-none p-0"
+            >
+              Basic
+            </button>
+            <a 
+              v-if="columnData.valid_values && Object.keys(columnData.valid_values).length > 0"
+              href="#valid-values" 
+              class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
+            >
+              Valid Values
+            </a>
+            <a 
+              v-if="columnData.statistics || (columnData.value_ranges && columnData.value_ranges.length > 0)"
+              href="#statistics" 
+              class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
+            >
+              Statistics
+            </a>
+            <a 
+              v-if="demographicAnalysis"
+              href="#demographic-analysis" 
+              class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
+            >
+              Demographic Analysis
+            </a>
+            <a 
+              v-if="columnData.html_name"
+              href="#codebook" 
+              class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
+            >
+              Codebook
+            </a>
+            <a 
+              href="#json-data" 
+              class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
+            >
+              JSON Data
+            </a>
+          </nav>
+        </div>
+        
         <div class="bg-gray-50 rounded-lg p-3">
           <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
             <span>
@@ -215,62 +262,9 @@ onMounted(() => {
           </div>
           <div v-if="columnData.question" class="mt-2">
             <span class="text-gray-500 uppercase text-[10px] tracking-wider block mb-1">Question</span>
-            <span class="text-sm text-gray-900">{{ columnData.question }}</span>
+            <span class="text-sm text-gray-900">"{{ columnData.question }}"</span>
           </div>
         </div>
-      </div>
-      
-      <!-- Table of Contents -->
-      <div class="mb-3 sticky top-0 z-10 bg-white border-b border-gray-200">
-        <nav class="flex items-center gap-3 py-2 overflow-x-auto">
-          <button 
-            @click="scrollToTop"
-            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors cursor-pointer bg-transparent border-none p-0"
-          >
-            Basic
-          </button>
-          <a 
-            v-if="columnData.valid_values && Object.keys(columnData.valid_values).length > 0"
-            href="#valid-values" 
-            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
-          >
-            Valid Values
-          </a>
-          <a 
-            v-if="columnData.value_ranges && columnData.value_ranges.length > 0"
-            href="#value-lookup" 
-            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
-          >
-            Values
-          </a>
-          <a 
-            v-if="columnData.statistics"
-            href="#statistics" 
-            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
-          >
-            Statistics
-          </a>
-          <a 
-            v-if="demographicAnalysis"
-            href="#demographic-analysis" 
-            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
-          >
-            Demographic Analysis
-          </a>
-          <a 
-            v-if="columnData.html_name"
-            href="#codebook" 
-            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
-          >
-            Codebook
-          </a>
-          <a 
-            href="#json-data" 
-            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
-          >
-            JSON Data
-          </a>
-        </nav>
       </div>
       
       <!-- Main details -->
@@ -293,178 +287,105 @@ onMounted(() => {
           </div>
         </UCard>
         
-        <!-- Value Lookup -->
-        <UCard id="value-lookup" v-if="columnData.value_ranges && columnData.value_ranges.length > 0" :ui="{ body: { padding: 'p-2' }, header: { padding: 'p-2' } }">
-          <template #header>
-            <h2 class="text-base font-semibold">Values</h2>
-          </template>
-          
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <!-- Chart Section -->
-            <div v-if="valueLookupTableData.some(item => typeof item.count === 'number' && item.count > 0)">
-              <div class="bg-gray-50 rounded-lg p-3">
-                <ResponseChartHorizontal 
-                  :value-data="valueLookupTableData" 
-                  title="Response Distribution"
-                  @highlight-value="highlightedValue = $event"
-                />
-              </div>
-            </div>
-            
-            <!-- Table Section -->
-            <div>
-              <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                  <thead>
-                    <tr>
-                      <th class="px-2 py-1 text-left text-xs font-medium text-gray-700">Value</th>
-                      <th class="px-2 py-1 text-right text-xs font-medium text-gray-700">Count</th>
-                      <th class="px-2 py-1 text-left text-xs font-medium text-gray-700">Description</th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-gray-200">
-                    <tr 
-                      v-for="(row, index) in valueLookupTableData" 
-                      :key="index"
-                      :class="{
-                        'bg-blue-100 border-l-4 border-blue-500': highlightedValue === row.value,
-                        'bg-red-50 hover:bg-red-100': row.indicates_missing && highlightedValue !== row.value,
-                        'hover:bg-gray-50': !row.indicates_missing && highlightedValue !== row.value
-                      }"
-                    >
-                      <td class="px-2 py-1 text-xs font-mono text-gray-900">{{ row.value }}</td>
-                      <td class="px-2 py-1 text-xs text-right">
-                        <span v-if="row.count !== '-'" class="text-gray-900">
-                          {{ typeof row.count === 'number' ? row.count.toLocaleString() : row.count }}
-                        </span>
-                        <span v-else class="text-gray-400">
-                          {{ row.count }}
-                        </span>
-                      </td>
-                      <td class="px-2 py-1 text-xs text-gray-900">{{ row.description }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              
-              <!-- Legend for missing values -->
-              <div v-if="valueLookupTableData.some(row => row.indicates_missing)" class="mt-3 p-2 bg-gray-50 rounded-lg">
-                <div class="flex items-center gap-2 text-xs">
-                  <div class="flex items-center gap-1">
-                    <div class="w-3 h-3 bg-red-100 border border-red-200 rounded"></div>
-                    <span class="text-gray-600">Missing/Refused/Unknown values</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </UCard>
-        
         <!-- Statistics -->
-        <UCard id="statistics" v-if="columnData.statistics" :ui="{ body: { padding: 'p-2' }, header: { padding: 'p-2' } }">
+        <UCard id="statistics" v-if="columnData.statistics || (columnData.value_ranges && columnData.value_ranges.length > 0)" :ui="{ body: { padding: 'p-2' }, header: { padding: 'p-2' } }">
           <template #header>
             <h2 class="text-base font-semibold">Statistics</h2>
           </template>
           
-          <div class="space-y-2">
+          <div class="space-y-1">
             <!-- Enhanced response statistics -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-              <div>
-                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Valid Responses</h3>
-                <p class="text-gray-900 text-sm font-medium">{{ columnData.statistics.count.toLocaleString() }}</p>
-              </div>
-              
-              <div>
-                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Total Responses</h3>
-                <p class="text-gray-900 text-sm">{{ columnData.statistics.total_responses.toLocaleString() }}</p>
-              </div>
-              
-              <div v-if="columnData.statistics.missing_count > 0">
-                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Missing/Refused</h3>
-                <p class="text-orange-600 text-sm">{{ columnData.statistics.missing_count.toLocaleString() }}</p>
-              </div>
-              
-              <div v-if="columnData.statistics.null_count > 0">
-                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Null Values</h3>
-                <p class="text-gray-500 text-sm">{{ columnData.statistics.null_count.toLocaleString() }}</p>
-              </div>
-              
-              <div v-if="columnData.statistics.unique_count !== undefined">
-                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Unique Values</h3>
-                <p class="text-gray-900 text-sm">{{ columnData.statistics.unique_count.toLocaleString() }}</p>
-              </div>
-            </div>
-            
-            <!-- Data quality indicator -->
-            <div v-if="columnData.statistics.missing_count > 0" class="mt-2 p-2 bg-amber-50 rounded-lg border border-amber-200">
-              <div class="flex items-center gap-2 text-xs">
-                <div class="w-2 h-2 bg-amber-400 rounded-full"></div>
-                <span class="text-amber-700">
-                  {{ ((columnData.statistics.missing_count / columnData.statistics.total_responses) * 100).toFixed(1) }}% of responses are missing/refused values
-                </span>
+            <div v-if="columnData.statistics" class="bg-gray-50 rounded p-2">
+              <h3 class="text-xs font-medium text-gray-700 mb-1">Response Summary</h3>
+              <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-3 gap-y-1">
+                <div>
+                  <span class="text-xs text-gray-600">Valid</span>
+                  <p class="text-gray-900 text-sm font-medium">{{ columnData.statistics.count.toLocaleString() }}</p>
+                </div>
+                
+                <div>
+                  <span class="text-xs text-gray-600">Total</span>
+                  <p class="text-gray-900 text-sm">{{ columnData.statistics.total_responses.toLocaleString() }}</p>
+                </div>
+                
+                <div v-if="columnData.statistics.missing_count > 0">
+                  <span class="text-xs text-gray-600">Missing</span>
+                  <p class="text-orange-600 text-sm">
+                    {{ columnData.statistics.missing_count.toLocaleString() }} 
+                    ({{ ((columnData.statistics.missing_count / columnData.statistics.total_responses) * 100).toFixed(1) }}%)
+                  </p>
+                </div>
+                
+                <div v-if="columnData.statistics.null_count > 0">
+                  <span class="text-xs text-gray-600">Null</span>
+                  <p class="text-gray-500 text-sm">{{ columnData.statistics.null_count.toLocaleString() }}</p>
+                </div>
+                
+                <div v-if="columnData.statistics.unique_count !== undefined">
+                  <span class="text-xs text-gray-600">Unique</span>
+                  <p class="text-gray-900 text-sm">{{ columnData.statistics.unique_count.toLocaleString() }}</p>
+                </div>
               </div>
             </div>
             
             <!-- Numeric statistics -->
-            <div v-if="'mean' in columnData.statistics" class="mt-3">
+            <div v-if="columnData.statistics && 'mean' in columnData.statistics" class="bg-blue-50 rounded p-2">
               <h3 class="text-xs font-medium text-gray-700 mb-1">Numeric Distribution</h3>
               
-              <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
+              <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-x-3 gap-y-1">
                 <div v-if="columnData.statistics.mean !== undefined && columnData.statistics.mean !== null">
-                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">Mean</h3>
+                  <span class="text-xs text-gray-600">Mean</span>
                   <p class="text-gray-900 text-sm">{{ columnData.statistics.mean.toLocaleString(undefined, {maximumFractionDigits: 4}) }}</p>
                 </div>
                 
                 <div v-if="columnData.statistics.median !== undefined && columnData.statistics.median !== null">
-                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">Median</h3>
+                  <span class="text-xs text-gray-600">Median</span>
                   <p class="text-gray-900 text-sm">{{ columnData.statistics.median.toLocaleString(undefined, {maximumFractionDigits: 2}) }}</p>
                 </div>
                 
                 <div v-if="columnData.statistics.std !== undefined && columnData.statistics.std !== null">
-                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">Std Dev</h3>
+                  <span class="text-xs text-gray-600">Std Dev</span>
                   <p class="text-gray-900 text-sm">{{ columnData.statistics.std.toLocaleString(undefined, {maximumFractionDigits: 4}) }}</p>
                 </div>
-              </div>
-              
-              <div class="grid grid-cols-1 md:grid-cols-5 gap-2 mt-2">
+                
                 <div v-if="columnData.statistics.min !== undefined && columnData.statistics.min !== null">
-                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">Min</h3>
+                  <span class="text-xs text-gray-600">Min</span>
                   <p class="text-gray-900 text-sm">{{ columnData.statistics.min.toLocaleString(undefined, {maximumFractionDigits: 2}) }}</p>
                 </div>
                 
                 <div v-if="columnData.statistics.q25 !== undefined && columnData.statistics.q25 !== null">
-                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">25th %</h3>
+                  <span class="text-xs text-gray-600">25th %</span>
                   <p class="text-gray-900 text-sm">{{ columnData.statistics.q25.toLocaleString(undefined, {maximumFractionDigits: 2}) }}</p>
                 </div>
                 
                 <div v-if="columnData.statistics.median !== undefined && columnData.statistics.median !== null">
-                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">50th %</h3>
+                  <span class="text-xs text-gray-600">50th %</span>
                   <p class="text-gray-900 text-sm">{{ columnData.statistics.median.toLocaleString(undefined, {maximumFractionDigits: 2}) }}</p>
                 </div>
                 
                 <div v-if="columnData.statistics.q75 !== undefined && columnData.statistics.q75 !== null">
-                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">75th %</h3>
+                  <span class="text-xs text-gray-600">75th %</span>
                   <p class="text-gray-900 text-sm">{{ columnData.statistics.q75.toLocaleString(undefined, {maximumFractionDigits: 2}) }}</p>
                 </div>
                 
                 <div v-if="columnData.statistics.max !== undefined && columnData.statistics.max !== null">
-                  <h3 class="text-xs font-medium text-gray-700 mb-0.5">Max</h3>
+                  <span class="text-xs text-gray-600">Max</span>
                   <p class="text-gray-900 text-sm">{{ columnData.statistics.max.toLocaleString(undefined, {maximumFractionDigits: 2}) }}</p>
                 </div>
               </div>
             </div>
             
             <!-- Categorical statistics -->
-            <div v-if="'top_values' in columnData.statistics && columnData.statistics.top_values.length > 0" class="mt-3">
+            <div v-if="columnData.statistics && 'top_values' in columnData.statistics && columnData.statistics.top_values.length > 0" class="bg-green-50 rounded p-2">
               <h3 class="text-xs font-medium text-gray-700 mb-1">Top Values</h3>
               
               <div class="space-y-0.5">
                 <div 
-                  v-for="(valueInfo, index) in columnData.statistics.top_values.slice(0, 10)" 
+                  v-for="(valueInfo, index) in columnData.statistics.top_values.slice(0, 8)" 
                   :key="index"
-                  class="flex items-start gap-2 py-0.5 border-b border-gray-100 last:border-0 text-sm"
+                  class="flex items-start gap-2 py-0.5 border-b border-green-100 last:border-0"
                 >
-                  <span class="font-mono text-xs text-gray-600 min-w-[6rem] whitespace-nowrap">
+                  <span class="font-mono text-xs text-gray-600 min-w-[4rem] whitespace-nowrap">
                     {{ valueInfo.value }} ({{ valueInfo.count.toLocaleString() }})
                   </span>
                   <span v-if="valueInfo.description" class="text-gray-900 text-xs">
@@ -472,8 +393,73 @@ onMounted(() => {
                   </span>
                 </div>
               </div>
-              <div v-if="columnData.statistics.top_values.length > 10" class="text-xs text-gray-500 mt-1">
-                Showing 10 of {{ columnData.statistics.top_values.length }} values
+              <div v-if="columnData.statistics.top_values.length > 8" class="text-xs text-gray-500 mt-0.5">
+                Showing 8 of {{ columnData.statistics.top_values.length }} values
+              </div>
+            </div>
+            
+            <!-- Response Values -->
+            <div v-if="columnData.value_ranges && columnData.value_ranges.length > 0" class="bg-purple-50 rounded p-2">
+              <h3 class="text-xs font-medium text-gray-700 mb-2">Response Values</h3>
+              
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                <!-- Chart Section -->
+                <div v-if="valueLookupTableData.length > 0">
+                  <div class="bg-white rounded p-2">
+                    <ResponseChartHorizontal 
+                      :value-data="valueLookupTableData" 
+                      title="Response Distribution"
+                      @highlight-value="highlightedValue = $event"
+                    />
+                  </div>
+                </div>
+                
+                <!-- Table Section -->
+                <div>
+                  <div class="overflow-x-auto bg-white rounded p-2">
+                    <table class="min-w-full divide-y divide-gray-200">
+                      <thead>
+                        <tr>
+                          <th class="px-2 py-1 text-left text-xs font-medium text-gray-700">Value</th>
+                          <th class="px-2 py-1 text-right text-xs font-medium text-gray-700">Count</th>
+                          <th class="px-2 py-1 text-left text-xs font-medium text-gray-700">Description</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200">
+                        <tr 
+                          v-for="(row, index) in valueLookupTableData" 
+                          :key="index"
+                          :class="{
+                            'bg-blue-100 border-l-4 border-blue-500': highlightedValue === row.value,
+                            'bg-red-50 hover:bg-red-100': row.indicates_missing && highlightedValue !== row.value,
+                            'hover:bg-gray-50': !row.indicates_missing && highlightedValue !== row.value
+                          }"
+                        >
+                          <td class="px-2 py-1 text-xs font-mono text-gray-900">{{ row.value }}</td>
+                          <td class="px-2 py-1 text-xs text-right">
+                            <span v-if="row.count !== '-'" class="text-gray-900">
+                              {{ typeof row.count === 'number' ? row.count.toLocaleString() : row.count }}
+                            </span>
+                            <span v-else class="text-gray-400">
+                              {{ row.count }}
+                            </span>
+                          </td>
+                          <td class="px-2 py-1 text-xs text-gray-900">{{ row.description }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    
+                    <!-- Legend for missing values -->
+                    <div v-if="valueLookupTableData.some(row => row.indicates_missing)" class="mt-2 p-2 bg-gray-50 rounded">
+                      <div class="flex items-center gap-2 text-xs">
+                        <div class="flex items-center gap-1">
+                          <div class="w-3 h-3 bg-red-100 border border-red-200 rounded"></div>
+                          <span class="text-gray-600">Missing/Refused/Unknown values</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -33,16 +33,15 @@ const props = withDefaults(defineProps<Props>(), {
   title: 'Response Counts'
 })
 
-// Filter and prepare data for the chart
+// Include all table rows in chart - even with zero counts
 const chartData = computed(() => {
-  return props.valueData
-    .filter(item => typeof item.count === 'number' && item.count > 0)
-    .map(item => ({
-      value: item.value,
-      count: item.count as number,
-      description: item.description
-    }))
-    .sort((a, b) => b.count - a.count) // Sort by count descending
+  return props.valueData.map(item => ({
+    value: item.value,
+    count: typeof item.count === 'number' ? item.count : 0,
+    description: item.description,
+    indicates_missing: item.indicates_missing || false
+  }))
+  // Keep the same order as the table (by value order, not count)
 })
 
 // Truncate long descriptions for better display
@@ -57,16 +56,6 @@ const emit = defineEmits<{
 
 // ECharts configuration
 const chartOption = computed<EChartsOption>(() => ({
-  title: {
-    text: props.title,
-    textStyle: {
-      fontSize: 14,
-      fontWeight: 'normal',
-      color: '#374151' // gray-700
-    },
-    left: 'center',
-    top: 10
-  },
   tooltip: {
     trigger: 'axis',
     axisPointer: {
@@ -75,15 +64,19 @@ const chartOption = computed<EChartsOption>(() => ({
     formatter: (params: any) => {
       const data = Array.isArray(params) ? params[0] : params
       const originalItem = chartData.value[data.dataIndex]
+      const isMissing = originalItem.indicates_missing
+      const titleColor = isMissing ? '#dc2626' : '#1e40af' // red-600 for missing, blue-800 for normal
+      const countColor = isMissing ? '#dc2626' : '#059669' // red-600 for missing, green-600 for normal
+      
       return `
         <div style="font-size: 12px; max-width: 250px;">
-          <div style="font-weight: bold; margin-bottom: 4px; color: #1e40af;">
+          <div style="font-weight: bold; margin-bottom: 4px; color: ${titleColor};">
             Value: ${originalItem.value}
           </div>
           <div style="margin-bottom: 6px; line-height: 1.4;">
             ${originalItem.description}
           </div>
-          <div style="color: #059669; font-weight: bold;">
+          <div style="color: ${countColor}; font-weight: bold;">
             Count: ${data.value.toLocaleString()}
           </div>
         </div>
@@ -91,16 +84,16 @@ const chartOption = computed<EChartsOption>(() => ({
     }
   },
   grid: {
-    left: '5%',
-    right: '15%',
-    bottom: '5%',
-    top: '15%',
+    left: '3%',
+    right: '8%',
+    bottom: '3%',
+    top: '3%',
     containLabel: true
   },
   xAxis: {
     type: 'value',
     axisLabel: {
-      fontSize: 10,
+      fontSize: 9,
       color: '#6b7280', // gray-500
       formatter: (value: number) => value.toLocaleString()
     },
@@ -120,9 +113,9 @@ const chartOption = computed<EChartsOption>(() => ({
     type: 'category',
     data: chartData.value.map(item => item.value),
     axisLabel: {
-      fontSize: 10,
+      fontSize: 9,
       color: '#6b7280', // gray-500
-      width: 200,
+      width: 180,
       overflow: 'truncate'
     },
     axisTick: {
@@ -133,25 +126,30 @@ const chartOption = computed<EChartsOption>(() => ({
         color: '#e5e7eb' // gray-200
       }
     },
-    inverse: true // Show highest values at top
+    inverse: true // Reverse order to match table (first value at top)
   },
   series: [{
     type: 'bar',
-    data: chartData.value.map(item => item.count),
-    itemStyle: {
-      color: '#1e40af', // blue-800
-      borderRadius: [0, 2, 2, 0]
-    },
-    emphasis: {
+    data: chartData.value.map(item => ({
+      value: item.count,
       itemStyle: {
-        color: '#1e3a8a' // blue-900
+        color: item.indicates_missing ? '#fecaca' : '#1e40af', // red-200 for missing, blue-800 for normal
+        borderRadius: [0, 2, 2, 0]
+      },
+      emphasis: {
+        itemStyle: {
+          color: item.indicates_missing ? '#dc2626' : '#1e3a8a' // red-600 for missing hover, blue-900 for normal hover
+        }
       }
-    },
+    })),
     label: {
       show: true,
       position: 'right',
-      fontSize: 10,
-      color: '#1e40af',
+      fontSize: 9,
+      color: (params: any) => {
+        const item = chartData.value[params.dataIndex]
+        return item?.indicates_missing ? '#dc2626' : '#1e40af' // red-600 for missing, blue-800 for normal
+      },
       fontWeight: 'bold',
       formatter: (params: any) => params.value.toLocaleString()
     }
@@ -164,12 +162,12 @@ const chartOption = computed<EChartsOption>(() => ({
     label: {
       show: true,
       position: 'inside',
-      fontSize: 9,
+      fontSize: 8,
       color: '#ffffff',
       fontWeight: 'bold',
       formatter: (params: any) => {
         const item = chartData.value[params.dataIndex]
-        return truncateDescription(item.description, 30)
+        return truncateDescription(item.description, 25)
       }
     },
     tooltip: {
@@ -179,11 +177,16 @@ const chartOption = computed<EChartsOption>(() => ({
   }]
 }))
 
-// Chart height based on number of items (more generous for horizontal)
+// Chart height - calculate based on number of rows to match table
 const chartHeight = computed(() => {
-  const baseHeight = 300
-  const itemCount = chartData.value.length
-  return Math.max(baseHeight, Math.min(600, baseHeight + (itemCount * 25)))
+  const itemCount = props.valueData.length
+  const rowHeight = 28 // Height per row to align with table rows
+  const headerHeight = 40 // Space for axes
+  const minHeight = 200 // Reasonable minimum
+  const maxHeight = 600 // Maximum height limit
+  
+  const calculatedHeight = headerHeight + (itemCount * rowHeight)
+  return Math.max(minHeight, Math.min(maxHeight, calculatedHeight))
 })
 
 // Chart event handlers
@@ -205,10 +208,10 @@ const onChartLeave = () => {
       :option="chartOption" 
       :init-options="{ 
         width: 'auto', 
-        height: chartHeight 
+        height: chartHeight
       }"
       autoresize
-      :style="{ height: `${chartHeight}px`, minHeight: '300px' }"
+      :style="{ height: `${chartHeight}px`, width: '100%' }"
       @mouseover="onChartHover"
       @mouseout="onChartLeave"
     />
