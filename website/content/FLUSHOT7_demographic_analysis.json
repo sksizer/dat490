@@ -1,17 +1,17 @@
 {
   "target_column": "FLUSHOT7",
-  "accuracy": 0.6493866732416939,
+  "accuracy": 0.6500647229242433,
   "classification_report": {
     "1.0": {
-      "precision": 0.6380933983677017,
-      "recall": 0.6697077979675106,
-      "f1-score": 0.6535184795914583,
+      "precision": 0.6386978450252178,
+      "recall": 0.6707468511619655,
+      "f1-score": 0.654330144132117,
       "support": 39459.0
     },
     "2.0": {
-      "precision": 0.6612078304905394,
-      "recall": 0.640988691595633,
-      "f1-score": 0.650941290274574,
+      "precision": 0.6619689902937098,
+      "recall": 0.6413062061890922,
+      "f1-score": 0.6514737991266376,
       "support": 40943.0
     },
     "7.0": {
@@ -21,85 +21,85 @@
       "support": 559.0
     },
     "9.0": {
-      "precision": 0.5,
-      "recall": 0.032467532467532464,
-      "f1-score": 0.06097560975609756,
+      "precision": 0.5454545454545454,
+      "recall": 0.03896103896103896,
+      "f1-score": 0.07272727272727272,
       "support": 154.0
     },
-    "accuracy": 0.6493866732416939,
+    "accuracy": 0.6500647229242433,
     "macro avg": {
-      "precision": 0.44982530721456027,
-      "recall": 0.335791005507669,
-      "f1-score": 0.3413588449055325,
+      "precision": 0.4615303451933682,
+      "recall": 0.33775352407802417,
+      "f1-score": 0.34463280399650686,
       "support": 81115.0
     },
     "weighted avg": {
-      "precision": 0.645100901312523,
-      "recall": 0.6493866732416939,
-      "f1-score": 0.6465889808027329,
+      "precision": 0.6458654334764893,
+      "recall": 0.6500647229242433,
+      "f1-score": 0.6472749172773362,
       "support": 81115.0
     }
   },
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.3347995027426645
+      "importance": 0.33265310341311605
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.2146243507969625
+      "importance": 0.21335162856166845
     },
     {
       "feature": "EDUCA",
-      "importance": 0.19270690382365507
+      "importance": 0.18709843628314604
     },
     {
       "feature": "INCOME3",
-      "importance": 0.06528359508274903
+      "importance": 0.06544668005946049
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.04277123666491522
+      "importance": 0.04310172520602013
     },
     {
       "feature": "MARITAL",
-      "importance": 0.03749436694496227
+      "importance": 0.04035326210355903
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.0293705452329754
+      "importance": 0.033281522590163974
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.026291612507481424
+      "importance": 0.028916579601259124
     },
     {
-      "feature": "_SEX",
-      "importance": 0.02562572660746799
+      "feature": "SEXVAR",
+      "importance": 0.026705707273113995
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.012826695576605075
-    },
-    {
-      "feature": "_HISPANC",
-      "importance": 0.009462399799799296
+      "importance": 0.012305620453033204
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.008743064219762224
+      "importance": 0.00867246565890002
+    },
+    {
+      "feature": "_HISPANC",
+      "importance": 0.008113268796559544
     }
   ],
   "confusion_matrix": [
     [
-      26426,
-      13033,
+      26467,
+      12992,
       0,
       0
     ],
     [
-      14695,
-      26244,
+      14682,
+      26257,
       0,
       4
     ],
@@ -110,10 +110,10 @@
       1
     ],
     [
-      57,
-      92,
+      54,
+      94,
       0,
-      5
+      6
     ]
   ],
   "class_labels": [
@@ -143,15 +143,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 27751,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 3.0818309783935547,
+    "analysis_time_seconds": 2.2861897945404053,
     "target_distribution": {
       "1.0": 197294,
       "2.0": 204711,

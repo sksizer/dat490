@@ -37,51 +37,51 @@
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.2627422355360903
+      "importance": 0.25625557955122247
     },
     {
       "feature": "INCOME3",
-      "importance": 0.17718560503224456
+      "importance": 0.16878445883958118
     },
     {
       "feature": "MARITAL",
-      "importance": 0.1028178515575585
+      "importance": 0.11053297481581899
     },
     {
       "feature": "EDUCA",
-      "importance": 0.08930843840785872
+      "importance": 0.0897268787228849
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.08288765279146161
+      "importance": 0.0828977051225617
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.07523574941488705
+      "importance": 0.07281496246995903
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.04427629456312877
-    },
-    {
-      "feature": "_SEX",
-      "importance": 0.04379426998166549
+      "importance": 0.04457600304351894
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.041274273519127797
+      "importance": 0.04377619289133362
+    },
+    {
+      "feature": "SEXVAR",
+      "importance": 0.043188665650106456
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.03026936116795669
+      "importance": 0.03338866769073193
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.02972904376025568
+      "importance": 0.03190736032638576
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.02047922426776504
+      "importance": 0.022150550875895132
     }
   ],
   "confusion_matrix": [
@@ -127,15 +127,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 430736,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.15128684043884277,
+    "analysis_time_seconds": 0.15154695510864258,
     "target_distribution": {
       "1.0": 513,
       "2.0": 2004,

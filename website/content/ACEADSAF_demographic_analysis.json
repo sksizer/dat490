@@ -61,51 +61,51 @@
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.2557584981895402
+      "importance": 0.25254374388349843
     },
     {
       "feature": "INCOME3",
-      "importance": 0.13582883492973383
+      "importance": 0.138519896577857
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.09929509937755564
+      "importance": 0.10014216880932017
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.09870509567958062
+      "importance": 0.09838141831376088
     },
     {
       "feature": "EDUCA",
-      "importance": 0.0868931774070119
+      "importance": 0.08621966346879002
     },
     {
       "feature": "MARITAL",
-      "importance": 0.0857119395724356
+      "importance": 0.08516953183264593
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.06874946494778975
+      "importance": 0.07113721911440715
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.05171467652005577
+      "importance": 0.05071185599872315
     },
     {
-      "feature": "_SEX",
-      "importance": 0.04486425183690327
+      "feature": "SEXVAR",
+      "importance": 0.04477872275756657
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.0320767575216773
+      "importance": 0.03248679185219467
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.02063555949471828
+      "importance": 0.021158709953563025
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.019766644522997777
+      "importance": 0.01875027743767316
     }
   ],
   "confusion_matrix": [
@@ -203,15 +203,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 378020,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.4174351692199707,
+    "analysis_time_seconds": 0.3638308048248291,
     "target_distribution": {
       "1.0": 2115,
       "2.0": 1406,

@@ -1,23 +1,23 @@
 {
   "target_column": "COVIDACT",
-  "accuracy": 0.44711538461538464,
+  "accuracy": 0.4469304733727811,
   "classification_report": {
     "1.0": {
-      "precision": 0.448943661971831,
-      "recall": 0.22270742358078602,
-      "f1-score": 0.29772329246935203,
+      "precision": 0.4454225352112676,
+      "recall": 0.22096069868995633,
+      "f1-score": 0.29538820782253356,
       "support": 1145.0
     },
     "2.0": {
-      "precision": 0.43333333333333335,
-      "recall": 0.33995157384987895,
-      "f1-score": 0.38100407055630936,
+      "precision": 0.43383685800604227,
+      "recall": 0.3476997578692494,
+      "f1-score": 0.3860215053763441,
       "support": 2065.0
     },
     "3.0": {
-      "precision": 0.45372670807453414,
-      "recall": 0.6827102803738317,
-      "f1-score": 0.5451492537313433,
+      "precision": 0.45400313971742545,
+      "recall": 0.6757009345794392,
+      "f1-score": 0.5430985915492957,
       "support": 2140.0
     },
     "7.0": {
@@ -32,102 +32,102 @@
       "f1-score": 0.0,
       "support": 7.0
     },
-    "accuracy": 0.44711538461538464,
+    "accuracy": 0.4469304733727811,
     "macro avg": {
-      "precision": 0.2672007406759397,
-      "recall": 0.24907385556089934,
-      "f1-score": 0.24477532335140095,
+      "precision": 0.26665250658694706,
+      "recall": 0.248872278227729,
+      "f1-score": 0.2449016609496347,
       "support": 5408.0
     },
     "weighted avg": {
-      "precision": 0.44006083239101007,
-      "recall": 0.44711538461538464,
-      "f1-score": 0.4242392711836653,
+      "precision": 0.439616981064103,
+      "recall": 0.4469304733727811,
+      "f1-score": 0.42484927745459405,
       "support": 5408.0
     }
   },
   "feature_importance": [
     {
       "feature": "EMPLOY1",
-      "importance": 0.23743352548402832
+      "importance": 0.23960888879352346
     },
     {
       "feature": "_AGE80",
-      "importance": 0.18829124269708916
+      "importance": 0.18908863547134028
     },
     {
       "feature": "INCOME3",
-      "importance": 0.18192712305898784
+      "importance": 0.18127822876320077
     },
     {
       "feature": "MARITAL",
-      "importance": 0.07355795992402038
+      "importance": 0.07150531897280818
     },
     {
       "feature": "EDUCA",
-      "importance": 0.06880936392709412
-    },
-    {
-      "feature": "_IMPRACE",
-      "importance": 0.05369873324811156
+      "importance": 0.06963733081164543
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.05273342167581335
+      "importance": 0.05263552645041149
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.05203234611273344
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.04532967652027205
+      "importance": 0.04507880698076214
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.0327101137179968
+      "importance": 0.03244338369685487
     },
     {
-      "feature": "_SEX",
-      "importance": 0.02861484872945495
+      "feature": "SEXVAR",
+      "importance": 0.03064161778566057
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.0196931708122371
+      "importance": 0.019290389314014098
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.017200820204894416
+      "importance": 0.01675952684704541
     }
   ],
   "confusion_matrix": [
     [
-      255,
-      360,
-      530,
+      253,
+      366,
+      526,
       0,
       0
     ],
     [
       156,
-      702,
-      1207,
+      718,
+      1191,
       0,
       0
     ],
     [
       142,
-      537,
-      1461,
+      552,
+      1446,
       0,
       0
     ],
     [
-      15,
-      18,
+      16,
+      17,
       18,
       0,
       0
     ],
     [
-      0,
-      3,
+      1,
+      2,
       4,
       0,
       0
@@ -161,15 +161,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 406287,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.23371291160583496,
+    "analysis_time_seconds": 0.3128550052642822,
     "target_distribution": {
       "1.0": 5722,
       "2.0": 10324,

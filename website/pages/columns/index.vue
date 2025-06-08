@@ -9,6 +9,11 @@ const { data: modelData } = await useAsyncData('model', () => {
 return val; }
 )
 
+// Fetch feature importance summary data
+const { data: featureImportanceData } = await useAsyncData('feature-importance', () => {
+  return queryCollection('feature_importance_summary').first()
+})
+
 // Transform the columns object into an array for the table
 const tableData = computed(() => {
   if (!modelData.value?.columns) return []
@@ -623,6 +628,18 @@ onMounted(() => {
 onUnmounted(() => {
   clearBreadcrumbs()
 })
+
+// Handle image loading errors for demographic analysis charts
+const handleImageError = (event: Event) => {
+  const img = event.target as HTMLImageElement
+  img.style.display = 'none'
+  
+  // Show fallback message
+  const container = img.parentElement
+  if (container) {
+    container.innerHTML = '<div class="text-gray-500 text-center p-4 text-xs">Visualization not available</div>'
+  }
+}
 </script>
 
 <template>
@@ -630,7 +647,7 @@ onUnmounted(() => {
 <!--    <h1 class="text-2xl font-bold mb-2">BRFSS Feature Metadatas</h1>-->
 <!--    <UContainer id="bfrssLinks">Links: <ul><li><ULink to='/html/codebook_USCODE23_LLCP_021924.HTML' target="_blank">Codebook</ULink></li></ul></UContainer>-->
 <!--    -->
-    <ModelMetadataSummary :model-data="modelData" />
+    <ModelMetadataSummary :model-data="modelData" :feature-importance-data="featureImportanceData" />
     
     <!-- Observation Count Chart -->
     <div class="mb-4">
@@ -661,6 +678,7 @@ onUnmounted(() => {
         </div>
       </UCard>
     </div>
+
 
     <div class="mb-2">
       <UInput 
@@ -767,6 +785,97 @@ onUnmounted(() => {
         </template>
       </UTable>
     </UCard>
+
+    <!-- Demographic Analysis Insights (moved to bottom) -->
+    <div v-if="featureImportanceData" class="mt-6">
+      <UCard :ui="{ body: { padding: 'p-3' }, header: { padding: 'p-3' } }">
+        <template #header>
+          <div class="flex items-center justify-between">
+            <h2 class="text-base font-semibold">Demographic Analysis Summary</h2>
+            <div class="flex items-center gap-2">
+              <UBadge color="blue" variant="soft">
+                {{ featureImportanceData.successful_analyses }} analyses
+              </UBadge>
+              <NuxtLink 
+                to="/demographic-analysis"
+                class="text-xs text-primary-600 hover:text-primary-700 flex items-center gap-0.5 font-medium"
+              >
+                View Full Analysis
+                <UIcon name="i-heroicons-arrow-top-right-on-square" class="w-3 h-3" />
+              </NuxtLink>
+            </div>
+          </div>
+        </template>
+        
+        <div class="space-y-3">
+          <!-- Condensed Summary Statistics -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div class="text-center p-2 bg-blue-50 rounded-lg">
+              <div class="text-base font-bold text-blue-700">
+                {{ (featureImportanceData.average_accuracy * 100).toFixed(1) }}%
+              </div>
+              <div class="text-xs text-blue-600">Avg Accuracy</div>
+            </div>
+            <div class="text-center p-2 bg-green-50 rounded-lg">
+              <div class="text-base font-bold text-green-700">
+                {{ featureImportanceData.successful_analyses }}
+              </div>
+              <div class="text-xs text-green-600">Analyses</div>
+            </div>
+            <div class="text-center p-2 bg-purple-50 rounded-lg">
+              <div class="text-base font-bold text-purple-700">
+                {{ featureImportanceData.sections_analyzed.length }}
+              </div>
+              <div class="text-xs text-purple-600">Sections</div>
+            </div>
+            <div class="text-center p-2 bg-orange-50 rounded-lg">
+              <div class="text-base font-bold text-orange-700">
+                {{ featureImportanceData.top_features.length }}
+              </div>
+              <div class="text-xs text-orange-600">Features</div>
+            </div>
+          </div>
+          
+          <!-- Top 5 Predictors Preview -->
+          <div>
+            <h4 class="text-sm font-medium text-gray-700 mb-2">Top 5 Demographic Predictors</h4>
+            <div class="bg-gray-50 rounded-lg p-2">
+              <div class="space-y-1">
+                <div 
+                  v-for="(feature, index) in featureImportanceData.top_features.slice(0, 5)" 
+                  :key="feature.feature"
+                  class="flex justify-between items-center p-1.5 bg-white rounded text-xs"
+                >
+                  <div class="flex items-center gap-2">
+                    <span class="w-5 h-5 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-xs font-bold">
+                      {{ index + 1 }}
+                    </span>
+                    <NuxtLink 
+                      :to="`/columns/${feature.feature}`"
+                      class="font-mono text-primary-600 hover:text-primary-700 hover:underline transition-colors"
+                      :title="`View details for ${feature.feature}`"
+                    >
+                      {{ feature.feature }}
+                    </NuxtLink>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-medium">{{ (feature.average_importance * 100).toFixed(1) }}%</div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center mt-2">
+                <NuxtLink 
+                  to="/demographic-analysis"
+                  class="text-xs text-primary-600 hover:text-primary-700 font-medium"
+                >
+                  View all {{ featureImportanceData.top_features.length }} features →
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
+        </div>
+      </UCard>
+    </div>
   </div>
 </template>
 

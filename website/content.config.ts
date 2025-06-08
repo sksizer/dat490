@@ -25,6 +25,26 @@ export default defineContentConfig({
                 error_message: z.string().nullable().optional()
             })
         }),
+        feature_importance_summary: defineCollection({
+            source: 'feature_importance_summary.json',
+            type: 'data',
+            schema: z.object({
+                total_analyses: z.number(),
+                successful_analyses: z.number(),
+                average_accuracy: z.number(),
+                top_features: z.array(z.object({
+                    feature: z.string(),
+                    average_importance: z.number(),
+                    frequency: z.number(),
+                    rank: z.number()
+                })),
+                feature_frequency: z.record(z.string(), z.number()),
+                accuracy_distribution: z.record(z.string(), z.number()),
+                sections_analyzed: z.array(z.string()),
+                sections_excluded: z.array(z.string()),
+                analysis_metadata: z.record(z.string(), z.any())
+            })
+        }),
         columns: defineCollection({
             // Load every file inside the `content` directory
             source: 'model.json',

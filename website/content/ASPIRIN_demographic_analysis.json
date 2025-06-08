@@ -1,11 +1,11 @@
 {
   "target_column": "ASPIRIN",
-  "accuracy": 0.7067130973108918,
+  "accuracy": 0.7074869413813116,
   "classification_report": {
     "1.0": {
-      "precision": 0.36283185840707965,
-      "recall": 0.03813953488372093,
-      "f1-score": 0.06902356902356903,
+      "precision": 0.37383177570093457,
+      "recall": 0.037209302325581395,
+      "f1-score": 0.0676818950930626,
       "support": 1075.0
     },
     "2.0": {
@@ -21,9 +21,9 @@
       "support": 197.0
     },
     "4.0": {
-      "precision": 0.7143987341772152,
-      "recall": 0.9841961852861035,
-      "f1-score": 0.8278707311482925,
+      "precision": 0.7145397076254445,
+      "recall": 0.985558583106267,
+      "f1-score": 0.8284470911589555,
       "support": 3670.0
     },
     "7.0": {
@@ -38,76 +38,76 @@
       "f1-score": 0.0,
       "support": 9.0
     },
-    "accuracy": 0.7067130973108918,
+    "accuracy": 0.7074869413813116,
     "macro avg": {
-      "precision": 0.1795384320973825,
-      "recall": 0.17038928669497075,
-      "f1-score": 0.14948238336197692,
+      "precision": 0.18139524722106318,
+      "recall": 0.1704613142386414,
+      "f1-score": 0.149354831042003,
       "support": 5169.0
     },
     "weighted avg": {
-      "precision": 0.582682840436833,
-      "recall": 0.7067130973108918,
-      "f1-score": 0.6021446933671059,
+      "precision": 0.5850705911905371,
+      "recall": 0.7074869413813116,
+      "f1-score": 0.602274881365527,
       "support": 5169.0
     }
   },
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.38790775102677894
+      "importance": 0.39442084227957386
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.21162555993070728
+      "importance": 0.21699492982661273
     },
     {
       "feature": "INCOME3",
-      "importance": 0.07006204472054837
+      "importance": 0.06931254542916059
     },
     {
       "feature": "MARITAL",
-      "importance": 0.06947945270845429
-    },
-    {
-      "feature": "CHILDREN",
-      "importance": 0.05343248304377153
+      "importance": 0.06440002581724107
     },
     {
       "feature": "EDUCA",
-      "importance": 0.051454713950867925
+      "importance": 0.052101311490150196
     },
     {
-      "feature": "_SEX",
-      "importance": 0.03655696019616604
+      "feature": "CHILDREN",
+      "importance": 0.04958599058766775
+    },
+    {
+      "feature": "SEXVAR",
+      "importance": 0.03566944650589263
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.034594240084650764
+      "importance": 0.03514856652014457
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.025735986201842975
-    },
-    {
-      "feature": "CPDEMO1C",
-      "importance": 0.024465116232804267
+      "importance": 0.024667112580249322
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.02396074645223505
+      "importance": 0.0245663060226015
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.02329246397307989
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.01072494545117248
+      "importance": 0.009840458967625823
     }
   ],
   "confusion_matrix": [
     [
-      41,
+      40,
       0,
       0,
-      1034,
+      1035,
       0,
       0
     ],
@@ -120,26 +120,26 @@
       0
     ],
     [
-      5,
+      6,
       0,
       0,
-      192,
-      0,
-      0
-    ],
-    [
-      58,
-      0,
-      0,
-      3612,
+      191,
       0,
       0
     ],
     [
-      1,
+      53,
       0,
       0,
-      23,
+      3617,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      24,
       0,
       0
     ],
@@ -181,15 +181,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 407478,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.2235097885131836,
+    "analysis_time_seconds": 0.2299959659576416,
     "target_distribution": {
       "1.0": 5374,
       "2.0": 968,

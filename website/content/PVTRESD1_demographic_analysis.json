@@ -31,55 +31,55 @@
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.2302491510572862
+      "importance": 0.2247475570912164
     },
     {
       "feature": "INCOME3",
-      "importance": 0.19979662309510582
-    },
-    {
-      "feature": "EDUCA",
-      "importance": 0.10861128385795264
-    },
-    {
-      "feature": "MARITAL",
-      "importance": 0.09118294448660623
+      "importance": 0.210234297142439
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.08402020609378028
+      "importance": 0.10149049228254231
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.10017028955865181
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.059938052082651745
+      "importance": 0.0810392850914881
     },
     {
-      "feature": "_SEX",
-      "importance": 0.05204775325113236
+      "feature": "MARITAL",
+      "importance": 0.08043712577242405
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.05071280047166439
+      "importance": 0.04116101566547444
+    },
+    {
+      "feature": "SEXVAR",
+      "importance": 0.04056378639738399
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.04144689118558444
+      "importance": 0.039211771070884964
     },
     {
       "feature": "NUMHHOL4",
-      "importance": 0.03246654573372671
+      "importance": 0.0298839505066527
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.02550453656783287
-    },
-    {
-      "feature": "_HISPANC",
-      "importance": 0.02002309768292526
+      "importance": 0.025288711925614757
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.0040001144337511235
+      "importance": 0.013204262441936074
+    },
+    {
+      "feature": "_HISPANC",
+      "importance": 0.012567455053291474
     }
   ],
   "confusion_matrix": [
@@ -118,15 +118,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 3,
     "target_missing_dropped": 344978,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.3641936779022217,
+    "analysis_time_seconds": 0.8706779479980469,
     "target_distribution": {
       "1.0": 88333,
       "2.0": 12

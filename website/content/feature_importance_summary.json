@@ -1,0 +1,181 @@
+{
+  "total_analyses": 186,
+  "successful_analyses": 186,
+  "average_accuracy": 0.7232485357888666,
+  "top_features": [
+    {
+      "feature": "_AGE80",
+      "average_importance": 0.2530480773184978,
+      "frequency": 182.0,
+      "rank": 1.0
+    },
+    {
+      "feature": "_CRACE1",
+      "average_importance": 0.23853874799006763,
+      "frequency": 3.0,
+      "rank": 2.0
+    },
+    {
+      "feature": "EMPLOY1",
+      "average_importance": 0.14198377752223948,
+      "frequency": 160.0,
+      "rank": 3.0
+    },
+    {
+      "feature": "INCOME3",
+      "average_importance": 0.12276591326224104,
+      "frequency": 159.0,
+      "rank": 4.0
+    },
+    {
+      "feature": "EDUCA",
+      "average_importance": 0.09257411416870127,
+      "frequency": 132.0,
+      "rank": 5.0
+    },
+    {
+      "feature": "MARITAL",
+      "average_importance": 0.07872088452897628,
+      "frequency": 133.0,
+      "rank": 6.0
+    },
+    {
+      "feature": "_IMPRACE",
+      "average_importance": 0.0700273172573638,
+      "frequency": 46.0,
+      "rank": 7.0
+    },
+    {
+      "feature": "RENTHOM1",
+      "average_importance": 0.0570839827963625,
+      "frequency": 52.0,
+      "rank": 8.0
+    },
+    {
+      "feature": "SEXVAR",
+      "average_importance": 0.056658554728766596,
+      "frequency": 31.0,
+      "rank": 9.0
+    },
+    {
+      "feature": "CHILDREN",
+      "average_importance": 0.047076942576680374,
+      "frequency": 20.0,
+      "rank": 10.0
+    },
+    {
+      "feature": "CPDEMO1C",
+      "average_importance": 0.028743713135880318,
+      "frequency": 1.0,
+      "rank": 11.0
+    },
+    {
+      "feature": "_HISPANC",
+      "average_importance": 0.024358849181803623,
+      "frequency": 3.0,
+      "rank": 12.0
+    },
+    {
+      "feature": "VETERAN3",
+      "average_importance": 0.021517447789803495,
+      "frequency": 8.0,
+      "rank": 13.0
+    },
+    {
+      "feature": "NUMHHOL4",
+      "average_importance": 0.01925473143961054,
+      "frequency": 0.0,
+      "rank": 14.0
+    }
+  ],
+  "feature_frequency": {
+    "_AGE80": 182,
+    "_CRACE1": 3,
+    "EMPLOY1": 160,
+    "INCOME3": 159,
+    "EDUCA": 132,
+    "MARITAL": 133,
+    "_IMPRACE": 46,
+    "RENTHOM1": 52,
+    "SEXVAR": 31,
+    "CHILDREN": 20,
+    "CPDEMO1C": 1,
+    "_HISPANC": 3,
+    "VETERAN3": 8,
+    "NUMHHOL4": 0
+  },
+  "accuracy_distribution": {
+    "0-10%": 1,
+    "10-20%": 0,
+    "20-30%": 4,
+    "30-40%": 6,
+    "40-50%": 16,
+    "50-60%": 14,
+    "60-70%": 32,
+    "70-80%": 36,
+    "80-90%": 38,
+    "90-100%": 39
+  },
+  "sections_analyzed": [
+    "Adverse Childhood Experiences",
+    "Alcohol Consumption",
+    "Arthritis",
+    "Aspirin for CVD Prevention",
+    "Breast and Cervical Cancer Screening",
+    "COVID Vaccination",
+    "Cancer Survivorship: Course of Treatment",
+    "Cancer Survivorship: Pain Management",
+    "Cancer Survivorship: Type of Cancer",
+    "Caregiver",
+    "Cell Phone Introduction",
+    "Child Demographic Variables",
+    "Child Weighting Variables",
+    "Childhood Asthma Prevalence",
+    "Cholesterol Awareness",
+    "Chronic Health Conditions",
+    "Cognitive Decline",
+    "Colorectal Cancer Screening",
+    "Diabetes",
+    "Disability",
+    "Exercise (Physical Activity)",
+    "Firearm Safety",
+    "HIV/AIDS",
+    "HPV Vaccination",
+    "Health Care Access",
+    "Health Status",
+    "Healthy Days",
+    "Heart Attack and Stroke",
+    "Hypertension Awareness",
+    "Immunization",
+    "Land Line Introduction",
+    "Long-term COVID Effects",
+    "Lung Cancer Screening",
+    "Marijuana Use",
+    "Other Tobacco Use",
+    "Pre-Diabetes",
+    "Prostate Cancer Screening",
+    "Questionnaire Language",
+    "Questionnaire Version",
+    "Random Child Selection",
+    "Reactions to Race",
+    "Seatbelt Use and Drinking and Driving",
+    "Sexual Orientation",
+    "Social Determinants",
+    "Tetanus Diphtheria (Tdap) (Adults)",
+    "Tobacco Cessation",
+    "Tobacco Use",
+    "Urban Rural"
+  ],
+  "sections_excluded": [
+    "Calculated Variables",
+    "Calculated Race Variables",
+    "Record Identification",
+    "Weighting Variables"
+  ],
+  "analysis_metadata": {
+    "generation_timestamp": 1749404639.246697,
+    "processing_time_seconds": 0.037780046463012695,
+    "total_analyses_attempted": 186,
+    "demographic_features_used": 26
+  }
+}

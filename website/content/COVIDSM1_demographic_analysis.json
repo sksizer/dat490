@@ -43,51 +43,51 @@
   "feature_importance": [
     {
       "feature": "EMPLOY1",
-      "importance": 0.17697595568070312
+      "importance": 0.17894880035741725
     },
     {
       "feature": "_AGE80",
-      "importance": 0.17135138769802605
+      "importance": 0.16904953576895923
     },
     {
       "feature": "INCOME3",
-      "importance": 0.16516706357478772
+      "importance": 0.16599465041855158
     },
     {
       "feature": "EDUCA",
-      "importance": 0.1129185423858832
+      "importance": 0.11282970520869082
     },
     {
-      "feature": "_SEX",
-      "importance": 0.09729682317810023
+      "feature": "SEXVAR",
+      "importance": 0.09949784625267086
     },
     {
       "feature": "MARITAL",
-      "importance": 0.06487229211122587
+      "importance": 0.06811596646135556
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.05344485464853126
+      "importance": 0.051926005758407154
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.04275969381689973
+      "importance": 0.04186869709627322
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.0409442840475199
+      "importance": 0.04044276837252763
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.03813400743120527
+      "importance": 0.0351115151668208
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.019355028210869193
+      "importance": 0.020013522670843855
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.016780067216248588
+      "importance": 0.016200986467482036
     }
   ],
   "confusion_matrix": [
@@ -143,15 +143,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 232306,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 1.8352670669555664,
+    "analysis_time_seconds": 1.2757608890533447,
     "target_distribution": {
       "1.0": 27074,
       "2.0": 170893,

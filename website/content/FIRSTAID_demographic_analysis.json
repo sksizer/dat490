@@ -61,51 +61,51 @@
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.25167188793597084
+      "importance": 0.2553332055095954
     },
     {
       "feature": "INCOME3",
-      "importance": 0.14173979424716063
+      "importance": 0.14195925617781552
     },
     {
       "feature": "EDUCA",
-      "importance": 0.09821568190441723
+      "importance": 0.09641664727402387
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.08934501402329337
+      "importance": 0.08716641892574047
     },
     {
       "feature": "MARITAL",
-      "importance": 0.08470874418077978
+      "importance": 0.08396800310523432
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.07047902779603074
+      "importance": 0.07211132958432505
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.059331915233571425
+      "importance": 0.06082157455700182
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.05572607738046535
+      "importance": 0.05587392393987474
     },
     {
-      "feature": "_SEX",
-      "importance": 0.04342263779350052
+      "feature": "SEXVAR",
+      "importance": 0.0431039334069747
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.043250583458834334
+      "importance": 0.040107876019476234
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.037003274065084496
+      "importance": 0.038073600730085005
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.02510536198089122
+      "importance": 0.02506423076985282
     }
   ],
   "confusion_matrix": [
@@ -203,15 +203,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 422964,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.18570804595947266,
+    "analysis_time_seconds": 0.16762089729309082,
     "target_distribution": {
       "1.0": 714,
       "2.0": 39,

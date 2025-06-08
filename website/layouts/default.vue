@@ -43,9 +43,12 @@ const docNavItems = computed(() => {
 
 const menuItems = computed(() => [
   { label: 'Home', to: '/', icon: 'i-heroicons-home' },
+  { label: 'Features', to: '/columns', icon: 'i-heroicons-table-cells' },
+  { label: 'Demographic Analysis', to: '/demographic-analysis', icon: 'i-heroicons-chart-bar' },
+  { label: 'Codebook', to: '/codebook', icon: 'i-heroicons-book-open' },
   { 
     label: 'Documentation', 
-    icon: 'i-heroicons-book-open',
+    icon: 'i-heroicons-document-text',
     children: docNavItems.value
   },
   { label: 'GitHub', href: 'https://github.com/sksizer/dat490', target: '_blank', icon: 'i-heroicons-code-bracket' }

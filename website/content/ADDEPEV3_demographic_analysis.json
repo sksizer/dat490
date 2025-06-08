@@ -1,17 +1,17 @@
 {
   "target_column": "ADDEPEV3",
-  "accuracy": 0.7978168559032586,
+  "accuracy": 0.7977937782701007,
   "classification_report": {
     "1.0": {
-      "precision": 0.6376083979917846,
-      "recall": 0.07923993193420306,
-      "f1-score": 0.14096160637707483,
+      "precision": 0.6379468377635197,
+      "recall": 0.0789563244469654,
+      "f1-score": 0.14052089642640825,
       "support": 17630.0
     },
     "2.0": {
-      "precision": 0.8019628502764328,
-      "recall": 0.9886743435935608,
-      "f1-score": 0.8855843018315401,
+      "precision": 0.8019200719731048,
+      "recall": 0.9887035334296598,
+      "f1-score": 0.8855699280359232,
       "support": 68517.0
     },
     "7.0": {
@@ -21,99 +21,99 @@
       "support": 403.0
     },
     "9.0": {
-      "precision": 1.0,
-      "recall": 0.03508771929824561,
-      "f1-score": 0.06779661016949153,
+      "precision": 0.8333333333333334,
+      "recall": 0.043859649122807015,
+      "f1-score": 0.08333333333333333,
       "support": 114.0
     },
-    "accuracy": 0.7978168559032586,
+    "accuracy": 0.7977937782701007,
     "macro avg": {
-      "precision": 0.6098928120670544,
-      "recall": 0.27575049870650237,
-      "f1-score": 0.27358562959452665,
+      "precision": 0.5683000607674895,
+      "recall": 0.27787987674985803,
+      "f1-score": 0.2773560394489162,
       "support": 86664.0
     },
     "weighted avg": {
-      "precision": 0.765059594168115,
-      "recall": 0.7978168559032586,
-      "f1-score": 0.7289123689487997,
+      "precision": 0.7648753844866619,
+      "recall": 0.7977937782701007,
+      "f1-score": 0.7288317890154496,
       "support": 86664.0
     }
   },
   "feature_importance": [
     {
       "feature": "EMPLOY1",
-      "importance": 0.27077847331605304
+      "importance": 0.27429195532082035
     },
     {
-      "feature": "_SEX",
-      "importance": 0.15990820507837303
+      "feature": "SEXVAR",
+      "importance": 0.16050229839048458
     },
     {
       "feature": "_AGE80",
-      "importance": 0.1477064053329727
-    },
-    {
-      "feature": "RENTHOM1",
-      "importance": 0.09383955634764876
+      "importance": 0.14839769715282503
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.09239035419464932
+      "importance": 0.09496460591303799
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.08903404535287028
     },
     {
       "feature": "INCOME3",
-      "importance": 0.08067924701385647
+      "importance": 0.08023593889738985
     },
     {
       "feature": "MARITAL",
-      "importance": 0.07241522577316398
+      "importance": 0.07092346924905876
     },
     {
       "feature": "EDUCA",
-      "importance": 0.023985474349692174
+      "importance": 0.023822887581645222
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.0206470160684982
+      "importance": 0.018251229849642576
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.015319611078069117
+      "importance": 0.016433409589482844
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.013292484074572666
+      "importance": 0.013742126456819392
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.009037947372450537
+      "importance": 0.009400336245923128
     }
   ],
   "confusion_matrix": [
     [
-      1397,
-      16233,
+      1392,
+      16238,
       0,
       0
     ],
     [
-      776,
-      67741,
+      773,
+      67743,
       0,
-      0
+      1
     ],
     [
-      15,
-      388,
+      14,
+      389,
       0,
       0
     ],
     [
       3,
-      107,
+      106,
       0,
-      4
+      5
     ]
   ],
   "class_labels": [
@@ -143,15 +143,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 3,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 2.091403007507324,
+    "analysis_time_seconds": 3.3630237579345703,
     "target_distribution": {
       "1.0": 88149,
       "2.0": 342587,

@@ -31,55 +31,55 @@
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.2722549743402507
+      "importance": 0.25322371937001
     },
     {
       "feature": "INCOME3",
-      "importance": 0.1445385179836969
+      "importance": 0.12256475572831081
     },
     {
       "feature": "EDUCA",
-      "importance": 0.10397424134220015
+      "importance": 0.11010425815341265
     },
     {
       "feature": "MARITAL",
-      "importance": 0.09497197268596988
+      "importance": 0.10495034252181684
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.08632270219335958
+      "importance": 0.09641636888251585
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.06700188066944791
+      "importance": 0.07083731484944591
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.06209785690285458
+      "importance": 0.06517343679124982
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.05938196652050696
-    },
-    {
-      "feature": "_SEX",
-      "importance": 0.024847074631862868
+      "importance": 0.054327421469274655
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.024314815592578785
+      "importance": 0.02784302514319983
     },
     {
-      "feature": "_HISPANC",
-      "importance": 0.022440699679405273
+      "feature": "SEXVAR",
+      "importance": 0.02783953311570271
     },
     {
       "feature": "NUMHHOL4",
-      "importance": 0.020302219118148335
+      "importance": 0.027634641249337254
+    },
+    {
+      "feature": "_HISPANC",
+      "importance": 0.021839262810730706
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.017551078339718074
+      "importance": 0.01724591991499301
     }
   ],
   "confusion_matrix": [
@@ -118,15 +118,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 3,
     "target_missing_dropped": 344978,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.4124021530151367,
+    "analysis_time_seconds": 0.9555859565734863,
     "target_distribution": {
       "1.0": 88212,
       "2.0": 133

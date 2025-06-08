@@ -13,7 +13,12 @@ from pathlib import Path
 from typing import List, Dict, Optional
 
 from dat490.parser import ColumnMetadata, parse_codebook_html
-from scripts.demographic_analysis import perform_demographic_analysis, generate_analysis_visualizations
+from scripts.demographic_analysis import (
+    perform_demographic_analysis, 
+    generate_analysis_visualizations,
+    generate_feature_importance_summary,
+    generate_summary_visualizations
+)
 
 # Demographic feature columns for analysis (26 total features)
 DEMOGRAPHIC_FEATURE_COLUMNS = [
@@ -30,16 +35,11 @@ DEMOGRAPHIC_FEATURE_COLUMNS = [
     'CHILDREN',   # https://singular-eclair-6a5a16.netlify.app/columns/CHILDREN
     'INCOME3',    # https://singular-eclair-6a5a16.netlify.app/columns/INCOME3
     'PREGNANT',   # https://singular-eclair-6a5a16.netlify.app/columns/PREGNANT
+    'SEXVAR',    # https://singular-eclair-6a5a16.netlify.app/columns/SEXVAR
     '_HISPANC', # https://singular-eclair-6a5a16.netlify.app/columns/_HISPANC # Calculated but not sure from what
     '_CRACE1',    # https://singular-eclair-6a5a16.netlify.app/columns/_CRACE1 # Child race
     '_IMPRACE',   # https://singular-eclair-6a5a16.netlify.app/columns/_IMPRACE
-    '_SEX',       # https://singular-eclair-6a5a16.netlify.app/columns/_SEX
     '_AGE80',     # https://singular-eclair-6a5a16.netlify.app/columns/_AGE80
-
-    # Removed weight/height since there's obviously relationshp of weight to genhealth
-    # 'WEIGHT2',    # https://singular-eclair-6a5a16.netlify.app/columns/WEIGHT2
-    # 'HEIGHT3',    # https://singular-eclair-6a5a16.netlify.app/columns/HEIGHT3
-    # 'MRACASC1',   # https://singular-eclair-6a5a16.netlify.app/columns/MRACASC1
 ]
 
 # Configure logging
@@ -218,6 +218,14 @@ def generate_demographic_analyses(df: pd.DataFrame, metadata: Dict[str, ColumnMe
     """
     analysis_start_time = time.time()
     
+    # Sections to exclude from being target variables
+    EXCLUDED_TARGET_SECTIONS = [
+        'Calculated Variables',
+        'Calculated Race Variables', 
+        'Record Identification',
+        'Weighting Variables'
+    ]
+    
     # Identify candidate columns for analysis
     candidate_columns = []
     
@@ -227,6 +235,10 @@ def generate_demographic_analyses(df: pd.DataFrame, metadata: Dict[str, ColumnMe
             
         # Skip if this is a demographic feature column (don't analyze predictors)
         if col_name in DEMOGRAPHIC_FEATURE_COLUMNS:
+            continue
+            
+        # Skip columns from excluded sections
+        if col_meta.section_name in EXCLUDED_TARGET_SECTIONS:
             continue
             
         # Check if column has enough valid data
@@ -375,6 +387,47 @@ def generate_demographic_analyses(df: pd.DataFrame, metadata: Dict[str, ColumnMe
     logger.info(f"  Analysis time: {total_analysis_time:.1f}s")
     logger.info(f"  Average per column: {avg_analysis_time:.1f}s")
     logger.info(f"  Parallel efficiency: {total_analysis_time/total_time:.1f}x")
+    
+    # Generate feature importance summary if we have successful analyses
+    if successful_analyses > 0:
+        logger.info("Generating feature importance summary...")
+        
+        try:
+            summary = generate_feature_importance_summary(
+                analysis_results=results,
+                analysis_files_dir=output_dir,
+                metadata=metadata,
+                excluded_sections=EXCLUDED_TARGET_SECTIONS
+            )
+            
+            # Save summary JSON file
+            summary_file = output_dir / 'feature_importance_summary.json'
+            with open(summary_file, 'w') as f:
+                f.write(summary.model_dump_json(indent=2))
+            
+            logger.info(f"Saved feature importance summary: {summary_file}")
+            
+            # Generate summary visualizations
+            viz_dir = Path('website/public/images')
+            summary_viz_files = generate_summary_visualizations(
+                summary=summary,
+                output_dir=viz_dir,
+                format='svg'
+            )
+            
+            if summary_viz_files:
+                logger.info(f"Generated {len(summary_viz_files)} summary visualizations:")
+                for viz_type, viz_file in summary_viz_files.items():
+                    logger.info(f"  {viz_type}: {viz_file}")
+            
+            logger.info(f"Feature importance summary completed:")
+            logger.info(f"  Top feature: {summary.top_features[0]['feature'] if summary.top_features else 'None'}")
+            logger.info(f"  Average accuracy: {summary.average_accuracy:.3f}")
+            logger.info(f"  Sections analyzed: {len(summary.sections_analyzed)}")
+            logger.info(f"  Sections excluded: {len(summary.sections_excluded)}")
+            
+        except Exception as e:
+            logger.error(f"Error generating feature importance summary: {e}")
     
     return results
 

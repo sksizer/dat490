@@ -43,51 +43,51 @@
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.2666883395609274
+      "importance": 0.26689202332820666
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.25763649843639885
+      "importance": 0.2568908314159645
     },
     {
-      "feature": "_SEX",
-      "importance": 0.09791852454659179
+      "feature": "SEXVAR",
+      "importance": 0.1030195194819419
     },
     {
       "feature": "INCOME3",
-      "importance": 0.08693751136738644
-    },
-    {
-      "feature": "VETERAN3",
-      "importance": 0.06487062707575394
+      "importance": 0.0869313382482266
     },
     {
       "feature": "EDUCA",
-      "importance": 0.0646825083223623
+      "importance": 0.0663946988739279
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.06082439863502307
     },
     {
       "feature": "MARITAL",
-      "importance": 0.04771355710489149
+      "importance": 0.04901920213153561
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.03207430846372534
+      "importance": 0.030624480520427568
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.028054070978222326
+      "importance": 0.02639120078290414
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.022125649829158815
+      "importance": 0.02194794179369465
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.019264940524158548
+      "importance": 0.01918450455176352
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.01203346379042281
+      "importance": 0.011879860236383854
     }
   ],
   "confusion_matrix": [
@@ -143,15 +143,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 3,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 2.1630070209503174,
+    "analysis_time_seconds": 3.5000948905944824,
     "target_distribution": {
       "1.0": 23451,
       "2.0": 407304,

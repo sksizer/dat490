@@ -1,6 +1,6 @@
 {
   "target_column": "COVACGE1",
-  "accuracy": 0.7037768452234017,
+  "accuracy": 0.7069859294001481,
   "classification_report": {
     "1.0": {
       "precision": 0.0,
@@ -15,21 +15,21 @@
       "support": 106.0
     },
     "3.0": {
-      "precision": 0.16666666666666666,
-      "recall": 0.0035714285714285713,
-      "f1-score": 0.006993006993006993,
+      "precision": 0.3333333333333333,
+      "recall": 0.007142857142857143,
+      "f1-score": 0.013986013986013986,
       "support": 560.0
     },
     "4.0": {
-      "precision": 0.7103154732098147,
-      "recall": 0.9926522043386984,
-      "f1-score": 0.8280793928779918,
+      "precision": 0.711639549436796,
+      "recall": 0.9947515745276417,
+      "f1-score": 0.8297096162264701,
       "support": 2858.0
     },
     "7.0": {
-      "precision": 0.27906976744186046,
-      "recall": 0.027972027972027972,
-      "f1-score": 0.05084745762711865,
+      "precision": 0.3953488372093023,
+      "recall": 0.039627039627039624,
+      "f1-score": 0.07203389830508475,
       "support": 429.0
     },
     "9.0": {
@@ -38,68 +38,68 @@
       "f1-score": 0.0,
       "support": 23.0
     },
-    "accuracy": 0.7037768452234017,
+    "accuracy": 0.7069859294001481,
     "macro avg": {
-      "precision": 0.19267531788639028,
-      "recall": 0.17069927681369249,
-      "f1-score": 0.14765330958301956,
+      "precision": 0.24005361999657193,
+      "recall": 0.1735869118829231,
+      "f1-score": 0.15262158808626147,
       "support": 4051.0
     },
     "weighted avg": {
-      "precision": 0.5537239906194871,
-      "recall": 0.7037768452234017,
-      "f1-score": 0.5905654278161983,
+      "precision": 0.5900116391310343,
+      "recall": 0.7069859294001481,
+      "f1-score": 0.5949258932066899,
       "support": 4051.0
     }
   },
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.25486746167532176
+      "importance": 0.2578844754999733
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.1348567495106319
+      "importance": 0.13335840309474897
     },
     {
       "feature": "MARITAL",
-      "importance": 0.11245634456044681
+      "importance": 0.1113749709122347
     },
     {
       "feature": "INCOME3",
-      "importance": 0.10919040014795797
+      "importance": 0.10747825321666228
     },
     {
       "feature": "EDUCA",
-      "importance": 0.08435170810083725
+      "importance": 0.08390907059864752
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.08031327110260653
+      "importance": 0.08099193717072108
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.06522372306248853
+      "importance": 0.06377844527900049
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.06036648493514
+      "importance": 0.06128507062698568
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.03135305739010364
+      "importance": 0.031948269172093036
     },
     {
-      "feature": "_SEX",
-      "importance": 0.02986615475419485
+      "feature": "SEXVAR",
+      "importance": 0.03055778579174668
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.026023926457345904
+      "importance": 0.02652284540371149
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.011130718302924968
+      "importance": 0.010910473233474811
     }
   ],
   "confusion_matrix": [
@@ -114,33 +114,33 @@
     [
       0,
       0,
-      1,
-      94,
-      11,
+      0,
+      96,
+      10,
       0
     ],
     [
       0,
       0,
-      2,
-      551,
+      4,
+      549,
       7,
       0
     ],
     [
       0,
       0,
-      8,
-      2837,
-      13,
+      6,
+      2843,
+      9,
       0
     ],
     [
       0,
-      2,
-      0,
-      415,
-      12,
+      1,
+      1,
+      410,
+      17,
       0
     ],
     [
@@ -181,15 +181,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 413068,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.4864802360534668,
+    "analysis_time_seconds": 0.21302390098571777,
     "target_distribution": {
       "1.0": 378,
       "2.0": 528,

@@ -21,6 +21,17 @@ We use a **Random Forest Classifier** to predict each BRFSS variable based on de
 - Robustness to overfitting
 - No requirement for feature scaling
 
+### Target Variable Selection
+
+Not all BRFSS variables are suitable targets for demographic analysis. The following sections are **excluded** from being target variables:
+
+- **Calculated Variables**: Derived variables computed from other responses
+- **Calculated Race Variables**: Computed race/ethnicity classifications  
+- **Record Identification**: Administrative fields like record IDs
+- **Weighting Variables**: Statistical weights for survey analysis
+
+This filtering ensures we analyze genuine survey responses rather than computed derivatives or administrative data.
+
 ### Demographic Features Used
 
 The analysis uses 16 carefully selected demographic features from the BRFSS dataset:
@@ -84,6 +95,22 @@ The following variables were deliberately excluded from the demographic analysis
    - Feature importance bar chart
    - Both saved as SVG files for web display
 
+### Cross-Analysis Feature Importance
+
+Beyond individual column analyses, we aggregate feature importance across all successful analyses to identify which demographic variables are most consistently predictive:
+
+#### Methodology
+1. **Aggregation**: Collect feature importance scores from all successful Random Forest analyses
+2. **Ranking**: Calculate average importance for each demographic feature across all models
+3. **Frequency Analysis**: Track how often each feature appears in the top 5 most important features
+4. **Visualization**: Generate charts showing the most consistently predictive demographic variables
+
+#### Key Insights
+- **Top Predictors**: Demographic features with highest average importance across health variables
+- **Consistency**: Features that frequently appear in top-5 rankings across different health outcomes
+- **Accuracy Distribution**: Overview of how well demographics predict various health measures
+- **Section Analysis**: Which categories of health variables are most/least predictable from demographics
+
 ### Interpretation
 
 The **demographic analysis score** (accuracy) indicates how predictable a variable is from demographics alone:
@@ -91,6 +118,8 @@ The **demographic analysis score** (accuracy) indicates how predictable a variab
 - **High scores (>70%)**: Strong demographic patterns, potential health disparities
 - **Medium scores (40-70%)**: Moderate demographic influence
 - **Low scores (<40%)**: Weak demographic patterns, more individual variation
+
+The **cross-analysis insights** reveal which demographic factors are most universally predictive of health outcomes, helping identify key social determinants of health.
 
 ### Implementation
 
@@ -123,7 +152,9 @@ python scripts/generate.py --demographic-analysis --max-workers 8
 
 This generates:
 - Individual JSON files for each analyzed column in `/website/content/`
+- `feature_importance_summary.json` with cross-analysis insights in `/website/content/`
 - Confusion matrix and feature importance SVGs in `/website/public/images/`
+- Summary visualizations (`feature_importance_ranking.svg`, `analysis_accuracy_distribution.svg`)
 - Updated model.json with demographic analysis scores embedded
 
 ### Limitations

@@ -43,51 +43,51 @@
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.3124398674164195
+      "importance": 0.31125818030546315
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.14474979099236257
+      "importance": 0.14574514982870196
     },
     {
       "feature": "INCOME3",
-      "importance": 0.13934902653432124
+      "importance": 0.13357444162355228
     },
     {
       "feature": "EDUCA",
-      "importance": 0.08100703721289794
+      "importance": 0.08133409428918935
     },
     {
       "feature": "MARITAL",
-      "importance": 0.07526038902630862
+      "importance": 0.07826239949760301
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.06830318065330229
+      "importance": 0.059124309210863125
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.04433153862504395
+      "importance": 0.04668085487125133
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.03885690436038827
+      "importance": 0.043363767834920415
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.03760380000888198
+      "importance": 0.034415768798266
     },
     {
-      "feature": "_SEX",
-      "importance": 0.03165270756694697
+      "feature": "SEXVAR",
+      "importance": 0.032776354308930555
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.016228937912204925
+      "importance": 0.01891877460150432
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.010216819690921648
+      "importance": 0.014545904829754576
     }
   ],
   "confusion_matrix": [
@@ -143,15 +143,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 430550,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.14406108856201172,
+    "analysis_time_seconds": 0.14058876037597656,
     "target_distribution": {
       "1.0": 222,
       "2.0": 2520,

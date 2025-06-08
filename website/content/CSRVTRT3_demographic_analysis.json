@@ -1,6 +1,6 @@
 {
   "target_column": "CSRVTRT3",
-  "accuracy": 0.4884353741496599,
+  "accuracy": 0.49795918367346936,
   "classification_report": {
     "1.0": {
       "precision": 0.0,
@@ -9,9 +9,9 @@
       "support": 86.0
     },
     "2.0": {
-      "precision": 0.4971830985915493,
+      "precision": 0.5,
       "recall": 0.9724517906336089,
-      "f1-score": 0.6579683131407269,
+      "f1-score": 0.6604303086997194,
       "support": 363.0
     },
     "3.0": {
@@ -27,9 +27,9 @@
       "support": 32.0
     },
     "5.0": {
-      "precision": 0.25,
-      "recall": 0.0273972602739726,
-      "f1-score": 0.04938271604938271,
+      "precision": 0.4642857142857143,
+      "recall": 0.0593607305936073,
+      "f1-score": 0.10526315789473684,
       "support": 219.0
     },
     "7.0": {
@@ -44,77 +44,77 @@
       "f1-score": 0.0,
       "support": 9.0
     },
-    "accuracy": 0.4884353741496599,
+    "accuracy": 0.49795918367346936,
     "macro avg": {
-      "precision": 0.10674044265593562,
-      "recall": 0.14283557870108307,
-      "f1-score": 0.10105014702715852,
+      "precision": 0.13775510204081634,
+      "recall": 0.14740178874674517,
+      "f1-score": 0.10938478094206518,
       "support": 735.0
     },
     "weighted avg": {
-      "precision": 0.32003736705949987,
-      "recall": 0.4884353741496599,
-      "f1-score": 0.33966981290462406,
+      "precision": 0.3852769679300292,
+      "recall": 0.49795918367346936,
+      "f1-score": 0.3575358280774769,
       "support": 735.0
     }
   },
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.2258572493393339
+      "importance": 0.22959177216922527
     },
     {
       "feature": "INCOME3",
-      "importance": 0.18010953215681286
+      "importance": 0.17712394878456064
     },
     {
       "feature": "MARITAL",
-      "importance": 0.09710449494153568
-    },
-    {
-      "feature": "EMPLOY1",
-      "importance": 0.09423906253311054
+      "importance": 0.09835159139974983
     },
     {
       "feature": "EDUCA",
-      "importance": 0.08826314781249653
+      "importance": 0.09458784362981981
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.0886260280478422
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.061638731508159864
-    },
-    {
-      "feature": "RENTHOM1",
-      "importance": 0.05011554386894869
-    },
-    {
-      "feature": "CPDEMO1C",
-      "importance": 0.04926847499097612
+      "importance": 0.06688345394403376
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.04830419191815446
+      "importance": 0.04998758529346847
     },
     {
-      "feature": "_SEX",
-      "importance": 0.043100928739715036
+      "feature": "CPDEMO1C",
+      "importance": 0.04804628652885061
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.0474090937769247
+    },
+    {
+      "feature": "SEXVAR",
+      "importance": 0.0405476634882197
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.037550046547972823
+      "importance": 0.0357255043240278
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.024448595642783625
+      "importance": 0.02311922861327724
     }
   ],
   "confusion_matrix": [
     [
       0,
-      79,
+      83,
       0,
       0,
-      7,
+      3,
       0,
       0
     ],
@@ -147,10 +147,10 @@
     ],
     [
       0,
-      213,
+      206,
       0,
       0,
-      6,
+      13,
       0,
       0
     ],
@@ -165,10 +165,10 @@
     ],
     [
       1,
-      8,
+      7,
       0,
       0,
-      0,
+      1,
       0,
       0
     ]
@@ -203,15 +203,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 429652,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.16035819053649902,
+    "analysis_time_seconds": 0.15357112884521484,
     "target_distribution": {
       "1.0": 427,
       "2.0": 1813,

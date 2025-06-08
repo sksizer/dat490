@@ -43,51 +43,51 @@
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.21633132365645616
+      "importance": 0.21681832054743505
     },
     {
       "feature": "EDUCA",
-      "importance": 0.15940649259833362
+      "importance": 0.1614357751258087
     },
     {
       "feature": "INCOME3",
-      "importance": 0.15010205253042452
+      "importance": 0.14576217359065116
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.09010170367651515
+      "importance": 0.0841638105653483
     },
     {
       "feature": "MARITAL",
-      "importance": 0.08083225653996308
+      "importance": 0.08221005047364771
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.07753681748139295
-    },
-    {
-      "feature": "CPDEMO1C",
-      "importance": 0.05122395612909483
-    },
-    {
-      "feature": "CHILDREN",
-      "importance": 0.04573670032906473
+      "importance": 0.08087466871525885
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.04540181024048467
+      "importance": 0.05053245019315992
     },
     {
-      "feature": "_SEX",
-      "importance": 0.045074918765415
+      "feature": "CPDEMO1C",
+      "importance": 0.04943929334416155
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.04796036584333382
+    },
+    {
+      "feature": "SEXVAR",
+      "importance": 0.04677397501752959
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.019806924216836618
+      "importance": 0.017289123280853327
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.018445043836018665
+      "importance": 0.01673999330281199
     }
   ],
   "confusion_matrix": [
@@ -143,15 +143,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 422822,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.17856693267822266,
+    "analysis_time_seconds": 0.18363499641418457,
     "target_distribution": {
       "1.0": 9584,
       "2.0": 602,

@@ -10,6 +10,7 @@ import os
 import time
 import logging
 import warnings
+import json
 from typing import Dict, List, Tuple, Optional, Any, Union
 from pathlib import Path
 
@@ -50,6 +51,19 @@ class DemographicAnalysisResult(BaseModel):
     analysis_metadata: Dict[str, Any]
     successful: bool = True
     error_message: Optional[str] = None
+
+
+class FeatureImportanceSummary(BaseModel):
+    """Aggregated feature importance summary across all demographic analyses."""
+    total_analyses: int
+    successful_analyses: int
+    average_accuracy: float
+    top_features: List[Dict[str, Union[str, float]]]  # Ranked by average importance
+    feature_frequency: Dict[str, int]  # How often each feature appears in top 5
+    accuracy_distribution: Dict[str, int]  # Accuracy ranges and counts
+    sections_analyzed: List[str]
+    sections_excluded: List[str]
+    analysis_metadata: Dict[str, Any]  # Generation timestamp, processing time, etc.
 
 
 def perform_demographic_analysis(
@@ -413,6 +427,225 @@ def generate_analysis_visualizations(
         
     except Exception as e:
         logging.error(f"Error generating feature importance plot for {result.target_column}: {e}")
+    
+    return generated_files
+
+
+def generate_feature_importance_summary(
+    analysis_results: Dict[str, float],
+    analysis_files_dir: Path,
+    metadata: Dict[str, Any],
+    excluded_sections: List[str]
+) -> FeatureImportanceSummary:
+    """
+    Generate aggregated feature importance summary across all successful analyses.
+    
+    Args:
+        analysis_results: Dictionary mapping column names to accuracy scores
+        analysis_files_dir: Directory containing individual analysis JSON files
+        metadata: Column metadata dictionary
+        excluded_sections: List of sections that were excluded from target analysis
+        
+    Returns:
+        FeatureImportanceSummary object with aggregated insights
+    """
+    start_time = time.time()
+    
+    # Collect feature importance data from all successful analyses
+    feature_importance_data = []
+    accuracy_scores = []
+    sections_analyzed = set()
+    
+    for column_name, accuracy in analysis_results.items():
+        analysis_file = analysis_files_dir / f"{column_name}_demographic_analysis.json"
+        
+        if analysis_file.exists():
+            try:
+                with open(analysis_file, 'r') as f:
+                    analysis_data = json.load(f)
+                
+                if analysis_data.get('successful', False):
+                    feature_importance_data.append({
+                        'column': column_name,
+                        'accuracy': accuracy,
+                        'features': analysis_data.get('feature_importance', [])
+                    })
+                    accuracy_scores.append(accuracy)
+                    
+                    # Track section analyzed
+                    if column_name in metadata and metadata[column_name].section_name:
+                        sections_analyzed.add(metadata[column_name].section_name)
+                        
+            except Exception as e:
+                logging.warning(f"Error reading analysis file for {column_name}: {e}")
+    
+    # Aggregate feature importance across all analyses
+    feature_totals = {}  # feature_name -> {'importance_sum': float, 'count': int, 'top5_count': int}
+    
+    for analysis in feature_importance_data:
+        features = analysis['features']
+        # Sort features by importance for this analysis
+        sorted_features = sorted(features, key=lambda x: x['importance'], reverse=True)
+        
+        for i, feature_data in enumerate(sorted_features):
+            feature_name = feature_data['feature']
+            importance = feature_data['importance']
+            
+            if feature_name not in feature_totals:
+                feature_totals[feature_name] = {
+                    'importance_sum': 0.0,
+                    'count': 0,
+                    'top5_count': 0
+                }
+            
+            feature_totals[feature_name]['importance_sum'] += importance
+            feature_totals[feature_name]['count'] += 1
+            
+            # Track if this feature is in top 5 for this analysis
+            if i < 5:
+                feature_totals[feature_name]['top5_count'] += 1
+    
+    # Calculate average importance and create ranked list
+    top_features = []
+    for feature_name, data in feature_totals.items():
+        avg_importance = data['importance_sum'] / data['count']
+        frequency = data['top5_count']
+        
+        top_features.append({
+            'feature': feature_name,
+            'average_importance': avg_importance,
+            'frequency': frequency,
+            'rank': 0  # Will be set after sorting
+        })
+    
+    # Sort by average importance and assign ranks
+    top_features.sort(key=lambda x: x['average_importance'], reverse=True)
+    for i, feature in enumerate(top_features):
+        feature['rank'] = i + 1
+    
+    # Create feature frequency mapping
+    feature_frequency = {
+        feature['feature']: feature['frequency'] 
+        for feature in top_features
+    }
+    
+    # Create accuracy distribution (binned)
+    accuracy_distribution = {}
+    if accuracy_scores:
+        import numpy as np
+        
+        # Create bins for accuracy distribution
+        bins = np.arange(0.0, 1.1, 0.1)  # 0-10%, 10-20%, etc.
+        bin_labels = [f"{int(b*100)}-{int((b+0.1)*100)}%" for b in bins[:-1]]
+        
+        hist, _ = np.histogram(accuracy_scores, bins=bins)
+        
+        for label, count in zip(bin_labels, hist):
+            accuracy_distribution[label] = int(count)
+    
+    # Create summary object
+    summary = FeatureImportanceSummary(
+        total_analyses=len(analysis_results),
+        successful_analyses=len(feature_importance_data),
+        average_accuracy=float(np.mean(accuracy_scores)) if accuracy_scores else 0.0,
+        top_features=top_features,
+        feature_frequency=feature_frequency,
+        accuracy_distribution=accuracy_distribution,
+        sections_analyzed=sorted(list(sections_analyzed)),
+        sections_excluded=excluded_sections,
+        analysis_metadata={
+            'generation_timestamp': time.time(),
+            'processing_time_seconds': time.time() - start_time,
+            'total_analyses_attempted': len(analysis_results),
+            'demographic_features_used': len(DEMOGRAPHIC_FEATURE_COLUMNS)
+        }
+    )
+    
+    return summary
+
+
+def generate_summary_visualizations(
+    summary: FeatureImportanceSummary,
+    output_dir: Path,
+    format: str = 'svg'
+) -> Dict[str, str]:
+    """
+    Generate summary visualizations for aggregated feature importance data.
+    
+    Args:
+        summary: FeatureImportanceSummary object
+        output_dir: Directory to save visualizations
+        format: Image format ('svg', 'png', 'jpg')
+        
+    Returns:
+        Dictionary mapping visualization type to file path
+    """
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    generated_files = {}
+    
+    # Top Features Ranking Chart
+    try:
+        plt.figure(figsize=(12, 8))
+        
+        # Show top 15 features
+        top_15_features = summary.top_features[:15]
+        features = [f['feature'] for f in top_15_features]
+        importances = [f['average_importance'] for f in top_15_features]
+        frequencies = [f['frequency'] for f in top_15_features]
+        
+        # Create horizontal bar chart
+        y_pos = np.arange(len(features))
+        bars = plt.barh(y_pos, importances, alpha=0.8)
+        
+        # Color bars based on frequency (how often in top 5)
+        max_freq = max(frequencies) if frequencies else 1
+        for bar, freq in zip(bars, frequencies):
+            # Color intensity based on frequency
+            color_intensity = freq / max_freq
+            bar.set_color(plt.cm.Blues(0.3 + 0.7 * color_intensity))
+        
+        plt.yticks(y_pos, features)
+        plt.xlabel('Average Feature Importance')
+        plt.title(f'Top Demographic Predictors Across {summary.successful_analyses} Analyses\n' +
+                 f'(Color intensity = frequency in top 5 features)')
+        plt.gca().invert_yaxis()
+        plt.tight_layout()
+        
+        ranking_file = output_dir / f"feature_importance_ranking.{format}"
+        plt.savefig(ranking_file, format=format, dpi=300, bbox_inches='tight')
+        plt.close()
+        
+        generated_files['ranking'] = str(ranking_file)
+        
+    except Exception as e:
+        logging.error(f"Error generating feature importance ranking chart: {e}")
+    
+    # Accuracy Distribution Chart
+    try:
+        plt.figure(figsize=(10, 6))
+        
+        bins = list(summary.accuracy_distribution.keys())
+        counts = list(summary.accuracy_distribution.values())
+        
+        if bins and counts:
+            plt.bar(bins, counts, alpha=0.7, color='steelblue')
+            plt.xlabel('Accuracy Range')
+            plt.ylabel('Number of Analyses')
+            plt.title(f'Demographic Analysis Accuracy Distribution\n' +
+                     f'({summary.successful_analyses} analyses, avg: {summary.average_accuracy:.3f})')
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            
+            distribution_file = output_dir / f"analysis_accuracy_distribution.{format}"
+            plt.savefig(distribution_file, format=format, dpi=300, bbox_inches='tight')
+            plt.close()
+            
+            generated_files['distribution'] = str(distribution_file)
+        
+    except Exception as e:
+        logging.error(f"Error generating accuracy distribution chart: {e}")
     
     return generated_files
 

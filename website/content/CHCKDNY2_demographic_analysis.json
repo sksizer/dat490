@@ -43,51 +43,51 @@
   "feature_importance": [
     {
       "feature": "EMPLOY1",
-      "importance": 0.36081830041253965
+      "importance": 0.3543910040645434
     },
     {
       "feature": "_AGE80",
-      "importance": 0.293006541333472
+      "importance": 0.3002843413953186
     },
     {
       "feature": "INCOME3",
-      "importance": 0.09040894864667971
+      "importance": 0.08938835644998576
     },
     {
       "feature": "MARITAL",
-      "importance": 0.04865435279501094
+      "importance": 0.046352308581037366
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.03979487570374077
+      "importance": 0.042512321990351355
     },
     {
       "feature": "EDUCA",
-      "importance": 0.03842780110861414
+      "importance": 0.03955405307798661
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.031818871219779846
+      "importance": 0.030704309527568977
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.023507535009909538
+      "importance": 0.024556405374274684
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.02242379240901242
+      "importance": 0.022439287497307173
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.019262474629456697
+      "importance": 0.019162470516359262
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.01687429778376949
+      "importance": 0.015807940796829862
     },
     {
-      "feature": "_SEX",
-      "importance": 0.015002208948014836
+      "feature": "SEXVAR",
+      "importance": 0.014847200728436906
     }
   ],
   "confusion_matrix": [
@@ -143,15 +143,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 3,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 3.7546019554138184,
+    "analysis_time_seconds": 2.3654448986053467,
     "target_distribution": {
       "1.0": 20555,
       "2.0": 410876,

@@ -48,52 +48,52 @@
   },
   "feature_importance": [
     {
-      "feature": "_SEX",
-      "importance": 0.2964602061974734
+      "feature": "SEXVAR",
+      "importance": 0.29323344397268547
     },
     {
       "feature": "_AGE80",
-      "importance": 0.1583726490179863
+      "importance": 0.15681374321816832
     },
     {
       "feature": "EDUCA",
-      "importance": 0.11543386216262179
+      "importance": 0.11827147529729913
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.06367130347755917
+      "importance": 0.06816077916110647
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.06319586158546812
+      "importance": 0.06609560700014516
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.05680604614480499
+      "importance": 0.05266485001337547
     },
     {
       "feature": "INCOME3",
-      "importance": 0.04901074937727278
-    },
-    {
-      "feature": "MARITAL",
-      "importance": 0.04749512479916405
+      "importance": 0.05234288801894674
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.04502096036814132
+      "importance": 0.04782605952068487
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.04348041687814147
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.03860987153852101
+      "importance": 0.03744250590315803
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.03428083366053866
+      "importance": 0.031929309115530366
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.03164253167044824
+      "importance": 0.03173892190075851
     }
   ],
   "confusion_matrix": [
@@ -161,15 +161,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 20437,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 5.0886781215667725,
+    "analysis_time_seconds": 2.693047046661377,
     "target_distribution": {
       "1.0": 6951,
       "2.0": 4862,

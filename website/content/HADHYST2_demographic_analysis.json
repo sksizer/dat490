@@ -43,50 +43,50 @@
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.35783061833740315
+      "importance": 0.36292056959640523
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.13681403908515416
+      "importance": 0.13068388528924071
     },
     {
       "feature": "INCOME3",
-      "importance": 0.1266448246767652
+      "importance": 0.12972799437345278
     },
     {
       "feature": "MARITAL",
-      "importance": 0.09816000393421585
+      "importance": 0.10771732271143501
     },
     {
       "feature": "EDUCA",
-      "importance": 0.08193910575014648
+      "importance": 0.07521368895580546
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.06217061364557786
-    },
-    {
-      "feature": "RENTHOM1",
-      "importance": 0.05527556820353654
+      "importance": 0.06007731338842807
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.047325522064739195
+      "importance": 0.04815852215241261
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.0462338726824722
     },
     {
       "feature": "CPDEMO1C",
-      "importance": 0.018454130138727362
+      "importance": 0.022126210767483116
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.010962480379990923
+      "importance": 0.011032107781291862
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.0044230937837432885
+      "importance": 0.006108512301572994
     },
     {
-      "feature": "_SEX",
+      "feature": "SEXVAR",
       "importance": 0.0
     }
   ],
@@ -143,15 +143,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 432240,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.1784679889678955,
+    "analysis_time_seconds": 0.13503289222717285,
     "target_distribution": {
       "1.0": 287,
       "2.0": 786,

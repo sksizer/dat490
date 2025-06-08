@@ -49,51 +49,51 @@
   "feature_importance": [
     {
       "feature": "_AGE80",
-      "importance": 0.2614591765621475
+      "importance": 0.2614518074889769
     },
     {
       "feature": "INCOME3",
-      "importance": 0.1510970747032946
+      "importance": 0.1459784161270432
     },
     {
       "feature": "EMPLOY1",
-      "importance": 0.13205566169938393
-    },
-    {
-      "feature": "MARITAL",
-      "importance": 0.08278383194147411
+      "importance": 0.1301059210092997
     },
     {
       "feature": "EDUCA",
-      "importance": 0.08158959175447224
+      "importance": 0.08616394865494793
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.07977757463662656
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.061523189538174164
-    },
-    {
-      "feature": "CPDEMO1C",
-      "importance": 0.05219598600807236
+      "importance": 0.06042766008238847
     },
     {
       "feature": "RENTHOM1",
-      "importance": 0.050979932312544926
+      "importance": 0.05328759825241854
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.05318952612890258
+    },
+    {
+      "feature": "SEXVAR",
+      "importance": 0.04437040219093343
     },
     {
       "feature": "CHILDREN",
-      "importance": 0.04204496492212575
-    },
-    {
-      "feature": "_SEX",
-      "importance": 0.03924680301592431
+      "importance": 0.04132444905279284
     },
     {
       "feature": "VETERAN3",
-      "importance": 0.031005600080352712
+      "importance": 0.03171302285534396
     },
     {
       "feature": "_HISPANC",
-      "importance": 0.014018187462033382
+      "importance": 0.012209673520325901
     }
   ],
   "confusion_matrix": [
@@ -161,15 +161,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
+      "SEXVAR",
       "_HISPANC",
       "_IMPRACE",
-      "_SEX",
       "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 416162,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.19113683700561523,
+    "analysis_time_seconds": 0.2031879425048828,
     "target_distribution": {
       "1.0": 12765,
       "2.0": 3102,
