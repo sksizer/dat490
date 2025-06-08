@@ -63,6 +63,26 @@ const formatArray = (value: any[] | undefined) => {
   return value.join(', ')
 }
 
+// Helper to create extended question with value descriptions
+const getExtendedQuestion = computed(() => {
+  if (!columnData.value?.question) return ''
+  
+  let extendedQuestion = columnData.value.question
+  
+  // Add value descriptions if available
+  if (columnData.value.value_ranges && columnData.value.value_ranges.length > 0) {
+    const descriptions = columnData.value.value_ranges
+      .map(range => range.description)
+      .filter(desc => desc && desc.trim())
+    
+    if (descriptions.length > 0) {
+      extendedQuestion += ' ' + descriptions.join(', ')
+    }
+  }
+  
+  return extendedQuestion
+})
+
 // Reference to the iframe component
 const iframeComponent = ref()
 
@@ -274,7 +294,9 @@ onMounted(() => {
           </div>
           <div v-if="columnData.question" class="mt-2">
             <span class="text-gray-500 uppercase text-[10px] tracking-wider block mb-1">Question</span>
-            <span class="text-sm text-gray-900">"{{ columnData.question }}"</span>
+            <div class="text-sm text-gray-900 truncate" :title="getExtendedQuestion">
+              "{{ getExtendedQuestion }}"
+            </div>
           </div>
         </div>
       </div>
@@ -482,13 +504,22 @@ onMounted(() => {
           <template #header>
             <div class="flex items-center justify-between">
               <h2 class="text-base font-semibold">Demographic Analysis</h2>
-              <NuxtLink 
-                :to="`/columns/${columnId}/demographic-analysis`"
-                class="text-xs text-primary-600 hover:text-primary-700 flex items-center gap-0.5"
-              >
-                View full analysis
-                <UIcon name="i-heroicons-arrow-top-right-on-square" class="w-3 h-3" />
-              </NuxtLink>
+              <div class="flex items-center gap-2">
+                <NuxtLink 
+                  to="/demographic_analysis"
+                  class="text-xs text-gray-600 hover:text-gray-700 flex items-center gap-0.5"
+                >
+                  Methodology
+                  <UIcon name="i-heroicons-information-circle" class="w-3 h-3" />
+                </NuxtLink>
+                <NuxtLink 
+                  :to="`/columns/${columnId}/demographic-analysis`"
+                  class="text-xs text-primary-600 hover:text-primary-700 flex items-center gap-0.5"
+                >
+                  View full analysis
+                  <UIcon name="i-heroicons-arrow-top-right-on-square" class="w-3 h-3" />
+                </NuxtLink>
+              </div>
             </div>
           </template>
           

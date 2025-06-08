@@ -23,11 +23,11 @@ We use a **Random Forest Classifier** to predict each BRFSS variable based on de
 
 ### Demographic Features Used
 
-The analysis uses 26 demographic features from the BRFSS dataset, divided into two categories:
+The analysis uses 16 carefully selected demographic features from the BRFSS dataset:
 
-#### Direct Demographic Variables (13 features)
+#### Direct Demographic Variables (11 features)
 - `MARITAL` - Marital Status
-- `EDUCA` - Education Level
+- `EDUCA` - Education Level  
 - `RENTHOM1` - Own or Rent Home
 - `NUMHHOL4` - Number of Adults in Household
 - `NUMPHON4` - Number of Cell Phones
@@ -37,40 +37,41 @@ The analysis uses 26 demographic features from the BRFSS dataset, divided into t
 - `CHILDREN` - Number of Children in Household
 - `INCOME3` - Income Level
 - `PREGNANT` - Pregnancy Status
-- `WEIGHT2` - Reported Weight
-- `HEIGHT3` - Reported Height
 
-#### Calculated Demographic Variables (13 features)
-- `_IMPRACE` - Imputed Race/Ethnicity
+#### Calculated Demographic Variables (5 features)
+- `_HISPANC` - Hispanic/Latino Ethnicity (calculated)
 - `_CRACE1` - Calculated White/Black/Other Race
-- `_MRACE1` - Calculated Multiracial
-- `_RACE` - Calculated Race
-- `_RACEG21` - Calculated Race Groups
-- `_RACEGR3` - Calculated Race Grouping
-- `_RACEPRV` - Calculated Race/Ethnicity
+- `_IMPRACE` - Imputed Race/Ethnicity
 - `_SEX` - Calculated Sex
-- `_AGEG5YR` - Calculated Age Groups (5-year)
-- `_AGE65YR` - Calculated 65+ Age Groups
 - `_AGE80` - Calculated Age 80+
-- `_AGE_G` - Calculated Age Groups (6 levels)
-- `_EDUCAG` - Calculated Education Level
+
+#### Excluded Variables
+
+The following variables were deliberately excluded from the demographic analysis to avoid obvious correlations with health outcomes:
+
+- `WEIGHT2` and `HEIGHT3` - Physical measurements that directly relate to health conditions
+- Additional race/ethnicity variables - To avoid redundancy with selected race variables
 
 ### Analysis Process
 
 1. **Data Preparation**
-   - Load target variable and demographic features
+   - Load target variable and 16 demographic features
    - Remove rows with missing target values
-   - Remove features with >50% missing data
-   - Filter columns with insufficient samples (<1000 valid responses)
+   - Drop features with >30% missing data (missing value threshold)
+   - Fill remaining missing values with mode (most frequent value)
+   - Filter target columns with insufficient samples (<1000 valid responses)
+   - Exclude overly sparse categorical variables (>50% unique categories)
+   - Require at least 2 unique values for classification
 
 2. **Model Training**
-   - Split data into 80% training, 20% test sets
-   - Train Random Forest with parameters:
-     - `n_estimators`: 100
-     - `max_depth`: 10
-     - `min_samples_split`: 10
-     - `min_samples_leaf`: 5
-     - `random_state`: 42
+   - Split data into 80% training, 20% test sets (stratified)
+   - Train Random Forest with default parameters for efficiency:
+     - `n_estimators`: 100 (number of trees)
+     - `max_depth`: 10 (maximum tree depth)
+     - `min_samples_split`: 10 (minimum samples to split)
+     - `min_samples_leaf`: 5 (minimum samples per leaf)
+     - `random_state`: 42 (for reproducibility)
+     - `hyperparameter_tuning`: False (disabled for bulk analysis performance)
 
 3. **Evaluation Metrics**
    - **Accuracy**: Overall prediction accuracy on test set
@@ -93,16 +94,37 @@ The **demographic analysis score** (accuracy) indicates how predictable a variab
 
 ### Implementation
 
-The analysis is implemented in `scripts/demographic_analysis.py` and can be run via:
+The analysis is implemented in `scripts/demographic_analysis.py` and orchestrated via `scripts/generate.py`. 
+
+#### Running the Analysis
 
 ```bash
+# Full analysis (all applicable columns)
 python scripts/generate.py --demographic-analysis
+
+# Test mode (limited to GENHLTH, ASTHMS1, MICHD)
+python scripts/generate.py --demographic-analysis --test-mode
+
+# Sequential processing (for debugging)
+python scripts/generate.py --demographic-analysis --sequential
+
+# Parallel processing with custom worker count
+python scripts/generate.py --demographic-analysis --max-workers 8
 ```
+
+#### Performance Features
+
+- **Parallel Processing**: Uses ProcessPoolExecutor for concurrent analysis
+- **Memory Optimization**: Each worker loads its own data copy to avoid memory sharing issues
+- **Automatic Filtering**: Only analyzes columns meeting data quality criteria
+- **Progress Tracking**: Real-time logging of analysis progress and results
+
+#### Generated Output
 
 This generates:
 - Individual JSON files for each analyzed column in `/website/content/`
-- Visualization SVGs in `/website/public/images/`
-- Updated model.json with demographic analysis scores
+- Confusion matrix and feature importance SVGs in `/website/public/images/`
+- Updated model.json with demographic analysis scores embedded
 
 ### Limitations
 
