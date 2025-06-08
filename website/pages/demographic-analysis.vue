@@ -329,28 +329,54 @@ const insights = computed(() => {
           <!-- Sections Analyzed -->
           <div>
             <h4 class="font-medium text-gray-900 mb-2">Health Sections Analyzed</h4>
-            <div class="space-y-1">
-              <div 
+            <p class="text-xs text-gray-500 mb-2">
+              Click any section to view its features in the columns browser
+            </p>
+            <div class="space-y-2">
+              <NuxtLink 
                 v-for="section in featureImportanceData.sections_analyzed" 
                 :key="section"
-                class="text-sm text-gray-700 p-2 bg-green-50 rounded border border-green-200"
+                :to="`/columns?section=${encodeURIComponent(section)}`"
+                target="_blank"
+                class="block text-sm font-medium text-gray-800 p-3 bg-green-50 rounded-lg border border-green-200 hover:bg-green-100 hover:border-green-300 hover:shadow-sm transition-all duration-200 cursor-pointer group"
               >
-                {{ section }}
-              </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-green-800 group-hover:text-green-900">{{ section }}</span>
+                  <div class="flex items-center gap-1">
+                    <span class="text-xs text-green-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                      View features
+                    </span>
+                    <UIcon name="i-heroicons-arrow-top-right-on-square" class="w-4 h-4 opacity-60 group-hover:opacity-100 transition-opacity text-green-600" />
+                  </div>
+                </div>
+              </NuxtLink>
             </div>
           </div>
 
           <!-- Sections Excluded -->
           <div>
             <h4 class="font-medium text-gray-900 mb-2">Health Sections Excluded</h4>
-            <div class="space-y-1">
-              <div 
+            <p class="text-xs text-gray-500 mb-2">
+              Click any section to view its features (excluded from demographic analysis)
+            </p>
+            <div class="space-y-2">
+              <NuxtLink 
                 v-for="section in featureImportanceData.sections_excluded" 
                 :key="section"
-                class="text-sm text-gray-700 p-2 bg-red-50 rounded border border-red-200"
+                :to="`/columns?section=${encodeURIComponent(section)}`"
+                target="_blank"
+                class="block text-sm font-medium text-gray-800 p-3 bg-red-50 rounded-lg border border-red-200 hover:bg-red-100 hover:border-red-300 hover:shadow-sm transition-all duration-200 cursor-pointer group"
               >
-                {{ section }}
-              </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-red-800 group-hover:text-red-900">{{ section }}</span>
+                  <div class="flex items-center gap-1">
+                    <span class="text-xs text-red-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                      View features
+                    </span>
+                    <UIcon name="i-heroicons-arrow-top-right-on-square" class="w-4 h-4 opacity-60 group-hover:opacity-100 transition-opacity text-red-600" />
+                  </div>
+                </div>
+              </NuxtLink>
             </div>
             <p class="text-xs text-gray-500 mt-2">
               These sections were excluded to focus on genuine health outcomes rather than calculated variables.

@@ -291,6 +291,10 @@ const columns: ColumnDef<any>[] = [
   },
 ]
 
+// URL and navigation
+const route = useRoute()
+const router = useRouter()
+
 // Search state
 const search = ref('')
 
@@ -303,6 +307,39 @@ const filters = ref({
   types: [] as string[],
   computed: [] as string[]
 })
+
+// Check if we're in section filter mode
+const isFilteredBySection = computed(() => {
+  return !!(route.query.section)
+})
+
+// Get the active section name
+const activeSection = computed(() => {
+  return route.query.section as string || null
+})
+
+// Initialize filters from URL parameter
+const initializeFiltersFromURL = () => {
+  const sectionParam = route.query.section as string
+  if (sectionParam) {
+    filters.value.sections = [sectionParam]
+    // Optionally clear other filters to focus on the section
+    // filters.value.types = []
+    // filters.value.computed = []
+  }
+}
+
+// Watch for URL parameter changes
+watch(() => route.query.section, (newSection) => {
+  if (newSection && typeof newSection === 'string') {
+    // Update filters when URL parameter changes
+    filters.value.sections = [newSection]
+  } else if (!newSection) {
+    // Clear section filter if parameter is removed
+    filters.value.sections = []
+  }
+})
+
 
 // Get unique filter options from data
 const filterOptions = computed(() => {
@@ -614,14 +651,35 @@ const handleColumnReorder = (newColumnOrder: string[]) => {
 // Set the breadcrumbs
 const { setBreadcrumbs, clearBreadcrumbs } = usePageTitle()
 
-// Set breadcrumbs when component mounts
-onMounted(() => {
-  setBreadcrumbs([
+// Update breadcrumbs based on section filter
+const updateBreadcrumbs = () => {
+  const baseBreadcrumbs = [
     {
       label: 'BFRSS Features',
       to: '/columns'
     }
-  ])
+  ]
+  
+  const sectionParam = route.query.section as string
+  if (sectionParam) {
+    baseBreadcrumbs.push({
+      label: `Section: ${sectionParam}`,
+      to: `/columns?section=${encodeURIComponent(sectionParam)}`
+    })
+  }
+  
+  setBreadcrumbs(baseBreadcrumbs)
+}
+
+// Set breadcrumbs when component mounts
+onMounted(() => {
+  initializeFiltersFromURL()
+  updateBreadcrumbs()
+})
+
+// Watch for section parameter changes to update breadcrumbs
+watch(() => route.query.section, () => {
+  updateBreadcrumbs()
 })
 
 // Clear breadcrumbs when component unmounts
@@ -647,7 +705,12 @@ const handleImageError = (event: Event) => {
 <!--    <h1 class="text-2xl font-bold mb-2">BRFSS Feature Metadatas</h1>-->
 <!--    <UContainer id="bfrssLinks">Links: <ul><li><ULink to='/html/codebook_USCODE23_LLCP_021924.HTML' target="_blank">Codebook</ULink></li></ul></UContainer>-->
 <!--    -->
-    <ModelMetadataSummary :model-data="modelData" :feature-importance-data="featureImportanceData" />
+    <!-- Only show metadata summary when not filtering by section -->
+    <ModelMetadataSummary 
+      v-if="!isFilteredBySection" 
+      :model-data="modelData" 
+      :feature-importance-data="featureImportanceData" 
+    />
     
     <!-- Observation Count Chart -->
     <div class="mb-4">
@@ -673,7 +736,7 @@ const handleImageError = (event: Event) => {
         <div class="bg-gray-50 rounded-lg p-3">
           <ObservationCountChart 
             :data="sortedFilteredData" 
-            :title="`Observation Counts${filters.sections.length > 0 || filters.types.length > 0 || filters.computed.length > 0 || search.length > 0 ? ' (Filtered)' : ''}`"
+            :title="`Observation Counts${isFilteredBySection ? ` - ${activeSection}` : (filters.sections.length > 0 || filters.types.length > 0 || filters.computed.length > 0 || search.length > 0 ? ' (Filtered)' : '')}`"
           />
         </div>
       </UCard>
@@ -687,6 +750,18 @@ const handleImageError = (event: Event) => {
         icon="i-heroicons-magnifying-glass"
         size="sm"
         class="max-w-sm"
+      />
+    </div>
+
+    <!-- Section Filter Indicator -->
+    <div v-if="isFilteredBySection" class="mb-2">
+      <UAlert 
+        color="blue" 
+        variant="soft"
+        :title="`Filtered by Section: ${activeSection}`"
+        :description="`Showing ${sortedFilteredData.length} features from this section`"
+        :close-button="{ icon: 'i-heroicons-x-mark-20-solid', color: 'gray', variant: 'link', padded: false }"
+        @close="router.push('/columns')"
       />
     </div>
 
@@ -786,8 +861,8 @@ const handleImageError = (event: Event) => {
       </UTable>
     </UCard>
 
-    <!-- Demographic Analysis Insights (moved to bottom) -->
-    <div v-if="featureImportanceData" class="mt-6">
+    <!-- Demographic Analysis Insights (moved to bottom) - Hide when filtering by section -->
+    <div v-if="featureImportanceData && !isFilteredBySection" class="mt-6">
       <UCard :ui="{ body: { padding: 'p-3' }, header: { padding: 'p-3' } }">
         <template #header>
           <div class="flex items-center justify-between">
