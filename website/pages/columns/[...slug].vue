@@ -171,6 +171,18 @@ onUnmounted(() => {
   clearBreadcrumbs()
 })
 
+// Handle image loading errors for demographic analysis charts
+const handleImageError = (event: Event) => {
+  const img = event.target as HTMLImageElement
+  img.style.display = 'none'
+  
+  // Show fallback message
+  const container = img.parentElement
+  if (container) {
+    container.innerHTML = '<div class="text-gray-500 text-center p-4 text-xs">Visualization not available</div>'
+  }
+}
+
 // Scroll to top when component mounts
 onMounted(() => {
   // Use nextTick to ensure DOM is fully rendered
@@ -506,6 +518,35 @@ onMounted(() => {
                   {{ demographicAnalysis.analysis_metadata.analysis_time_seconds.toFixed(1) }}s
                 </div>
                 <div class="text-xs text-orange-600">Analysis Time</div>
+              </div>
+            </div>
+
+            <!-- Visualizations -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+              <!-- Confusion Matrix -->
+              <div class="bg-white rounded-lg border p-3">
+                <h4 class="text-sm font-medium text-gray-700 mb-2">Confusion Matrix</h4>
+                <div class="flex justify-center">
+                  <img 
+                    :src="`/images/${columnId}_demographic_analysis_confusion_matrix.svg`"
+                    :alt="`Confusion matrix for ${columnId} demographic analysis`"
+                    class="max-w-full h-auto"
+                    @error="handleImageError"
+                  />
+                </div>
+              </div>
+
+              <!-- Feature Importance -->
+              <div class="bg-white rounded-lg border p-3">
+                <h4 class="text-sm font-medium text-gray-700 mb-2">Feature Importance</h4>
+                <div class="flex justify-center">
+                  <img 
+                    :src="`/images/${columnId}_demographic_analysis_feature_importance.svg`"
+                    :alt="`Feature importance for ${columnId} demographic analysis`"
+                    class="max-w-full h-auto"
+                    @error="handleImageError"
+                  />
+                </div>
               </div>
             </div>
 
