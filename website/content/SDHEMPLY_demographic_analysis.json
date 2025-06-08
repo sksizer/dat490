@@ -1,0 +1,214 @@
+{
+  "target_column": "SDHEMPLY",
+  "accuracy": 0.9051120758394613,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.7878787878787878,
+      "recall": 0.03252439329497123,
+      "f1-score": 0.0624699663623258,
+      "support": 3997.0
+    },
+    "2.0": {
+      "precision": 0.9055781586962804,
+      "recall": 0.9991169544740973,
+      "f1-score": 0.9500507306378065,
+      "support": 40768.0
+    },
+    "7.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 176.0
+    },
+    "9.0": {
+      "precision": 0.5,
+      "recall": 0.00966183574879227,
+      "f1-score": 0.018957345971563982,
+      "support": 207.0
+    },
+    "accuracy": 0.9051120758394613,
+    "macro avg": {
+      "precision": 0.5483642366437671,
+      "recall": 0.2603257958794652,
+      "f1-score": 0.2578695107429241,
+      "support": 45148.0
+    },
+    "weighted avg": {
+      "precision": 0.8897683593709904,
+      "recall": 0.9051120758394613,
+      "f1-score": 0.8634997079119436,
+      "support": 45148.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.25984738981456174
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.10942998714238658
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.10466157074850303
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.10149126496350165
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.05788139614437559
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.054152985219308385
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.04834056596139028
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.03625017510727802
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.03236834156404852
+    },
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.03034008854464791
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.02712653016191453
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.026041433576513943
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.018077443983462903
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.015421228203625938
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.015312195355443611
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.015108623186203176
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.011486499749987169
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.010980597122515853
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.008052892128609742
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.006537801382485372
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.00615204024902237
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.004938949690213803
+    }
+  ],
+  "confusion_matrix": [
+    [
+      130,
+      3867,
+      0,
+      0
+    ],
+    [
+      34,
+      40732,
+      0,
+      2
+    ],
+    [
+      0,
+      176,
+      0,
+      0
+    ],
+    [
+      1,
+      204,
+      0,
+      2
+    ]
+  ],
+  "class_labels": [
+    "Yes",
+    "No",
+    "Don't know/Not Sure",
+    "Refused"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 225739,
+    "training_samples": 180591,
+    "test_samples": 45148,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 207584,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 1.1995751857757568,
+    "target_distribution": {
+      "1.0": 19987,
+      "2.0": 203838,
+      "7.0": 879,
+      "9.0": 1035
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

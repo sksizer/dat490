@@ -1,0 +1,182 @@
+{
+  "target_column": "_URBSTAT",
+  "accuracy": 0.8693058823529412,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.8693216588994022,
+      "recall": 0.9999323162725218,
+      "f1-score": 0.9300638987692404,
+      "support": 73873.0
+    },
+    "2.0": {
+      "precision": 0.8214285714285714,
+      "recall": 0.002067044126898535,
+      "f1-score": 0.004123711340206186,
+      "support": 11127.0
+    },
+    "accuracy": 0.8693058823529412,
+    "macro avg": {
+      "precision": 0.8453751151639868,
+      "recall": 0.5009996801997102,
+      "f1-score": 0.4670938050547233,
+      "support": 85000.0
+    },
+    "weighted avg": {
+      "precision": 0.8630521720254265,
+      "recall": 0.8693058823529412,
+      "f1-score": 0.808852881527795,
+      "support": 85000.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "INCOME3",
+      "importance": 0.1283226600787378
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.08585694339359579
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.08161719420552378
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.08146593736983242
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.07798851486743781
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.07735466719483503
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.07091686738657436
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.0508336501975944
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.048404531818213074
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.043472939836385026
+    },
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.03776614592558367
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.03711993610980074
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.029049091865841016
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.02771131236699396
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.02661801920247394
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.025549618382916642
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.019370666578448412
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.01725359497539875
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.016556613116958472
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.00643668124240582
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.0058017191799514655
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.0045326947044977
+    }
+  ],
+  "confusion_matrix": [
+    [
+      73868,
+      5
+    ],
+    [
+      11104,
+      23
+    ]
+  ],
+  "class_labels": [
+    "Urban counties (_URBNRRL = 1,2,3,4,5)",
+    "Rural counties (_URBNRRL = 6)"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 425000,
+    "training_samples": 340000,
+    "test_samples": 85000,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 8323,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 2.2832608222961426,
+    "target_distribution": {
+      "1.0": 369363,
+      "2.0": 55637
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

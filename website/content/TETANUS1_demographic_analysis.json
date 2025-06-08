@@ -1,0 +1,254 @@
+{
+  "target_column": "TETANUS1",
+  "accuracy": 0.36020249221183803,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.37037037037037035,
+      "recall": 0.3727714748784441,
+      "f1-score": 0.3715670436187399,
+      "support": 617.0
+    },
+    "2.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 163.0
+    },
+    "3.0": {
+      "precision": 0.3098827470686767,
+      "recall": 0.26618705035971224,
+      "f1-score": 0.28637770897832815,
+      "support": 695.0
+    },
+    "4.0": {
+      "precision": 0.37861915367483295,
+      "recall": 0.5923344947735192,
+      "f1-score": 0.46195652173913043,
+      "support": 861.0
+    },
+    "7.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 228.0
+    },
+    "9.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 4.0
+    },
+    "accuracy": 0.36020249221183803,
+    "macro avg": {
+      "precision": 0.17647871185231334,
+      "recall": 0.20521550333527924,
+      "f1-score": 0.1866502123893664,
+      "support": 2568.0
+    },
+    "weighted avg": {
+      "precision": 0.2997967753291589,
+      "recall": 0.36020249221183803,
+      "f1-score": 0.3216643064135871,
+      "support": 2568.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.12717094010745586
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.12412134206305475
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.10346619235449582
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.08860563032275812
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.06486663542183528
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.05302203349196025
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.05001790939320548
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.047432749885449085
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.046084039569488186
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.039706168370848796
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.03606149507669851
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.03221039997465613
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.031697678711153296
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.022635116883543315
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.022233137202364382
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.020959467650053645
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.019930405706031912
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.017937844592190427
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.017676327228056593
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.012400668439675262
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.011267605988175129
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.010496211566849772
+    }
+  ],
+  "confusion_matrix": [
+    [
+      230,
+      0,
+      119,
+      268,
+      0,
+      0
+    ],
+    [
+      36,
+      0,
+      48,
+      79,
+      0,
+      0
+    ],
+    [
+      144,
+      0,
+      185,
+      366,
+      0,
+      0
+    ],
+    [
+      160,
+      0,
+      188,
+      510,
+      3,
+      0
+    ],
+    [
+      49,
+      0,
+      57,
+      122,
+      0,
+      0
+    ],
+    [
+      2,
+      0,
+      0,
+      2,
+      0,
+      0
+    ]
+  ],
+  "class_labels": [
+    "Yes, received Tdap",
+    "Yes, received tetanus shot, but not Tdap",
+    "Yes, received tetanus shot but not sure what type",
+    "No, did not receive any tetanus shot in the past 10 years",
+    "Don't know/Not Sure",
+    "Refused"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 12840,
+    "training_samples": 10272,
+    "test_samples": 2568,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 420483,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 0.17659687995910645,
+    "target_distribution": {
+      "1.0": 3085,
+      "2.0": 814,
+      "3.0": 3476,
+      "4.0": 4305,
+      "7.0": 1139,
+      "9.0": 21
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

@@ -1,0 +1,197 @@
+{
+  "target_column": "VIRCOLO1",
+  "accuracy": 0.8288461538461539,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 68.0
+    },
+    "2.0": {
+      "precision": 0.8304431599229287,
+      "recall": 0.9976851851851852,
+      "f1-score": 0.9064143007360673,
+      "support": 432.0
+    },
+    "7.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 20.0
+    },
+    "accuracy": 0.8288461538461539,
+    "macro avg": {
+      "precision": 0.27681438664097624,
+      "recall": 0.33256172839506176,
+      "f1-score": 0.30213810024535576,
+      "support": 520.0
+    },
+    "weighted avg": {
+      "precision": 0.6899066251667407,
+      "recall": 0.8288461538461539,
+      "f1-score": 0.7530211113807329,
+      "support": 520.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.12502682720030048
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.11093225839885885
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.1096048986220778
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.10226040260032275
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.06198918012750395
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.058730321664251926
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.0493511081132905
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.04908875701848762
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.04389253025939648
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.036535773471374454
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.03501568256945352
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.03183849350879573
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.028264796946180594
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.025841411408943273
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.024134321127622396
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.021789622453624164
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.018749887312128274
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.017234931693393424
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.014426134850554443
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.013873125750089988
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.011104433361237955
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.010315101542111535
+    }
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      68,
+      0
+    ],
+    [
+      1,
+      431,
+      0
+    ],
+    [
+      0,
+      20,
+      0
+    ]
+  ],
+  "class_labels": [
+    "Yes",
+    "No -  Go to Module 07.09 SMALSTOL",
+    "Don't know/Not Sure -  Go to Module 07.09 SMALSTOL"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 2598,
+    "training_samples": 2078,
+    "test_samples": 520,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 430725,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 0.1301429271697998,
+    "target_distribution": {
+      "1.0": 341,
+      "2.0": 2156,
+      "7.0": 101
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

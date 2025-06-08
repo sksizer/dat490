@@ -197,23 +197,27 @@ const route = useRoute()
 // Page metadata
 usePageTitle(`Demographic Analysis - ${route.params.slug}`)
 
-// Fetch the demographic analysis data from individual JSON files
+
+
+// Fetch the demographic analysis data using queryCollection
 const { data: analysisData, pending, error } = await useAsyncData(
   `demographic-analysis-${route.params.slug}`,
   async () => {
     try {
-      // Import the specific demographic analysis file directly
-      const fileName = `${route.params.slug}_demographic_analysis.json`
-      const data = await import(`~/content/${fileName}`)
+      // Search for files with stem matching the pattern
+      const stem = `${route.params.slug}_demographic_analysis`
+      const demographicAnalysis = await queryCollection('demographic_analysis')
+        .where('stem', '=', stem)
+        .first()
       
-      if (!data || !data.default) {
+      if (!demographicAnalysis) {
         throw createError({
           statusCode: 404,
           statusMessage: `No demographic analysis found for column: ${route.params.slug}`
         })
       }
       
-      return data.default
+      return demographicAnalysis
     } catch (err) {
       if (err.statusCode) {
         throw err

@@ -1,0 +1,277 @@
+{
+  "target_column": "RRATWRK2",
+  "accuracy": 0.8179034325594645,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 603.0
+    },
+    "2.0": {
+      "precision": 0.8179034325594645,
+      "recall": 1.0,
+      "f1-score": 0.8998315509068829,
+      "support": 11485.0
+    },
+    "3.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 940.0
+    },
+    "4.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 50.0
+    },
+    "5.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 198.0
+    },
+    "7.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 530.0
+    },
+    "9.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 236.0
+    },
+    "accuracy": 0.8179034325594645,
+    "macro avg": {
+      "precision": 0.11684334750849493,
+      "recall": 0.14285714285714285,
+      "f1-score": 0.12854736441526898,
+      "support": 14042.0
+    },
+    "weighted avg": {
+      "precision": 0.6689660249925545,
+      "recall": 0.8179034325594645,
+      "f1-score": 0.7359753142120461,
+      "support": 14042.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.1152889064633298
+    },
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.09344941869164572
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.08858774266671038
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.07989625121912368
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.07750265471613049
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.05774125769994326
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.052395608235849794
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.04389737525840424
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.04163358852730474
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.04056577073289289
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.04015434205233077
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.03563235914521223
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.03205502241757471
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.031349264862659626
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.029080757066203434
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.02559760016585353
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.025391970701019707
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.024389321838257226
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.024104355011266863
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.020679255540327075
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.011584639512997565
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.00902253747496225
+    }
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      603,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      11485,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      940,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      50,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      198,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      530,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      236,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "class_labels": [
+    "Worse than other races",
+    "The same as other races",
+    "Better than other races",
+    "Worse than some races, better than others",
+    "Only encountered people of the same race",
+    "Don't know/Not sure",
+    "Refused"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 70209,
+    "training_samples": 56167,
+    "test_samples": 14042,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 363114,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 0.3705909252166748,
+    "target_distribution": {
+      "1.0": 3015,
+      "2.0": 57424,
+      "3.0": 4701,
+      "4.0": 250,
+      "5.0": 990,
+      "7.0": 2648,
+      "9.0": 1181
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

@@ -1,0 +1,329 @@
+{
+  "target_column": "METVL12_",
+  "accuracy": 0.5443668838706682,
+  "classification_report": {
+    "0.0": {
+      "precision": 0.3220108695652174,
+      "recall": 0.046977205153617446,
+      "f1-score": 0.08199273482096522,
+      "support": 5045.0
+    },
+    "33.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 831.0
+    },
+    "35.0": {
+      "precision": 0.5481545604784764,
+      "recall": 0.9942901190510178,
+      "f1-score": 0.706702380227674,
+      "support": 35027.0
+    },
+    "38.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 834.0
+    },
+    "45.0": {
+      "precision": 0.3283582089552239,
+      "recall": 0.004549841444919343,
+      "f1-score": 0.008975317875841436,
+      "support": 14506.0
+    },
+    "50.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 738.0
+    },
+    "65.0": {
+      "precision": 0.29927007299270075,
+      "recall": 0.010416666666666666,
+      "f1-score": 0.020132580407561995,
+      "support": 3936.0
+    },
+    "68.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 2792.0
+    },
+    "73.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 900.0
+    },
+    "accuracy": 0.5443668838706682,
+    "macro avg": {
+      "precision": 0.16642152355462428,
+      "recall": 0.11735931470180236,
+      "f1-score": 0.09086700148133807,
+      "support": 64609.0
+    },
+    "weighted avg": {
+      "precision": 0.4142742623046304,
+      "recall": 0.5443668838706682,
+      "f1-score": 0.3927743103437234,
+      "support": 64609.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "_SEX",
+      "importance": 0.16421232122386592
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.1498974962184551
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.09297798667771823
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.08948683657233118
+    },
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.08946670314315608
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.07966043023037733
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.04261155827554232
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.042476401058403175
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.03728142540066317
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.02845241018965188
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.025191307125440966
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.024809008344610223
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.024140916650579783
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.018502359978893764
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.017500203014897353
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.01294126325153238
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.012491951825724927
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.012341596397371184
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.011890491192903934
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.00959735058581609
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.0089295558465163
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.005140426795548788
+    }
+  ],
+  "confusion_matrix": [
+    [
+      237,
+      0,
+      4720,
+      0,
+      41,
+      0,
+      47,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      831,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      136,
+      0,
+      34827,
+      0,
+      43,
+      0,
+      21,
+      0,
+      0
+    ],
+    [
+      26,
+      0,
+      790,
+      0,
+      10,
+      0,
+      8,
+      0,
+      0
+    ],
+    [
+      136,
+      0,
+      14287,
+      0,
+      66,
+      0,
+      17,
+      0,
+      0
+    ],
+    [
+      7,
+      0,
+      729,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      168,
+      0,
+      3690,
+      0,
+      37,
+      0,
+      41,
+      0,
+      0
+    ],
+    [
+      23,
+      0,
+      2764,
+      0,
+      3,
+      0,
+      2,
+      0,
+      0
+    ],
+    [
+      3,
+      0,
+      897,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "class_labels": [
+    "Activity MET Value",
+    "Activity MET Value (one implied decimal place)",
+    "Activity MET Value (one implied decimal place)",
+    "Activity MET Value (one implied decimal place)",
+    "Activity MET Value (one implied decimal place)",
+    "Activity MET Value (one implied decimal place)",
+    "Activity MET Value (one implied decimal place)",
+    "Activity MET Value (one implied decimal place)",
+    "Activity MET Value (one implied decimal place)"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 323041,
+    "training_samples": 258432,
+    "test_samples": 64609,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 110282,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 1.6471500396728516,
+    "target_distribution": {
+      "0.0": 25223,
+      "33.0": 4153,
+      "35.0": 175131,
+      "38.0": 4169,
+      "45.0": 72528,
+      "50.0": 3693,
+      "65.0": 19682,
+      "68.0": 13961,
+      "73.0": 4501
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

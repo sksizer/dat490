@@ -1,0 +1,617 @@
+{
+  "target_column": "CRGVPRB3",
+  "accuracy": 0.29078947368421054,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 73.0
+    },
+    "2.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 6.0
+    },
+    "3.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 160.0
+    },
+    "4.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 67.0
+    },
+    "5.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 258.0
+    },
+    "6.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 99.0
+    },
+    "7.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 80.0
+    },
+    "8.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 158.0
+    },
+    "9.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 3.0
+    },
+    "10.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 93.0
+    },
+    "11.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 52.0
+    },
+    "12.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 5.0
+    },
+    "13.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 138.0
+    },
+    "14.0": {
+      "precision": 0.32432432432432434,
+      "recall": 0.03986710963455149,
+      "f1-score": 0.07100591715976332,
+      "support": 301.0
+    },
+    "15.0": {
+      "precision": 0.289426523297491,
+      "recall": 0.9817629179331308,
+      "f1-score": 0.4470588235294118,
+      "support": 658.0
+    },
+    "77.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 63.0
+    },
+    "99.0": {
+      "precision": 0.5555555555555556,
+      "recall": 0.07575757575757576,
+      "f1-score": 0.13333333333333333,
+      "support": 66.0
+    },
+    "accuracy": 0.29078947368421054,
+    "macro avg": {
+      "precision": 0.06878272959866888,
+      "recall": 0.06455221196030929,
+      "f1-score": 0.03831753376602991,
+      "support": 2280.0
+    },
+    "weighted avg": {
+      "precision": 0.142425851148262,
+      "recall": 0.29078947368421054,
+      "f1-score": 0.14225328374887794,
+      "support": 2280.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.12467615812408318
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.11490775656164894
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.0972228489343194
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.08617105994737626
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.05753640761902254
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.04919120055805447
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.04847399299693266
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.04435277892897989
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.04123757914166262
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.039602115207893786
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.03760493976231528
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.03386594748276817
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.030942336424063917
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.029538820288814743
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.028688458612223147
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.02802448717760124
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.02445614405819993
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.022630642080298805
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.022183508423519717
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.014023246652059429
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.013347921485254812
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.01132164953290703
+    }
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      73,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      5,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      159,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      67,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      5,
+      253,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      97,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      80,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      155,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      92,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      51,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      5,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      135,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      12,
+      288,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      9,
+      646,
+      0,
+      2
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      63,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      60,
+      0,
+      5
+    ]
+  ],
+  "class_labels": [
+    "Arthritis/ rheumatism",
+    "Asthma",
+    "Cancer",
+    "Chronic respiratory conditions such as emphysema or COPD",
+    "Alzheimer's disease, dementia or other cognitive impairment disorder -  Go to Module 14.07 CRGVPER1",
+    "Developmental disabilities such as autism, Down's Syndrome, and spina bifida",
+    "Diabetes",
+    "Heart disease, hypertension, stroke",
+    "Human Immunodeficiency Virus Infection (H.I.V.)",
+    "Mental illnesses, such as anxiety, depression, or schizophrenia",
+    "Other organ failure or diseases such as kidney or liver problems",
+    "Substance abuse or addiction disorders",
+    "Injuries, including broken bones",
+    "Old age/ infirmity/frailty",
+    "Other",
+    "Don't know/Not Sure",
+    "Refused"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 11397,
+    "training_samples": 9117,
+    "test_samples": 2280,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 421926,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 0.185837984085083,
+    "target_distribution": {
+      "1.0": 367,
+      "2.0": 29,
+      "3.0": 802,
+      "4.0": 337,
+      "5.0": 1290,
+      "6.0": 494,
+      "7.0": 399,
+      "8.0": 790,
+      "9.0": 16,
+      "10.0": 464,
+      "11.0": 258,
+      "12.0": 24,
+      "13.0": 691,
+      "14.0": 1505,
+      "15.0": 3287,
+      "77.0": 313,
+      "99.0": 331
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

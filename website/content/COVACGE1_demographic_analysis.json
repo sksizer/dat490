@@ -1,0 +1,254 @@
+{
+  "target_column": "COVACGE1",
+  "accuracy": 0.7050111083683042,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 75.0
+    },
+    "2.0": {
+      "precision": 0.25,
+      "recall": 0.009433962264150943,
+      "f1-score": 0.01818181818181818,
+      "support": 106.0
+    },
+    "3.0": {
+      "precision": 0.14285714285714285,
+      "recall": 0.0017857142857142857,
+      "f1-score": 0.003527336860670194,
+      "support": 560.0
+    },
+    "4.0": {
+      "precision": 0.7128837443381983,
+      "recall": 0.9912526242127362,
+      "f1-score": 0.8293325526932084,
+      "support": 2858.0
+    },
+    "7.0": {
+      "precision": 0.3181818181818182,
+      "recall": 0.04895104895104895,
+      "f1-score": 0.08484848484848485,
+      "support": 429.0
+    },
+    "9.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 23.0
+    },
+    "accuracy": 0.7050111083683042,
+    "macro avg": {
+      "precision": 0.23732045089619322,
+      "recall": 0.1752372249522751,
+      "f1-score": 0.15598169876403026,
+      "support": 4051.0
+    },
+    "weighted avg": {
+      "precision": 0.5629281020287757,
+      "recall": 0.7050111083683042,
+      "f1-score": 0.595046906187716,
+      "support": 4051.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "_AGE80",
+      "importance": 0.13308560436595854
+    },
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.09210332618689156
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.08697025174256284
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.07148301924366392
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.0661718039963173
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.059989964432585294
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.05632563779195163
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.04790993665385674
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.04361527102940619
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.04306844606093403
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.03685732752388827
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.036741103635750665
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.03649790333645341
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.033686564518518536
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.032242161526632375
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.029808925366382286
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.026001716628841823
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.020121407131818776
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.019547517338559618
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.01576504053106244
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.006218906114540951
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.0057881648434228985
+    }
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      0,
+      0,
+      72,
+      3,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      93,
+      12,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      550,
+      9,
+      0
+    ],
+    [
+      0,
+      0,
+      5,
+      2833,
+      20,
+      0
+    ],
+    [
+      0,
+      3,
+      1,
+      404,
+      21,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      22,
+      1,
+      0
+    ]
+  ],
+  "class_labels": [
+    "Will definitely get a vaccine -  Go to Next Module",
+    "Will probably get a vaccine -  Go to Next Module",
+    "Will probably not get a vaccine -  Go to Next Module",
+    "Will definitely not get a vaccine -  Go to Next Module",
+    "Don't know/Not sure -  Go to Next Module",
+    "Refused -  Go to Next Module"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 20255,
+    "training_samples": 16204,
+    "test_samples": 4051,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 413068,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 0.20306682586669922,
+    "target_distribution": {
+      "1.0": 378,
+      "2.0": 528,
+      "3.0": 2800,
+      "4.0": 14291,
+      "7.0": 2145,
+      "9.0": 113
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

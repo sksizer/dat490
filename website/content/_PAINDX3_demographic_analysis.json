@@ -1,0 +1,197 @@
+{
+  "target_column": "_PAINDX3",
+  "accuracy": 0.5804996249927883,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.5850190071866589,
+      "recall": 0.9132788980095731,
+      "f1-score": 0.7131899635514888,
+      "support": 46171.0
+    },
+    "2.0": {
+      "precision": 0.5355885504362468,
+      "recall": 0.24624371019388439,
+      "f1-score": 0.33737495480294083,
+      "support": 28419.0
+    },
+    "9.0": {
+      "precision": 0.7521367521367521,
+      "recall": 0.09474120082815735,
+      "f1-score": 0.16828478964401294,
+      "support": 12075.0
+    },
+    "accuracy": 0.5804996249927883,
+    "macro avg": {
+      "precision": 0.6242481032532193,
+      "recall": 0.41808793634387165,
+      "f1-score": 0.40628323599948085,
+      "support": 86665.0
+    },
+    "weighted avg": {
+      "precision": 0.592094327326074,
+      "recall": 0.5804996249927883,
+      "f1-score": 0.5140320946475742,
+      "support": 86665.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.14879751340676797
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.12856614819825146
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.11358881742779596
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.10974725971578683
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.09759008860252377
+    },
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.08285010812604977
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.06326200836911156
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.04421632328425172
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.034616636853061745
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.03092858861391155
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.020378043284866015
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.019689251268409664
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.01818830333512185
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.01749685734279521
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.014278800243277372
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.013285898253455865
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.011059459740521251
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.007988130734367063
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.007949094488975782
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.007737836732193143
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.005630601474722963
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.0021542305037815087
+    }
+  ],
+  "confusion_matrix": [
+    [
+      42167,
+      4004,
+      0
+    ],
+    [
+      21044,
+      6998,
+      377
+    ],
+    [
+      8867,
+      2064,
+      1144
+    ]
+  ],
+  "class_labels": [
+    "Meet Aerobic Recommendations",
+    "Did Not Meet Aerobic Recommendations",
+    "Don't know/Not Sure/Refused/Missing"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 433323,
+    "training_samples": 346658,
+    "test_samples": 86665,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 0,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 2.5820937156677246,
+    "target_distribution": {
+      "1.0": 230855,
+      "2.0": 142093,
+      "9.0": 60375
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

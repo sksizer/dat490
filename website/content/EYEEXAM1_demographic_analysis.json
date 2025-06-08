@@ -1,0 +1,277 @@
+{
+  "target_column": "EYEEXAM1",
+  "accuracy": 0.5054627911770769,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 950.0
+    },
+    "2.0": {
+      "precision": 0.5056063122923588,
+      "recall": 0.9967253376995497,
+      "f1-score": 0.6708913073426092,
+      "support": 2443.0
+    },
+    "3.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 596.0
+    },
+    "4.0": {
+      "precision": 0.25,
+      "recall": 0.003795066413662239,
+      "f1-score": 0.007476635514018692,
+      "support": 527.0
+    },
+    "7.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 114.0
+    },
+    "8.0": {
+      "precision": 0.5769230769230769,
+      "recall": 0.07009345794392523,
+      "f1-score": 0.125,
+      "support": 214.0
+    },
+    "9.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 7.0
+    },
+    "accuracy": 0.5054627911770769,
+    "macro avg": {
+      "precision": 0.1903613413164908,
+      "recall": 0.1529448374367339,
+      "f1-score": 0.11476684897951826,
+      "support": 4851.0
+    },
+    "weighted avg": {
+      "precision": 0.3072372210661247,
+      "recall": 0.5054627911770769,
+      "f1-score": 0.34419246562644445,
+      "support": 4851.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.1322964236376927
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.11855932425009538
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.10185577391812445
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.08300917406170175
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.05645399461835747
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.05279728207158451
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.05238731253074863
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.04735478093337025
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.04080642855309631
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.035378851715643825
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.034880236255289895
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.033464202872856376
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.029577791065446824
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.027795623717116098
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.025938675371500124
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.02449351292699272
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.022745216959468992
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.022679540624396016
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.019416777995286266
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.018010085327812664
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.011625881170832152
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.008473109422586727
+    }
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      948,
+      0,
+      1,
+      0,
+      1,
+      0
+    ],
+    [
+      1,
+      2435,
+      0,
+      2,
+      0,
+      5,
+      0
+    ],
+    [
+      0,
+      589,
+      0,
+      2,
+      0,
+      5,
+      0
+    ],
+    [
+      0,
+      525,
+      0,
+      2,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      114,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      198,
+      0,
+      1,
+      0,
+      15,
+      0
+    ],
+    [
+      0,
+      7,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "class_labels": [
+    "Within the past month (anytime less than 1 month ago)",
+    "Within the past year (1 month but less than 12 months ago)",
+    "Within the past 2 years (1 year but less than 2 years ago)",
+    "2 or more years ago",
+    "Don't know/Not sure",
+    "Never",
+    "Refused"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 24253,
+    "training_samples": 19402,
+    "test_samples": 4851,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 409070,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 0.21616601943969727,
+    "target_distribution": {
+      "1.0": 4747,
+      "2.0": 12216,
+      "3.0": 2982,
+      "4.0": 2634,
+      "7.0": 571,
+      "8.0": 1070,
+      "9.0": 33
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

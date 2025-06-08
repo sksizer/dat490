@@ -1,0 +1,187 @@
+{
+  "target_column": "LADULT1",
+  "accuracy": 0.9984718999377441,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.9984718999377441,
+      "recall": 1.0,
+      "f1-score": 0.9992353657500496,
+      "support": 17642.0
+    },
+    "2.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 27.0
+    },
+    "accuracy": 0.9984718999377441,
+    "macro avg": {
+      "precision": 0.49923594996887205,
+      "recall": 0.5,
+      "f1-score": 0.4996176828750248,
+      "support": 17669.0
+    },
+    "weighted avg": {
+      "precision": 0.9969461349652884,
+      "recall": 0.9984718999377441,
+      "f1-score": 0.9977084341254386,
+      "support": 17669.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.15834651100397978
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.12548700575661315
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.11191822118958358
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.09058105254944192
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.06825066791546452
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.05248426322112319
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.04636374984610882
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.04224408865393087
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.0381135441156033
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.03297531212522966
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.03129279732245799
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.02831427533023791
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.02699973729290636
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.02293727813372894
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.018336061339395172
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.017014272050003255
+    },
+    {
+      "feature": "NUMHHOL4",
+      "importance": 0.01591068093577298
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.015840432575546518
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.015215962977419744
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.015037375820248562
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.011669849839024818
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.010342051518787518
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.0043248084873914175
+    }
+  ],
+  "confusion_matrix": [
+    [
+      17642,
+      0
+    ],
+    [
+      27,
+      0
+    ]
+  ],
+  "class_labels": [
+    "Yes -  If LL.03, COLGHOUS, is 1 go to LL.09, LANDSEX2; else go to LL.07, NUMADULT",
+    "No -  If LL.03, COLGHOUS, is 1 Terminate Phone Call, else go to LL.07, NUMADULT"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 88345,
+    "training_samples": 70676,
+    "test_samples": 17669,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "NUMHHOL4",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 3,
+    "target_missing_dropped": 344978,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 0.4342920780181885,
+    "target_distribution": {
+      "1.0": 88212,
+      "2.0": 133
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

@@ -1,0 +1,457 @@
+{
+  "target_column": "PRIMINS1",
+  "accuracy": 0.6450313855810949,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.6288436252912274,
+      "recall": 0.8935103244837758,
+      "f1-score": 0.7381703470031545,
+      "support": 30510.0
+    },
+    "2.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 6722.0
+    },
+    "3.0": {
+      "precision": 0.7242685324389961,
+      "recall": 0.9141366223908919,
+      "f1-score": 0.8082010582010583,
+      "support": 27404.0
+    },
+    "4.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 71.0
+    },
+    "5.0": {
+      "precision": 0.37609607319862753,
+      "recall": 0.34336930038287505,
+      "f1-score": 0.35898835516739447,
+      "support": 5746.0
+    },
+    "6.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 27.0
+    },
+    "7.0": {
+      "precision": 0.4918444165621079,
+      "recall": 0.13145539906103287,
+      "f1-score": 0.20746229161153745,
+      "support": 2982.0
+    },
+    "8.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 243.0
+    },
+    "9.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 2430.0
+    },
+    "10.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 2255.0
+    },
+    "77.0": {
+      "precision": 0.37104072398190047,
+      "recall": 0.035964912280701755,
+      "f1-score": 0.06557377049180328,
+      "support": 2280.0
+    },
+    "88.0": {
+      "precision": 0.46905676483141273,
+      "recall": 0.24201717683329663,
+      "f1-score": 0.3192911098198722,
+      "support": 4541.0
+    },
+    "99.0": {
+      "precision": 0.3706896551724138,
+      "recall": 0.029593943565037854,
+      "f1-score": 0.05481198215423837,
+      "support": 1453.0
+    },
+    "accuracy": 0.6450313855810949,
+    "macro avg": {
+      "precision": 0.26398767626743735,
+      "recall": 0.19923443684597014,
+      "f1-score": 0.19634607034223525,
+      "support": 86664.0
+    },
+    "weighted avg": {
+      "precision": 0.5328183980213793,
+      "recall": 0.6450313855810949,
+      "f1-score": 0.5657478268354675,
+      "support": 86664.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "_AGE80",
+      "importance": 0.17740825106898075
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.1745096514084735
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.17193021129406064
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.12862003331933317
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.1054603023187315
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.07355612445234934
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.02562113532085968
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.02308388202866919
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.022559674668629334
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.022408725488875014
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.015802442872660923
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.011933349979974152
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.009839344393400994
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.0065623601559526065
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.0062152374566558375
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.005883682500616121
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.005520835636053695
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.003446321672425943
+    },
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.0033833150556060836
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.0031314650821016978
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.001935718573663095
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.001187935251926579
+    }
+  ],
+  "confusion_matrix": [
+    [
+      27261,
+      0,
+      2523,
+      0,
+      358,
+      0,
+      96,
+      0,
+      0,
+      0,
+      31,
+      228,
+      13
+    ],
+    [
+      4623,
+      0,
+      1578,
+      0,
+      326,
+      0,
+      40,
+      0,
+      0,
+      0,
+      27,
+      115,
+      13
+    ],
+    [
+      1443,
+      0,
+      25051,
+      0,
+      690,
+      0,
+      72,
+      0,
+      0,
+      0,
+      18,
+      114,
+      16
+    ],
+    [
+      13,
+      0,
+      44,
+      0,
+      10,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      3,
+      0
+    ],
+    [
+      2135,
+      0,
+      1259,
+      0,
+      1973,
+      0,
+      33,
+      0,
+      0,
+      0,
+      26,
+      310,
+      10
+    ],
+    [
+      15,
+      0,
+      5,
+      0,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      4,
+      0
+    ],
+    [
+      1377,
+      0,
+      1165,
+      0,
+      39,
+      0,
+      392,
+      0,
+      0,
+      0,
+      3,
+      3,
+      3
+    ],
+    [
+      141,
+      0,
+      46,
+      0,
+      41,
+      0,
+      4,
+      0,
+      0,
+      0,
+      3,
+      8,
+      0
+    ],
+    [
+      1188,
+      0,
+      547,
+      0,
+      521,
+      0,
+      28,
+      0,
+      0,
+      0,
+      2,
+      141,
+      3
+    ],
+    [
+      1122,
+      1,
+      712,
+      0,
+      246,
+      0,
+      40,
+      0,
+      0,
+      0,
+      8,
+      122,
+      4
+    ],
+    [
+      1124,
+      0,
+      652,
+      0,
+      224,
+      0,
+      25,
+      0,
+      0,
+      0,
+      82,
+      167,
+      6
+    ],
+    [
+      2312,
+      0,
+      312,
+      0,
+      752,
+      0,
+      55,
+      0,
+      0,
+      0,
+      6,
+      1099,
+      5
+    ],
+    [
+      597,
+      1,
+      694,
+      0,
+      64,
+      0,
+      10,
+      0,
+      0,
+      0,
+      15,
+      29,
+      43
+    ]
+  ],
+  "class_labels": [
+    "A plan purchased through an employer or union (including plans purchased through another person's employer)",
+    "A private nongovernmental plan that you or another family member buys on your own",
+    "Medicare",
+    "Medigap",
+    "Medicaid",
+    "Children's Health Insurance Program (CHIP)",
+    "Military related health care: TRICARE (CHAMPUS) / VA health care / CHAMP- VA",
+    "Indian Health Service",
+    "State sponsored health plan",
+    "Other government program",
+    "Don't know/Not Sure",
+    "No coverage of any type",
+    "Refused"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 433318,
+    "training_samples": 346654,
+    "test_samples": 86664,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 5,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 2.832085609436035,
+    "target_distribution": {
+      "1.0": 152549,
+      "2.0": 33608,
+      "3.0": 137019,
+      "4.0": 354,
+      "5.0": 28729,
+      "6.0": 134,
+      "7.0": 14912,
+      "8.0": 1217,
+      "9.0": 12149,
+      "10.0": 11275,
+      "77.0": 11403,
+      "88.0": 22703,
+      "99.0": 7266
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

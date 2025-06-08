@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const route = useRoute()
 const appName = "DAT490"
 
 // Use the page title composable
@@ -95,8 +96,9 @@ const menuItems = computed(() => [
     <!-- Fixed Footer -->
     <footer class="fixed bottom-0 left-0 right-0 z-50 bg-gray-100 border-t border-gray-200">
       <UContainer>
-        <div class="py-2">
+        <div class="py-2 flex items-center justify-between">
           <p class="text-sm text-gray-600">&copy; {{ new Date().getFullYear() }} {{ appName }}</p>
+          <p class="text-xs text-gray-400 font-mono">{{ route.path }}</p>
         </div>
       </UContainer>
     </footer>

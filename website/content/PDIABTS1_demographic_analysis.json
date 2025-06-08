@@ -1,0 +1,329 @@
+{
+  "target_column": "PDIABTS1",
+  "accuracy": 0.65603007518797,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.6646747166091671,
+      "recall": 0.9912715913267182,
+      "f1-score": 0.7957663372178787,
+      "support": 21768.0
+    },
+    "2.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 3232.0
+    },
+    "3.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 1099.0
+    },
+    "4.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 992.0
+    },
+    "5.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 674.0
+    },
+    "6.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 530.0
+    },
+    "7.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 2265.0
+    },
+    "8.0": {
+      "precision": 0.2988505747126437,
+      "recall": 0.08843537414965986,
+      "f1-score": 0.13648293963254593,
+      "support": 2646.0
+    },
+    "9.0": {
+      "precision": 0.3333333333333333,
+      "recall": 0.022727272727272728,
+      "f1-score": 0.0425531914893617,
+      "support": 44.0
+    },
+    "accuracy": 0.65603007518797,
+    "macro avg": {
+      "precision": 0.14409540273946045,
+      "recall": 0.12249269313373896,
+      "f1-score": 0.10831138537108737,
+      "support": 33250.0
+    },
+    "weighted avg": {
+      "precision": 0.45937036145878707,
+      "recall": 0.65603007518797,
+      "f1-score": 0.5318871526993092,
+      "support": 33250.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "_AGE80",
+      "importance": 0.21213492187501828
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.13870436862738525
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.1334216242265359
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.07670200052132832
+    },
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.060895844916970615
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.06009569743099544
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.05031292796241461
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.037567325139200254
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.03456924083545204
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.02688156755277113
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.026212318610180828
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.02229296563619088
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.01958428150292335
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.018022795676294192
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.0129271494504124
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.012126988431068188
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.012013501517167688
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.010425192927199827
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.010280980285945755
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.009461211874381146
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.009310266053556216
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.006056828946607771
+    }
+  ],
+  "confusion_matrix": [
+    [
+      21578,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      188,
+      2
+    ],
+    [
+      3152,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      80,
+      0
+    ],
+    [
+      1059,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      40,
+      0
+    ],
+    [
+      953,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      39,
+      0
+    ],
+    [
+      652,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      22,
+      0
+    ],
+    [
+      508,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      22,
+      0
+    ],
+    [
+      2107,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      158,
+      0
+    ],
+    [
+      2412,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      234,
+      0
+    ],
+    [
+      43,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ]
+  ],
+  "class_labels": [
+    "Within the past year (anytime less than 12 months ago)",
+    "Within the past 2 years (1 year but less than 2 years)",
+    "Within the past 3 years (2 years but less than 3 years)",
+    "Within the past 5 years (3 to 4 years but less than 5 years ago)",
+    "Within the past 10 years (5 to 9 years but less than 10 years ago)",
+    "10 or more years ago",
+    "Don't know / Not sure",
+    "Never",
+    "Refused"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 166249,
+    "training_samples": 132999,
+    "test_samples": 33250,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 267074,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 0.798893928527832,
+    "target_distribution": {
+      "1.0": 108840,
+      "2.0": 16160,
+      "3.0": 5495,
+      "4.0": 4959,
+      "5.0": 3372,
+      "6.0": 2649,
+      "7.0": 11324,
+      "8.0": 13230,
+      "9.0": 220
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

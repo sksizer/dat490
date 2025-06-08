@@ -1,0 +1,233 @@
+{
+  "target_column": "CAREGIV1",
+  "accuracy": 0.7679818951097117,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 2301.0
+    },
+    "2.0": {
+      "precision": 0.7679818951097117,
+      "recall": 1.0,
+      "f1-score": 0.868766696349065,
+      "support": 7805.0
+    },
+    "7.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 26.0
+    },
+    "8.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 16.0
+    },
+    "9.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 15.0
+    },
+    "accuracy": 0.7679818951097117,
+    "macro avg": {
+      "precision": 0.15359637902194234,
+      "recall": 0.2,
+      "f1-score": 0.173753339269813,
+      "support": 10163.0
+    },
+    "weighted avg": {
+      "precision": 0.5897961912163042,
+      "recall": 0.7679818951097117,
+      "f1-score": 0.6671970938703584,
+      "support": 10163.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "_AGE80",
+      "importance": 0.1288901951711821
+    },
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.11071543962496869
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.08496256668498595
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.08403838548330225
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.07843065431580366
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.06387800727082155
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.05594373038241007
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.04996793313640302
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.04090032278414451
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.035975430228518776
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.03209956043956599
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.02991189330433599
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.029724383964322372
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.02631510677704822
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.025307606522666178
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.025157427918051412
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.024205650216466586
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.022301409072644274
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.02028794062709232
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.012114330280827508
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.011200684573428595
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.0076713412210098215
+    }
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      2301,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      7805,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      26,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      16,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      15,
+      0,
+      0,
+      0
+    ]
+  ],
+  "class_labels": [
+    "Yes",
+    "No -  Go to Module 14.09 CRGVEXPT",
+    "Don't know/Not Sure -  Go to Module 14.09 CRGVEXPT",
+    "Caregiving recipient died in past 30 days -  Go to next module",
+    "Refused -  Go to Module 14.09 CRGVEXPT"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 50811,
+    "training_samples": 40648,
+    "test_samples": 10163,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 382512,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 0.38582396507263184,
+    "target_distribution": {
+      "1.0": 11502,
+      "2.0": 39022,
+      "7.0": 131,
+      "8.0": 79,
+      "9.0": 77
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

@@ -1,0 +1,422 @@
+{
+  "target_column": "CSRVDOC1",
+  "accuracy": 0.36464088397790057,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 10.0
+    },
+    "2.0": {
+      "precision": 0.3985239852398524,
+      "recall": 0.782608695652174,
+      "f1-score": 0.5281173594132029,
+      "support": 138.0
+    },
+    "3.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 6.0
+    },
+    "4.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 5.0
+    },
+    "5.0": {
+      "precision": 0.2727272727272727,
+      "recall": 0.2079207920792079,
+      "f1-score": 0.23595505617977527,
+      "support": 101.0
+    },
+    "6.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 4.0
+    },
+    "7.0": {
+      "precision": 0.3333333333333333,
+      "recall": 0.05555555555555555,
+      "f1-score": 0.09523809523809523,
+      "support": 18.0
+    },
+    "8.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 4.0
+    },
+    "9.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 8.0
+    },
+    "10.0": {
+      "precision": 0.18181818181818182,
+      "recall": 0.034482758620689655,
+      "f1-score": 0.057971014492753624,
+      "support": 58.0
+    },
+    "77.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 9.0
+    },
+    "99.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 1.0
+    },
+    "accuracy": 0.36464088397790057,
+    "macro avg": {
+      "precision": 0.09886689775988668,
+      "recall": 0.09004731682563559,
+      "f1-score": 0.07644012711031893,
+      "support": 362.0
+    },
+    "weighted avg": {
+      "precision": 0.27372159959670916,
+      "recall": 0.36464088397790057,
+      "f1-score": 0.2811830409614495,
+      "support": 362.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "_AGE80",
+      "importance": 0.1394018829637993
+    },
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.13597089841185173
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.1165885603992179
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.094205950197972
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.08356804360516717
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.054484435156554205
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.0509758254270523
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.04497578739739204
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.044290183719400494
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.029107614109554803
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.026891474318296957
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.02453329258264341
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.02154122286888395
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.01971846864869498
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.017632160636481473
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.015654819109279287
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.015327464974654224
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.015000292507067536
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.01464080780753876
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.0135240704733108
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.011084453578047722
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.010882291107138847
+    }
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      9,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      108,
+      0,
+      0,
+      27,
+      0,
+      0,
+      0,
+      0,
+      3,
+      0,
+      0
+    ],
+    [
+      0,
+      5,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      4,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      75,
+      0,
+      0,
+      21,
+      0,
+      2,
+      0,
+      0,
+      3,
+      0,
+      0
+    ],
+    [
+      0,
+      2,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      11,
+      0,
+      0,
+      4,
+      0,
+      1,
+      0,
+      0,
+      2,
+      0,
+      0
+    ],
+    [
+      0,
+      2,
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      3,
+      0,
+      0,
+      5,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      43,
+      0,
+      0,
+      13,
+      0,
+      0,
+      0,
+      0,
+      2,
+      0,
+      0
+    ],
+    [
+      0,
+      9,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "class_labels": [
+    "Cancer Surgeon",
+    "Family Practitioner",
+    "General Surgeon",
+    "Gynecologic Oncologist",
+    "General Practitioner, Internist",
+    "Plastic Surgeon, Reconstructive Surgeon",
+    "Medical Oncologist",
+    "Radiation Oncologist",
+    "Urologist",
+    "Other",
+    "Don't know/Not Sure",
+    "Refused"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 1808,
+    "training_samples": 1446,
+    "test_samples": 362,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 431515,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 0.3492748737335205,
+    "target_distribution": {
+      "1.0": 51,
+      "2.0": 690,
+      "3.0": 30,
+      "4.0": 26,
+      "5.0": 504,
+      "6.0": 18,
+      "7.0": 92,
+      "8.0": 18,
+      "9.0": 38,
+      "10.0": 287,
+      "77.0": 47,
+      "99.0": 7
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

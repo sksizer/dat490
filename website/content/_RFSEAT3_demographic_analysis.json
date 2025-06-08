@@ -1,0 +1,197 @@
+{
+  "target_column": "_RFSEAT3",
+  "accuracy": 0.830531356372238,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.8279489904357067,
+      "recall": 0.9986185484789791,
+      "f1-score": 0.9053103172246395,
+      "support": 70216.0
+    },
+    "2.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 10148.0
+    },
+    "9.0": {
+      "precision": 0.9412658227848101,
+      "recall": 0.29503253451833045,
+      "f1-score": 0.44925084581923636,
+      "support": 6301.0
+    },
+    "accuracy": 0.830531356372238,
+    "macro avg": {
+      "precision": 0.5897382710735056,
+      "recall": 0.43121702766576986,
+      "f1-score": 0.45152038768129193,
+      "support": 86665.0
+    },
+    "weighted avg": {
+      "precision": 0.7392393960860864,
+      "recall": 0.830531356372238,
+      "f1-score": 0.7661454891103939,
+      "support": 86665.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.30214704227234734
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.27544414119508664
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.09372517447861424
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.04248821001634866
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.04221660274143976
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.04213445694660917
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.03735797715569482
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.02640767625313956
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.018021702642166924
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.01712912477391226
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.016290927863337277
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.013761199828977867
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.011760126329841384
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.009000681108303949
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.008713763852180334
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.008679038286011262
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.006719647044612773
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.006400122489693388
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.006371866523523997
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.006006673174490313
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.004763356097793207
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.004460488925874816
+    }
+  ],
+  "confusion_matrix": [
+    [
+      70119,
+      0,
+      97
+    ],
+    [
+      10129,
+      0,
+      19
+    ],
+    [
+      4442,
+      0,
+      1859
+    ]
+  ],
+  "class_labels": [
+    "Always Wear Seat Belt",
+    "Don't Always Wear Seat Belt",
+    "Don't know/Not Sure Or Refused/Missing"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 433323,
+    "training_samples": 346658,
+    "test_samples": 86665,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 0,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 2.233772039413452,
+    "target_distribution": {
+      "1.0": 351080,
+      "2.0": 50738,
+      "9.0": 31505
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

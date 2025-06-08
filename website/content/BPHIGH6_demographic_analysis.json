@@ -1,0 +1,254 @@
+{
+  "target_column": "BPHIGH6",
+  "accuracy": 0.6855441705898643,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.6260543323474641,
+      "recall": 0.6486310114909917,
+      "f1-score": 0.6371427376987501,
+      "support": 35245.0
+    },
+    "2.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 656.0
+    },
+    "3.0": {
+      "precision": 0.7288953592724807,
+      "recall": 0.7373060862197656,
+      "f1-score": 0.7330765990733498,
+      "support": 49571.0
+    },
+    "4.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 809.0
+    },
+    "7.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 262.0
+    },
+    "9.0": {
+      "precision": 0.4,
+      "recall": 0.01652892561983471,
+      "f1-score": 0.031746031746031744,
+      "support": 121.0
+    },
+    "accuracy": 0.6855441705898643,
+    "macro avg": {
+      "precision": 0.2924916152699908,
+      "recall": 0.23374433722176532,
+      "f1-score": 0.23366089475302196,
+      "support": 86664.0
+    },
+    "weighted avg": {
+      "precision": 0.6720871041964659,
+      "recall": 0.6855441705898643,
+      "f1-score": 0.6784740740411097,
+      "support": 86664.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "_AGE80",
+      "importance": 0.22807665622453646
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.15966581494544108
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.14125873436458874
+    },
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.13398721826456111
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.08820755993762108
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.0881099325737079
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.02001181290127469
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.017576229694234505
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.017403100099832352
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.014831614556442956
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.012522762724201738
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.011765132707894563
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.01143391117306399
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.010571874776862368
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.009012527825891984
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.007910022561206556
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.007179432274540905
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.006746461176588668
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.005759817249292663
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.0028790553937495856
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.0028619704751762314
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.0022283580992898617
+    }
+  ],
+  "confusion_matrix": [
+    [
+      22861,
+      0,
+      12384,
+      0,
+      0,
+      0
+    ],
+    [
+      91,
+      0,
+      565,
+      0,
+      0,
+      0
+    ],
+    [
+      13019,
+      0,
+      36549,
+      0,
+      0,
+      3
+    ],
+    [
+      379,
+      0,
+      430,
+      0,
+      0,
+      0
+    ],
+    [
+      125,
+      0,
+      137,
+      0,
+      0,
+      0
+    ],
+    [
+      41,
+      0,
+      78,
+      0,
+      0,
+      2
+    ]
+  ],
+  "class_labels": [
+    "Yes",
+    "Yes, but female told only during pregnancy -  Go to Section 06.01 CHOLCHK3",
+    "No -  Go to Section 06.01 CHOLCHK3",
+    "Told borderline high or pre-hypertensive or elevated blood pressure -  Go to Section 06.01 CHOLCHK3",
+    "Don't know/Not Sure -  Go to Section 06.01 CHOLCHK3",
+    "Refused -  Go to Section 06.01 CHOLCHK3"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 433320,
+    "training_samples": 346656,
+    "test_samples": 86664,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 3,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 3.452955961227417,
+    "target_distribution": {
+      "1.0": 176222,
+      "2.0": 3280,
+      "3.0": 247855,
+      "4.0": 4047,
+      "7.0": 1312,
+      "9.0": 604
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

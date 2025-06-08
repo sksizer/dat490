@@ -1,0 +1,457 @@
+{
+  "target_column": "EXRACT12",
+  "accuracy": 0.5407711465731944,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.5438224329678214,
+      "recall": 0.9953749964313244,
+      "f1-score": 0.7033629889648773,
+      "support": 35027.0
+    },
+    "2.0": {
+      "precision": 0.3717277486910995,
+      "recall": 0.018038617886178863,
+      "f1-score": 0.034407559970923186,
+      "support": 3936.0
+    },
+    "3.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 5194.0
+    },
+    "4.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 2792.0
+    },
+    "5.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 900.0
+    },
+    "6.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 834.0
+    },
+    "7.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 739.0
+    },
+    "8.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 831.0
+    },
+    "9.0": {
+      "precision": 0.31532846715328466,
+      "recall": 0.054189663823381834,
+      "f1-score": 0.09248554913294797,
+      "support": 3986.0
+    },
+    "10.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 1059.0
+    },
+    "11.0": {
+      "precision": 0.3898305084745763,
+      "recall": 0.0024701965417248417,
+      "f1-score": 0.004909284951974386,
+      "support": 9311.0
+    },
+    "77.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 330.0
+    },
+    "99.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 107.0
+    },
+    "accuracy": 0.5407711465731944,
+    "macro avg": {
+      "precision": 0.12466993517590629,
+      "recall": 0.08231334420635461,
+      "f1-score": 0.06424349100159406,
+      "support": 65046.0
+    },
+    "weighted avg": {
+      "precision": 0.3904652078973623,
+      "recall": 0.5407711465731944,
+      "f1-score": 0.3872103022714706,
+      "support": 65046.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "_SEX",
+      "importance": 0.17870056154598754
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.15228451540823834
+    },
+    {
+      "feature": "_AGE_G",
+      "importance": 0.09100977090182101
+    },
+    {
+      "feature": "_AGEG5YR",
+      "importance": 0.08996769939676087
+    },
+    {
+      "feature": "WEIGHT2",
+      "importance": 0.08662912548360967
+    },
+    {
+      "feature": "HEIGHT3",
+      "importance": 0.07743969475251415
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.045533946845320285
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.043404709038550225
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.030706480092943262
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.027497265960028966
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.026524744721019254
+    },
+    {
+      "feature": "_AGE65YR",
+      "importance": 0.024961611156906035
+    },
+    {
+      "feature": "_EDUCAG",
+      "importance": 0.02456917463188201
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.017157865167727358
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.01601731061993025
+    },
+    {
+      "feature": "_MRACE1",
+      "importance": 0.01170120504524601
+    },
+    {
+      "feature": "_RACEPRV",
+      "importance": 0.011592219914817513
+    },
+    {
+      "feature": "_RACE",
+      "importance": 0.010797189343851113
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.010458559074154229
+    },
+    {
+      "feature": "_RACEGR3",
+      "importance": 0.009510336423683138
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.008631782620003046
+    },
+    {
+      "feature": "_RACEG21",
+      "importance": 0.004904231855005651
+    }
+  ],
+  "confusion_matrix": [
+    [
+      34865,
+      22,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      127,
+      0,
+      13,
+      0,
+      0
+    ],
+    [
+      3722,
+      71,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      134,
+      0,
+      9,
+      0,
+      0
+    ],
+    [
+      5178,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      12,
+      0,
+      3,
+      0,
+      0
+    ],
+    [
+      2765,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      18,
+      0,
+      5,
+      0,
+      0
+    ],
+    [
+      896,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      799,
+      11,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      23,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      730,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      6,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      831,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      3713,
+      54,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      216,
+      0,
+      3,
+      0,
+      0
+    ],
+    [
+      1058,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      9121,
+      24,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      143,
+      0,
+      23,
+      0,
+      0
+    ],
+    [
+      326,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      0,
+      2,
+      0,
+      0
+    ],
+    [
+      107,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "class_labels": [
+    "Walking",
+    "Running or jogging",
+    "Gardening or yard work",
+    "Bicycling or bicycling machine exercise",
+    "Aerobics video or class",
+    "Calisthenics",
+    "Elliptical/EFX machine exercise",
+    "Household activities",
+    "Weight lifting",
+    "Yoga, Pilates, or Tai Chi",
+    "Other",
+    "Don't know/Not Sure -  Go to Section 04.08 STRENGTH",
+    "Refused -  Go to Section 04.08 STRENGTH"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 325227,
+    "training_samples": 260181,
+    "test_samples": 65046,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "WEIGHT2",
+      "HEIGHT3",
+      "_IMPRACE",
+      "_MRACE1",
+      "_RACE",
+      "_RACEG21",
+      "_RACEGR3",
+      "_RACEPRV",
+      "_SEX",
+      "_AGEG5YR",
+      "_AGE65YR",
+      "_AGE80",
+      "_AGE_G",
+      "_EDUCAG"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 108096,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 2.6658167839050293,
+    "target_distribution": {
+      "1.0": 175131,
+      "2.0": 19682,
+      "3.0": 25972,
+      "4.0": 13961,
+      "5.0": 4501,
+      "6.0": 4169,
+      "7.0": 3693,
+      "8.0": 4153,
+      "9.0": 19930,
+      "10.0": 5293,
+      "11.0": 46556,
+      "77.0": 1651,
+      "99.0": 535
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

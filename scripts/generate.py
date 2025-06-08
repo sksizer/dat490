@@ -124,25 +124,28 @@ def convert_notebooks_to_html(output_dir: Path) -> List[str]:
 def run_demographic_analysis_for_column(args):
     """
     Worker function for parallel demographic analysis.
+    Each worker loads its own data to avoid memory duplication.
     
     Args:
-        args: Tuple of (target_column, df_dict, metadata_dict, min_samples)
+        args: Tuple of (target_column, loading_params, min_samples)
         
     Returns:
         Tuple of (target_column, result_dict, analysis_time)
     """
-    target_column, df_dict, metadata_dict, min_samples = args
+    target_column, loading_params, min_samples = args
     
     start_time = time.time()
     try:
-        # Reconstruct DataFrame and metadata from serializable dictionaries
-        df = pd.DataFrame(df_dict)
-        
-        # Reconstruct metadata objects 
-        from dat490.parser import ColumnMetadata
-        metadata = {}
-        for col_name, meta_dict in metadata_dict.items():
-            metadata[col_name] = ColumnMetadata(**meta_dict)
+        # Each worker loads its own data to avoid memory passing
+        if loading_params is None:
+            # Single-threaded mode: data is passed directly (handled elsewhere)
+            raise ValueError("Single-threaded mode should not use this worker function")
+        else:
+            # Multi-threaded mode: load data fresh in each worker
+            from dat490 import load_bfrss
+            bfrss = load_bfrss(exclude_desc_columns=True)
+            df = bfrss.df
+            metadata = bfrss.metadata
         
         result = perform_demographic_analysis(
             df=df,
@@ -233,21 +236,24 @@ def generate_demographic_analyses(df: pd.DataFrame, metadata: Dict[str, ColumnMe
         logger.warning("No candidate columns found for demographic analysis")
         return {}
     
-    # Prepare serializable data for parallel processing
-    df_dict = df.to_dict()
-    metadata_dict = {col_name: col_meta.model_dump() for col_name, col_meta in metadata.items()}
-    
-    # Prepare arguments for parallel processing  
-    analysis_args = [
-        (col, df_dict, metadata_dict, min_samples) 
-        for col in candidate_columns
-    ]
+    # Prepare arguments for processing
+    if sequential or max_workers == 1:
+        # Single-threaded: we'll handle this separately (no worker function needed)
+        analysis_args = None
+    else:
+        # Multi-threaded: each worker will load its own data
+        # We just pass loading parameters (which are minimal)
+        loading_params = {'exclude_desc_columns': True}  # Parameters for load_bfrss()
+        analysis_args = [
+            (col, loading_params, min_samples) 
+            for col in candidate_columns
+        ]
     
     results = {}
     successful_analyses = 0
     total_analysis_time = 0
     
-    if sequential or len(candidate_columns) <= 5:
+    if sequential or max_workers == 1 or len(candidate_columns) <= 5:
         # Run sequentially for debugging or small datasets
         logger.info(f"Starting sequential demographic analysis...")
         
@@ -296,8 +302,9 @@ def generate_demographic_analyses(df: pd.DataFrame, metadata: Dict[str, ColumnMe
                 logger.error(f"[{i:3d}/{len(candidate_columns)}] {target_column}: ERROR - {str(e)}")
     
     else:
-        # Run analyses in parallel
+        # Run analyses in parallel - each worker loads its own data
         logger.info(f"Starting parallel demographic analysis with {max_workers} workers...")
+        logger.info(f"Each worker will load its own copy of the data to avoid memory issues")
         
         with ProcessPoolExecutor(max_workers=max_workers) as executor:
             # Submit all jobs
