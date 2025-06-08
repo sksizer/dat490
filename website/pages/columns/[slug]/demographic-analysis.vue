@@ -148,6 +148,20 @@
           </div>
         </div>
 
+        <!-- All Features Used -->
+        <div class="bg-white rounded-lg shadow-sm border p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">All Features Used in Analysis</h3>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+            <div v-for="feature in analysisData.analysis_metadata.features_used" :key="feature" 
+                 class="p-2 bg-gray-50 rounded text-sm font-mono text-center">
+              {{ feature }}
+            </div>
+          </div>
+          <p class="text-sm text-gray-600 mt-4">
+            Total: {{ analysisData.analysis_metadata.features_used.length }} features
+          </p>
+        </div>
+
         <!-- Analysis Metadata -->
         <div class="bg-white rounded-lg shadow-sm border p-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">Analysis Details</h3>
@@ -183,23 +197,23 @@ const route = useRoute()
 // Page metadata
 usePageTitle(`Demographic Analysis - ${route.params.slug}`)
 
-// Fetch the demographic analysis data using queryCollection
+// Fetch the demographic analysis data from individual JSON files
 const { data: analysisData, pending, error } = await useAsyncData(
   `demographic-analysis-${route.params.slug}`,
   async () => {
     try {
-      const data = await queryCollection('demographic_analysis')
-        .where('target_column', route.params.slug)
-        .first()
+      // Import the specific demographic analysis file directly
+      const fileName = `${route.params.slug}_demographic_analysis.json`
+      const data = await import(`~/content/${fileName}`)
       
-      if (!data) {
+      if (!data || !data.default) {
         throw createError({
           statusCode: 404,
           statusMessage: `No demographic analysis found for column: ${route.params.slug}`
         })
       }
       
-      return data
+      return data.default
     } catch (err) {
       if (err.statusCode) {
         throw err

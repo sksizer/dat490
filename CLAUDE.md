@@ -50,6 +50,9 @@ For frontend development commands and guidelines, see `web/README.md` and `web/C
 ### Web Development
 See `web/README.md` for setup instructions and `web/CLAUDE.md` for detailed development guidelines.
 
+### Additional Documentation
+- `docs/nuxt.md` - Nuxt 3 specific development patterns and content querying
+
 ## Important Files
 - `/generate.py` - Main data processing script
 - `/web/nuxt.config.ts` - Nuxt configuration
