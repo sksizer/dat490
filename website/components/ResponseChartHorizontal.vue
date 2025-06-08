@@ -50,6 +50,11 @@ const truncateDescription = (text: string, maxLength: number = 50) => {
   return text.length > maxLength ? text.substring(0, maxLength) + '...' : text
 }
 
+// Define emits
+const emit = defineEmits<{
+  highlightValue: [value: string | null]
+}>()
+
 // ECharts configuration
 const chartOption = computed<EChartsOption>(() => ({
   title: {
@@ -180,6 +185,18 @@ const chartHeight = computed(() => {
   const itemCount = chartData.value.length
   return Math.max(baseHeight, Math.min(600, baseHeight + (itemCount * 25)))
 })
+
+// Chart event handlers
+const onChartHover = (params: any) => {
+  if (params.dataIndex !== undefined) {
+    const item = chartData.value[params.dataIndex]
+    emit('highlightValue', item.value)
+  }
+}
+
+const onChartLeave = () => {
+  emit('highlightValue', null)
+}
 </script>
 
 <template>
@@ -192,6 +209,8 @@ const chartHeight = computed(() => {
       }"
       autoresize
       :style="{ height: `${chartHeight}px`, minHeight: '300px' }"
+      @mouseover="onChartHover"
+      @mouseout="onChartLeave"
     />
   </div>
   <div v-else class="text-center py-8 text-gray-500 text-sm">

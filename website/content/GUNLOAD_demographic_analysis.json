@@ -1,17 +1,17 @@
 {
   "target_column": "GUNLOAD",
-  "accuracy": 0.6351888667992047,
+  "accuracy": 0.6368455931080186,
   "classification_report": {
     "1.0": {
-      "precision": 0.5329341317365269,
-      "recall": 0.043799212598425195,
-      "f1-score": 0.08094588449295134,
+      "precision": 0.5597826086956522,
+      "recall": 0.050688976377952756,
+      "f1-score": 0.09296028880866426,
       "support": 2032.0
     },
     "2.0": {
-      "precision": 0.638098483557676,
-      "recall": 0.9803664921465969,
-      "f1-score": 0.7730415935597069,
+      "precision": 0.6392686261107313,
+      "recall": 0.9793193717277487,
+      "f1-score": 0.7735732009925558,
       "support": 3820.0
     },
     "7.0": {
@@ -26,132 +26,92 @@
       "f1-score": 0.0,
       "support": 32.0
     },
-    "accuracy": 0.6351888667992047,
+    "accuracy": 0.6368455931080186,
     "macro avg": {
-      "precision": 0.29275815382355075,
-      "recall": 0.2560414261862555,
-      "f1-score": 0.21349686951316457,
+      "precision": 0.2997628087015959,
+      "recall": 0.25750208702642535,
+      "f1-score": 0.216633372450305,
       "support": 6036.0
     },
     "weighted avg": {
-      "precision": 0.5832435988865051,
-      "recall": 0.6351888667992047,
-      "f1-score": 0.5164845799681507,
+      "precision": 0.593022599836408,
+      "recall": 0.6368455931080186,
+      "f1-score": 0.5208656286697761,
       "support": 6036.0
     }
   },
   "feature_importance": [
     {
-      "feature": "WEIGHT2",
-      "importance": 0.12666479248719523
-    },
-    {
-      "feature": "HEIGHT3",
-      "importance": 0.1185729380311198
-    },
-    {
       "feature": "_AGE80",
-      "importance": 0.09183546807013497
+      "importance": 0.18544206555765044
     },
     {
       "feature": "_SEX",
-      "importance": 0.08831275092595323
-    },
-    {
-      "feature": "MARITAL",
-      "importance": 0.07559970507073055
+      "importance": 0.1625541578962374
     },
     {
       "feature": "INCOME3",
-      "importance": 0.07087737084700897
+      "importance": 0.11761716366389603
     },
     {
-      "feature": "_AGEG5YR",
-      "importance": 0.05250730929423045
-    },
-    {
-      "feature": "CHILDREN",
-      "importance": 0.04306972488217439
-    },
-    {
-      "feature": "VETERAN3",
-      "importance": 0.041918424039095833
-    },
-    {
-      "feature": "EMPLOY1",
-      "importance": 0.03933176096345568
-    },
-    {
-      "feature": "_EDUCAG",
-      "importance": 0.03700695466725941
+      "feature": "MARITAL",
+      "importance": 0.10545045727093444
     },
     {
       "feature": "EDUCA",
-      "importance": 0.03653067956270084
+      "importance": 0.08163423628832285
     },
     {
-      "feature": "_AGE_G",
-      "importance": 0.02576378992433217
+      "feature": "EMPLOY1",
+      "importance": 0.07033222508804136
     },
     {
-      "feature": "RENTHOM1",
-      "importance": 0.025097587089899245
+      "feature": "CHILDREN",
+      "importance": 0.06498842987512726
     },
     {
-      "feature": "CPDEMO1C",
-      "importance": 0.02109015854056987
-    },
-    {
-      "feature": "_MRACE1",
-      "importance": 0.019821840260692468
+      "feature": "VETERAN3",
+      "importance": 0.06137256079020977
     },
     {
       "feature": "_IMPRACE",
-      "importance": 0.018207514739583732
+      "importance": 0.05479583920968897
     },
     {
-      "feature": "_RACE",
-      "importance": 0.018037729340193834
+      "feature": "RENTHOM1",
+      "importance": 0.04307470539809532
     },
     {
-      "feature": "_RACEPRV",
-      "importance": 0.0175518288555667
+      "feature": "CPDEMO1C",
+      "importance": 0.0382584150268397
     },
     {
-      "feature": "_RACEGR3",
-      "importance": 0.015992254344578908
-    },
-    {
-      "feature": "_AGE65YR",
-      "importance": 0.008970457492150885
-    },
-    {
-      "feature": "_RACEG21",
-      "importance": 0.00723896057137289
+      "feature": "_HISPANC",
+      "importance": 0.014479743934956442
     }
   ],
   "confusion_matrix": [
     [
-      89,
-      1943,
+      103,
+      1929,
       0,
       0
     ],
     [
-      75,
-      3745,
+      79,
+      3741,
       0,
       0
     ],
     [
-      0,
-      152,
+      1,
+      151,
       0,
       0
     ],
     [
-      3,
-      29,
+      1,
+      31,
       0,
       0
     ]
@@ -183,25 +143,15 @@
       "EMPLOY1",
       "CHILDREN",
       "INCOME3",
-      "WEIGHT2",
-      "HEIGHT3",
+      "_HISPANC",
       "_IMPRACE",
-      "_MRACE1",
-      "_RACE",
-      "_RACEG21",
-      "_RACEGR3",
-      "_RACEPRV",
       "_SEX",
-      "_AGEG5YR",
-      "_AGE65YR",
-      "_AGE80",
-      "_AGE_G",
-      "_EDUCAG"
+      "_AGE80"
     ],
     "features_dropped_missing": 4,
     "target_missing_dropped": 403146,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 0.22995209693908691,
+    "analysis_time_seconds": 0.2553749084472656,
     "target_distribution": {
       "1.0": 10160,
       "2.0": 19097,

@@ -11,9 +11,13 @@ const { data: modelData } = await useAsyncData('model', () => {
 // Fetch demographic analysis data for this column
 const { data: demographicAnalysis } = await useAsyncData(`demographic-analysis-${columnId}`, async () => {
   try {
-    return await queryCollection('demographic_analysis')
-      .where('target_column', columnId)
+    // Search for files with stem matching the pattern
+    const stem = `${columnId}_demographic_analysis`
+    const analysis = await queryCollection('demographic_analysis')
+      .where('stem', '=', stem)
       .first()
+    
+    return analysis || null
   } catch (err) {
     // Return null if no analysis found
     return null
@@ -59,13 +63,13 @@ const formatArray = (value: any[] | undefined) => {
   return value.join(', ')
 }
 
-// Reference to the iframe element
-const codebookIframe = ref<HTMLIFrameElement>()
+// Reference to the iframe component
+const iframeComponent = ref()
 
 // Reset codebook iframe to the correct anchor location
 const resetCodebook = () => {
-  if (codebookIframe.value && columnData.value?.html_name) {
-    codebookIframe.value.src = `/html/codebook_USCODE23_LLCP_021924.HTML#${columnData.value.html_name}`
+  if (iframeComponent.value) {
+    iframeComponent.value.reset()
   }
 }
 
@@ -98,11 +102,8 @@ const valueLookupTableData = computed(() => {
 // Define columns for the value lookup table - use simple string array
 const valueLookupColumns = ['value', 'count', 'description']
 
-// Define chart tabs for UTabs component
-const chartTabs = [
-  { label: 'Vertical Chart', value: 'vertical', icon: 'i-heroicons-chart-bar' },
-  { label: 'Horizontal Chart', value: 'horizontal', icon: 'i-heroicons-chart-bar-square' }
-]
+// Track highlighted value for chart-table interaction
+const highlightedValue = ref<string | null>(null)
 
 /**
  * Scroll to absolute top of page - handles complex Nuxt/Vue layouts
@@ -169,6 +170,14 @@ watchEffect(() => {
 onUnmounted(() => {
   clearBreadcrumbs()
 })
+
+// Scroll to top when component mounts
+onMounted(() => {
+  // Use nextTick to ensure DOM is fully rendered
+  nextTick(() => {
+    scrollToTop()
+  })
+})
 </script>
 
 <template>
@@ -177,11 +186,37 @@ onUnmounted(() => {
       <!-- Header -->
       <div class="mb-3">
         <h1 class="text-xl font-bold mb-1">{{ columnData.label || columnData.key }}</h1>
-        <div class="flex items-center gap-3 text-gray-600 text-sm">
-          <span class="font-mono text-xs">{{ columnData.key }}</span>
-          <span v-if="columnData.sas_variable_name" class="text-xs">
-            SAS: <span class="font-mono text-xs">{{ columnData.sas_variable_name }}</span>
-          </span>
+        <div class="bg-gray-50 rounded-lg p-3">
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+            <span>
+              <span class="text-gray-500 uppercase text-[10px] tracking-wider">Variable</span>
+              <span class="font-mono text-gray-900 font-semibold ml-1">{{ columnData.key }}</span>
+            </span>
+            <span v-if="columnData.sas_variable_name">
+              <span class="text-gray-500 uppercase text-[10px] tracking-wider">SAS</span>
+              <span class="font-mono text-gray-900 font-semibold ml-1">{{ columnData.sas_variable_name }}</span>
+            </span>
+            <span v-if="columnData.section_name">
+              <span class="text-gray-500 uppercase text-[10px] tracking-wider">Section</span>
+              <span class="text-gray-900 font-semibold ml-1">{{ columnData.section_name }}</span>
+            </span>
+            <span v-if="columnData.type_of_variable">
+              <span class="text-gray-500 uppercase text-[10px] tracking-wider">Type</span>
+              <span class="text-gray-900 font-semibold ml-1">{{ columnData.type_of_variable }}</span>
+            </span>
+            <span v-if="columnData.computed">
+              <span class="text-gray-500 uppercase text-[10px] tracking-wider">Computed</span>
+              <span class="text-green-600 font-semibold ml-1">Yes</span>
+            </span>
+            <span v-if="columnData.suppress">
+              <span class="text-gray-500 uppercase text-[10px] tracking-wider">Suppress</span>
+              <span class="text-orange-600 font-semibold ml-1">Yes</span>
+            </span>
+          </div>
+          <div v-if="columnData.question" class="mt-2">
+            <span class="text-gray-500 uppercase text-[10px] tracking-wider block mb-1">Question</span>
+            <span class="text-sm text-gray-900">{{ columnData.question }}</span>
+          </div>
         </div>
       </div>
       
@@ -190,54 +225,48 @@ onUnmounted(() => {
         <nav class="flex items-center gap-3 py-2 overflow-x-auto">
           <button 
             @click="scrollToTop"
-            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors cursor-pointer bg-transparent border-none p-0"
+            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors cursor-pointer bg-transparent border-none p-0"
           >
-            Start
+            Basic
           </button>
-          <a 
-            href="#basic-information" 
-            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
-          >
-            Basic Information
-          </a>
           <a 
             v-if="columnData.valid_values && Object.keys(columnData.valid_values).length > 0"
             href="#valid-values" 
-            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
+            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
           >
             Valid Values
           </a>
           <a 
             v-if="columnData.value_ranges && columnData.value_ranges.length > 0"
             href="#value-lookup" 
-            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
+            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
           >
             Values
           </a>
           <a 
             v-if="columnData.statistics"
             href="#statistics" 
-            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
+            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
           >
             Statistics
           </a>
           <a 
             v-if="demographicAnalysis"
             href="#demographic-analysis" 
-            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
+            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
           >
             Demographic Analysis
           </a>
           <a 
             v-if="columnData.html_name"
             href="#codebook" 
-            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
+            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
           >
             Codebook
           </a>
           <a 
             href="#json-data" 
-            class="text-xs font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap transition-colors"
+            class="text-xs font-medium text-primary-600 hover:text-primary-700 underline underline-offset-2 decoration-primary-300 whitespace-nowrap transition-colors"
           >
             JSON Data
           </a>
@@ -246,42 +275,6 @@ onUnmounted(() => {
       
       <!-- Main details -->
       <div class="grid gap-2">
-        <!-- Basic Information -->
-        <UCard id="basic-information" :ui="{ body: { padding: 'p-2' }, header: { padding: 'p-2' } }">
-          <template #header>
-            <h2 class="text-base font-semibold">Basic Information</h2>
-          </template>
-          
-          <div class="space-y-1">
-            <div v-if="columnData.question">
-              <h3 class="text-xs font-medium text-gray-700 mb-0.5">Question</h3>
-              <p class="text-gray-900 text-sm">{{ columnData.question }}</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
-              <div>
-                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Section</h3>
-                <p class="text-gray-900 text-sm">{{ columnData.section_name || 'Not specified' }}</p>
-              </div>
-              
-              <div>
-                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Type</h3>
-                <p class="text-gray-900 text-sm">{{ columnData.type_of_variable || 'Not specified' }}</p>
-              </div>
-              
-              <div>
-                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Computed</h3>
-                <p class="text-gray-900 text-sm">{{ formatBoolean(columnData.computed) }}</p>
-              </div>
-              
-              <div>
-                <h3 class="text-xs font-medium text-gray-700 mb-0.5">Suppress</h3>
-                <p class="text-gray-900 text-sm">{{ formatBoolean(columnData.suppress) }}</p>
-              </div>
-            </div>
-          </div>
-        </UCard>
-        
         <!-- Valid Values -->
         <UCard id="valid-values" v-if="columnData.valid_values && Object.keys(columnData.valid_values).length > 0" :ui="{ body: { padding: 'p-2' }, header: { padding: 'p-2' } }">
           <template #header>
@@ -306,76 +299,64 @@ onUnmounted(() => {
             <h2 class="text-base font-semibold">Values</h2>
           </template>
           
-          <!-- Charts Section -->
-          <div v-if="valueLookupTableData.some(item => typeof item.count === 'number' && item.count > 0)" class="mb-4">
-            <UTabs 
-              :items="[
-                { label: 'Vertical Chart', slot: 'vertical', icon: 'i-heroicons-chart-bar' },
-                { label: 'Horizontal Chart', slot: 'horizontal', icon: 'i-heroicons-chart-bar-square' }
-              ]"
-              class="mb-3"
-            >
-              <template #vertical>
-                <div class="bg-gray-50 rounded-lg p-3">
-                  <ResponseChartVertical 
-                    :value-data="valueLookupTableData" 
-                    title="Response Counts by Value"
-                  />
-                </div>
-              </template>
-              
-              <template #horizontal>
-                <div class="bg-gray-50 rounded-lg p-3">
-                  <ResponseChartHorizontal 
-                    :value-data="valueLookupTableData" 
-                    title="Response Distribution"
-                  />
-                </div>
-              </template>
-            </UTabs>
-          </div>
-          
-          <!-- Legend for missing values -->
-          <div v-if="valueLookupTableData.some(row => row.indicates_missing)" class="mb-3 p-2 bg-gray-50 rounded-lg">
-            <div class="flex items-center gap-2 text-xs">
-              <div class="flex items-center gap-1">
-                <div class="w-3 h-3 bg-red-100 border border-red-200 rounded"></div>
-                <span class="text-gray-600">Missing/Refused/Unknown values</span>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- Chart Section -->
+            <div v-if="valueLookupTableData.some(item => typeof item.count === 'number' && item.count > 0)">
+              <div class="bg-gray-50 rounded-lg p-3">
+                <ResponseChartHorizontal 
+                  :value-data="valueLookupTableData" 
+                  title="Response Distribution"
+                  @highlight-value="highlightedValue = $event"
+                />
               </div>
             </div>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead>
-                <tr>
-                  <th class="px-2 py-1 text-left text-xs font-medium text-gray-700">Value</th>
-                  <th class="px-2 py-1 text-right text-xs font-medium text-gray-700">Count</th>
-                  <th class="px-2 py-1 text-left text-xs font-medium text-gray-700">Description</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-200">
-                <tr 
-                  v-for="(row, index) in valueLookupTableData" 
-                  :key="index"
-                  :class="{
-                    'bg-red-50 hover:bg-red-100': row.indicates_missing,
-                    'hover:bg-gray-50': !row.indicates_missing
-                  }"
-                >
-                  <td class="px-2 py-1 text-xs font-mono text-gray-900">{{ row.value }}</td>
-                  <td class="px-2 py-1 text-xs text-right">
-                    <span v-if="row.count !== '-'" class="text-gray-900">
-                      {{ typeof row.count === 'number' ? row.count.toLocaleString() : row.count }}
-                    </span>
-                    <span v-else class="text-gray-400">
-                      {{ row.count }}
-                    </span>
-                  </td>
-                  <td class="px-2 py-1 text-xs text-gray-900">{{ row.description }}</td>
-                </tr>
-              </tbody>
-            </table>
+            
+            <!-- Table Section -->
+            <div>
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead>
+                    <tr>
+                      <th class="px-2 py-1 text-left text-xs font-medium text-gray-700">Value</th>
+                      <th class="px-2 py-1 text-right text-xs font-medium text-gray-700">Count</th>
+                      <th class="px-2 py-1 text-left text-xs font-medium text-gray-700">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200">
+                    <tr 
+                      v-for="(row, index) in valueLookupTableData" 
+                      :key="index"
+                      :class="{
+                        'bg-blue-100 border-l-4 border-blue-500': highlightedValue === row.value,
+                        'bg-red-50 hover:bg-red-100': row.indicates_missing && highlightedValue !== row.value,
+                        'hover:bg-gray-50': !row.indicates_missing && highlightedValue !== row.value
+                      }"
+                    >
+                      <td class="px-2 py-1 text-xs font-mono text-gray-900">{{ row.value }}</td>
+                      <td class="px-2 py-1 text-xs text-right">
+                        <span v-if="row.count !== '-'" class="text-gray-900">
+                          {{ typeof row.count === 'number' ? row.count.toLocaleString() : row.count }}
+                        </span>
+                        <span v-else class="text-gray-400">
+                          {{ row.count }}
+                        </span>
+                      </td>
+                      <td class="px-2 py-1 text-xs text-gray-900">{{ row.description }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <!-- Legend for missing values -->
+              <div v-if="valueLookupTableData.some(row => row.indicates_missing)" class="mt-3 p-2 bg-gray-50 rounded-lg">
+                <div class="flex items-center gap-2 text-xs">
+                  <div class="flex items-center gap-1">
+                    <div class="w-3 h-3 bg-red-100 border border-red-200 rounded"></div>
+                    <span class="text-gray-600">Missing/Refused/Unknown values</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </UCard>
         
@@ -601,14 +582,12 @@ onUnmounted(() => {
             </div>
           </template>
           
-          <div class="bg-gray-50 rounded-lg p-0.5">
-            <iframe
-              ref="codebookIframe"
-              :src="`/html/codebook_USCODE23_LLCP_021924.HTML#${columnData.html_name}`"
-              class="w-full h-[600px] bg-white rounded border border-gray-200"
-              :title="`Codebook for ${columnData.label || columnData.key}`"
-            />
-          </div>
+          <IframeComponent
+            ref="iframeComponent"
+            src="/html/codebook_USCODE23_LLCP_021924.HTML"
+            :anchor="columnData.html_name"
+            :title="`Codebook for ${columnData.label || columnData.key}`"
+          />
         </UCard>
         
         <!-- JSON Data -->

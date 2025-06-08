@@ -1,0 +1,279 @@
+{
+  "target_column": "_MRACE1",
+  "accuracy": 0.9307502251368139,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.9352747237588115,
+      "recall": 0.9991158136724679,
+      "f1-score": 0.9661417883861774,
+      "support": 67859.0
+    },
+    "2.0": {
+      "precision": 0.9983582089552239,
+      "recall": 0.8898496740721032,
+      "f1-score": 0.9409861433495111,
+      "support": 7517.0
+    },
+    "3.0": {
+      "precision": 0.9978102189781022,
+      "recall": 0.7636871508379889,
+      "f1-score": 0.8651898734177215,
+      "support": 1790.0
+    },
+    "4.0": {
+      "precision": 0.9783480352846833,
+      "recall": 0.9713375796178344,
+      "f1-score": 0.9748302037554935,
+      "support": 2512.0
+    },
+    "5.0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 542.0
+    },
+    "6.0": {
+      "precision": 0.6190476190476191,
+      "recall": 0.021241830065359478,
+      "f1-score": 0.04107424960505529,
+      "support": 1836.0
+    },
+    "7.0": {
+      "precision": 0.6405705229793978,
+      "recall": 0.8914865460961623,
+      "f1-score": 0.7454813721873847,
+      "support": 2267.0
+    },
+    "77.0": {
+      "precision": 0.3333333333333333,
+      "recall": 0.001053740779768177,
+      "f1-score": 0.0021008403361344537,
+      "support": 949.0
+    },
+    "99.0": {
+      "precision": 0.7692307692307693,
+      "recall": 0.19374068554396423,
+      "f1-score": 0.30952380952380953,
+      "support": 1342.0
+    },
+    "accuracy": 0.9307502251368139,
+    "macro avg": {
+      "precision": 0.6968859368408823,
+      "recall": 0.525723668965072,
+      "f1-score": 0.5383698089512542,
+      "support": 86614.0
+    },
+    "weighted avg": {
+      "precision": 0.9138539095605593,
+      "recall": 0.9307502251368139,
+      "f1-score": 0.9099575708983656,
+      "support": 86614.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.8314991207577551
+    },
+    {
+      "feature": "_HISPANC",
+      "importance": 0.09478065281616498
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.016805959243388086
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.014776118133336572
+    },
+    {
+      "feature": "EDUCA",
+      "importance": 0.012276969017119797
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.010511005327901363
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.006667607046094879
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.004288034867870618
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.0038442277921205427
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.0016352579853591562
+    },
+    {
+      "feature": "_SEX",
+      "importance": 0.0015536965970016205
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.0013613504158872286
+    }
+  ],
+  "confusion_matrix": [
+    [
+      67799,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      60
+    ],
+    [
+      828,
+      6689,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      378,
+      0,
+      1367,
+      39,
+      0,
+      0,
+      5,
+      0,
+      1
+    ],
+    [
+      69,
+      0,
+      3,
+      2440,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      111,
+      0,
+      0,
+      1,
+      0,
+      3,
+      427,
+      0,
+      0
+    ],
+    [
+      1101,
+      0,
+      0,
+      2,
+      0,
+      39,
+      692,
+      2,
+      0
+    ],
+    [
+      228,
+      0,
+      0,
+      5,
+      0,
+      13,
+      2021,
+      0,
+      0
+    ],
+    [
+      924,
+      2,
+      0,
+      0,
+      0,
+      4,
+      1,
+      1,
+      17
+    ],
+    [
+      1053,
+      9,
+      0,
+      7,
+      0,
+      4,
+      9,
+      0,
+      260
+    ]
+  ],
+  "class_labels": [
+    "White onlyNotes: MRACASC1 = 10",
+    "Black or African American onlyNotes: MRACASC1 = 20",
+    "American Indian or Alaskan Native onlyNotes: MRACASC1 = 30",
+    "Asian OnlyNotes: MRACASC1 = 40,41,42,43,44,45,46,47",
+    "Native Hawaiian or other Pacific Islander onlyNotes: MRACASC1 = 50,51,52,53,54",
+    "Other race onlyNotes: MRACASC1 = 60",
+    "MultiracialNotes: MRACASC1 >= 100",
+    "Don't know/Not sureNotes: MRACASC1 = 77",
+    "RefusedNotes: MRACASC1 = 99"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 433069,
+    "training_samples": 346455,
+    "test_samples": 86614,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "_HISPANC",
+      "_IMPRACE",
+      "_SEX",
+      "_AGE80"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 254,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 2.558469295501709,
+    "target_distribution": {
+      "1.0": 339295,
+      "2.0": 37587,
+      "3.0": 8951,
+      "4.0": 12562,
+      "5.0": 2711,
+      "6.0": 9178,
+      "7.0": 11334,
+      "77.0": 4743,
+      "99.0": 6708
+    }
+  },
+  "successful": true,
+  "error_message": null
+}

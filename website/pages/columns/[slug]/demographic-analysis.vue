@@ -136,30 +136,18 @@
           </div>
         </div>
 
-        <!-- Feature Details -->
+        <!-- All Features with Importance -->
         <div class="bg-white rounded-lg shadow-sm border p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Features Used</h3>
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">All Features Used ({{ analysisData.analysis_metadata.features_used.length }} total)</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div v-for="feature in topFeatures" :key="feature.feature" 
-                 class="flex justify-between items-center p-3 bg-gray-50 rounded">
-              <span class="font-mono text-sm">{{ feature.feature }}</span>
+            <div v-for="feature in allFeatures" :key="feature.feature" 
+                 class="flex justify-between items-center p-3 bg-gray-50 rounded hover:bg-gray-100 transition-colors">
+              <NuxtLink :to="`/columns/${feature.feature}`" class="font-mono text-sm text-primary-600 hover:text-primary-700 underline decoration-primary-300">
+                {{ feature.feature }}
+              </NuxtLink>
               <span class="text-sm font-medium">{{ (feature.importance * 100).toFixed(1) }}%</span>
             </div>
           </div>
-        </div>
-
-        <!-- All Features Used -->
-        <div class="bg-white rounded-lg shadow-sm border p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">All Features Used in Analysis</h3>
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-            <div v-for="feature in analysisData.analysis_metadata.features_used" :key="feature" 
-                 class="p-2 bg-gray-50 rounded text-sm font-mono text-center">
-              {{ feature }}
-            </div>
-          </div>
-          <p class="text-sm text-gray-600 mt-4">
-            Total: {{ analysisData.analysis_metadata.features_used.length }} features
-          </p>
         </div>
 
         <!-- Analysis Metadata -->
@@ -257,11 +245,11 @@ const classificationReport = computed(() => {
   return report
 })
 
-const topFeatures = computed(() => {
+const allFeatures = computed(() => {
   if (!analysisData.value?.feature_importance) return []
   
-  // Show top 10 features
-  return analysisData.value.feature_importance.slice(0, 10)
+  // Return all features sorted by importance
+  return analysisData.value.feature_importance
 })
 
 // Helper functions
@@ -291,4 +279,21 @@ const handleImageError = (event: Event) => {
     container.innerHTML = '<div class="text-gray-500 text-center p-8">Visualization not available</div>'
   }
 }
+
+// Scroll to top when component mounts
+onMounted(() => {
+  // Use nextTick to ensure DOM is fully rendered
+  nextTick(() => {
+    // Reset scroll on standard DOM elements
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+    window.scrollTo(0, 0)
+    
+    // Handle CSS overflow containers
+    const containers = document.querySelectorAll('[style*="overflow"], .overflow-auto, .overflow-y-auto, .overflow-scroll, .overflow-y-scroll')
+    containers.forEach((container: Element) => {
+      container.scrollTop = 0
+    })
+  })
+})
 </script>

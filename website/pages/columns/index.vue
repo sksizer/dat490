@@ -170,7 +170,19 @@ const columns: ColumnDef<any>[] = [
   },
   {
     accessorKey: 'demographic_analysis_score',
-    header: createSortableHeader('demographic_analysis_score', 'Demographic Analysis'),
+    header: () => {
+      return h('div', { class: 'flex items-center gap-1' }, [
+        createSortableHeader('demographic_analysis_score', 'Demographic Analysis')(),
+        h(resolveComponent('NuxtLink'), {
+          to: '/demographic_analysis',
+          class: 'text-gray-400 hover:text-gray-600 transition-colors',
+          title: 'Learn about demographic analysis methodology'
+        }, () => h(resolveComponent('UIcon'), { 
+          name: 'i-heroicons-question-mark-circle',
+          class: 'w-3 h-3'
+        }))
+      ])
+    },
     cell: ({ row }) => {
       const score = row.original.demographic_analysis_score
       const columnKey = row.original.key

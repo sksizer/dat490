@@ -18,12 +18,28 @@ from scripts.demographic_analysis import perform_demographic_analysis, generate_
 # Demographic feature columns for analysis (26 total features)
 DEMOGRAPHIC_FEATURE_COLUMNS = [
     # Demographics section columns (13 total)
-    'MARITAL', 'EDUCA', 'RENTHOM1', 'NUMHHOL4', 'NUMPHON4', 'CPDEMO1C', 
-    'VETERAN3', 'EMPLOY1', 'CHILDREN', 'INCOME3', 'PREGNANT', 'WEIGHT2', 'HEIGHT3',
-    
-    # Calculated demographic variables (13 total) 
-    '_IMPRACE', '_CRACE1', '_MRACE1', '_RACE', '_RACEG21', '_RACEGR3', '_RACEPRV', 
-    '_SEX', '_AGEG5YR', '_AGE65YR', '_AGE80', '_AGE_G', '_EDUCAG'
+    # Demographics section columns (13 total)
+    'MARITAL',    # https://singular-eclair-6a5a16.netlify.app/columns/MARITAL
+    'EDUCA',      # https://singular-eclair-6a5a16.netlify.app/columns/EDUCA
+    'RENTHOM1',   # https://singular-eclair-6a5a16.netlify.app/columns/RENTHOM1
+    'NUMHHOL4',   # https://singular-eclair-6a5a16.netlify.app/columns/NUMHHOL4
+    'NUMPHON4',   # https://singular-eclair-6a5a16.netlify.app/columns/NUMPHON4
+    'CPDEMO1C',   # https://singular-eclair-6a5a16.netlify.app/columns/CPDEMO1C
+    'VETERAN3',   # https://singular-eclair-6a5a16.netlify.app/columns/VETERAN3
+    'EMPLOY1',    # https://singular-eclair-6a5a16.netlify.app/columns/EMPLOY1
+    'CHILDREN',   # https://singular-eclair-6a5a16.netlify.app/columns/CHILDREN
+    'INCOME3',    # https://singular-eclair-6a5a16.netlify.app/columns/INCOME3
+    'PREGNANT',   # https://singular-eclair-6a5a16.netlify.app/columns/PREGNANT
+    '_HISPANC', # https://singular-eclair-6a5a16.netlify.app/columns/_HISPANC # Calculated but not sure from what
+    '_CRACE1',    # https://singular-eclair-6a5a16.netlify.app/columns/_CRACE1 # Child race
+    '_IMPRACE',   # https://singular-eclair-6a5a16.netlify.app/columns/_IMPRACE
+    '_SEX',       # https://singular-eclair-6a5a16.netlify.app/columns/_SEX
+    '_AGE80',     # https://singular-eclair-6a5a16.netlify.app/columns/_AGE80
+
+    # Removed weight/height since there's obviously relationshp of weight to genhealth
+    # 'WEIGHT2',    # https://singular-eclair-6a5a16.netlify.app/columns/WEIGHT2
+    # 'HEIGHT3',    # https://singular-eclair-6a5a16.netlify.app/columns/HEIGHT3
+    # 'MRACASC1',   # https://singular-eclair-6a5a16.netlify.app/columns/MRACASC1
 ]
 
 # Configure logging

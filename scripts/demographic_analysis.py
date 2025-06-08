@@ -386,19 +386,22 @@ def generate_analysis_visualizations(
     except Exception as e:
         logging.error(f"Error generating confusion matrix for {result.target_column}: {e}")
     
-    # Feature Importance
+    # Feature Importance - Show all features
     try:
-        plt.figure(figsize=(10, 8))
+        # Calculate figure height based on number of features
+        num_features = len(result.feature_importance)
+        fig_height = max(8, num_features * 0.3)  # Minimum 8 inches, 0.3 inches per feature
         
-        # Take top 15 features
-        top_features = result.feature_importance[:15]
-        features = [f['feature'] for f in top_features]
-        importances = [f['importance'] for f in top_features]
+        plt.figure(figsize=(10, fig_height))
+        
+        # Use all features
+        features = [f['feature'] for f in result.feature_importance]
+        importances = [f['importance'] for f in result.feature_importance]
         
         plt.barh(range(len(features)), importances)
         plt.yticks(range(len(features)), features)
         plt.xlabel('Feature Importance')
-        plt.title(f'Feature Importance: {result.target_column}\\nDemographic Predictors')
+        plt.title(f'Feature Importance: {result.target_column}\\nAll Demographic Predictors ({num_features} features)')
         plt.gca().invert_yaxis()
         plt.tight_layout()
         
