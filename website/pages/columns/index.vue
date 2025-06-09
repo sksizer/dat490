@@ -407,6 +407,167 @@ const selectedVisibleRows = computed(() => {
   return Array.from(selectedRows.value).filter(key => visibleKeys.has(key))
 })
 
+// Data for observation count chart - use selected rows if any are selected, otherwise use filtered data
+const observationCountData = computed(() => {
+  if (selectedVisibleRows.value.length > 0) {
+    // Show only selected rows
+    return sortedFilteredData.value.filter(item => selectedRows.value.has(item.key))
+  } else {
+    // Show all filtered data
+    return sortedFilteredData.value
+  }
+})
+
+// Statistical analysis of observation counts including semantic nulls
+const observationStatsAnalysis = computed(() => {
+  const validColumns = observationCountData.value.filter(item => item.statistics != null)
+  
+  if (validColumns.length === 0) {
+    return null
+  }
+  
+  // Calculate totals
+  const totalValidResponses = validColumns.reduce((sum, item) => sum + (item.statistics?.count || 0), 0)
+  const totalMissingResponses = validColumns.reduce((sum, item) => sum + (item.statistics?.missing_count || 0), 0)
+  const totalNullResponses = validColumns.reduce((sum, item) => sum + (item.statistics?.null_count || 0), 0)
+  
+  // Get total possible responses (should be consistent across columns)
+  const totalPossibleResponses = validColumns[0]?.statistics?.total_responses || 0
+  const totalPossibleAcrossAllColumns = totalPossibleResponses * validColumns.length
+  
+  // Calculate semantic nulls (missing + null)
+  const totalSemanticNulls = totalMissingResponses + totalNullResponses
+  
+  // Calculate percentages per column correctly accounting for skip logic
+  const columnRates = validColumns.map(item => {
+    const validForColumn = item.statistics?.count || 0
+    const missingForColumn = item.statistics?.missing_count || 0
+    const nullForColumn = item.statistics?.null_count || 0
+    const totalAsked = validForColumn + missingForColumn  // Only people who were actually asked
+    const totalInDataset = 433323  // Total survey respondents
+    
+    return {
+      // Of people asked this question, what % gave valid responses
+      validRate: totalAsked > 0 ? (validForColumn / totalAsked) * 100 : 0,
+      // Of people asked this question, what % refused/didn't know
+      missingRate: totalAsked > 0 ? (missingForColumn / totalAsked) * 100 : 0,
+      // Of all survey respondents, what % weren't asked this question
+      nullRate: (nullForColumn / totalInDataset) * 100,
+      // Of all survey respondents, what % have unusable data (missing + null)
+      semanticNullRate: ((missingForColumn + nullForColumn) / totalInDataset) * 100
+    }
+  })
+  
+  // Average the rates across columns
+  const validResponseRate = columnRates.length > 0 ? columnRates.reduce((sum, rates) => sum + rates.validRate, 0) / columnRates.length : 0
+  const missingResponseRate = columnRates.length > 0 ? columnRates.reduce((sum, rates) => sum + rates.missingRate, 0) / columnRates.length : 0
+  const nullResponseRate = columnRates.length > 0 ? columnRates.reduce((sum, rates) => sum + rates.nullRate, 0) / columnRates.length : 0
+  const semanticNullRate = columnRates.length > 0 ? columnRates.reduce((sum, rates) => sum + rates.semanticNullRate, 0) / columnRates.length : 0
+  
+  // Calculate per-column averages
+  const avgValidPerColumn = validColumns.length > 0 ? totalValidResponses / validColumns.length : 0
+  const avgMissingPerColumn = validColumns.length > 0 ? totalMissingResponses / validColumns.length : 0
+  const avgNullPerColumn = validColumns.length > 0 ? totalNullResponses / validColumns.length : 0
+  
+  // Find columns with highest/lowest completion rates
+  const columnCompletionRates = validColumns.map(item => ({
+    key: item.key,
+    label: item.label || item.key,
+    validCount: item.statistics?.count || 0,
+    missingCount: item.statistics?.missing_count || 0,
+    nullCount: item.statistics?.null_count || 0,
+    totalResponses: item.statistics?.total_responses || 0,
+    completionRate: item.statistics?.total_responses ? ((item.statistics.count || 0) / item.statistics.total_responses) * 100 : 0
+  })).sort((a, b) => b.completionRate - a.completionRate)
+  
+  const highestCompletion = columnCompletionRates[0]
+  const lowestCompletion = columnCompletionRates[columnCompletionRates.length - 1]
+  
+  // Distribution analysis
+  const completionBuckets = {
+    excellent: columnCompletionRates.filter(c => c.completionRate >= 95).length,
+    good: columnCompletionRates.filter(c => c.completionRate >= 80 && c.completionRate < 95).length,
+    fair: columnCompletionRates.filter(c => c.completionRate >= 60 && c.completionRate < 80).length,
+    poor: columnCompletionRates.filter(c => c.completionRate < 60).length
+  }
+  
+  // Calculate descriptive statistics for valid response counts
+  const validCounts = validColumns.map(item => item.statistics?.count || 0)
+  const sortedValidCounts = [...validCounts].sort((a, b) => a - b)
+  
+  const minValid = Math.min(...validCounts)
+  const maxValid = Math.max(...validCounts)
+  const meanValid = validCounts.reduce((sum, count) => sum + count, 0) / validCounts.length
+  
+  // Standard deviation calculation
+  const variance = validCounts.reduce((sum, count) => sum + Math.pow(count - meanValid, 2), 0) / validCounts.length
+  const stdDevValid = Math.sqrt(variance)
+  
+  // Median calculation
+  const medianValid = sortedValidCounts.length % 2 === 0
+    ? (sortedValidCounts[sortedValidCounts.length / 2 - 1] + sortedValidCounts[sortedValidCounts.length / 2]) / 2
+    : sortedValidCounts[Math.floor(sortedValidCounts.length / 2)]
+  
+  // Quartiles
+  const q1Index = Math.floor(sortedValidCounts.length * 0.25)
+  const q3Index = Math.floor(sortedValidCounts.length * 0.75)
+  const q1Valid = sortedValidCounts[q1Index]
+  const q3Valid = sortedValidCounts[q3Index]
+  
+  // Completion rate statistics
+  const completionRates = columnCompletionRates.map(c => c.completionRate)
+  const sortedCompletionRates = [...completionRates].sort((a, b) => a - b)
+  
+  const minCompletion = Math.min(...completionRates)
+  const maxCompletion = Math.max(...completionRates)
+  const meanCompletion = completionRates.reduce((sum, rate) => sum + rate, 0) / completionRates.length
+  
+  const completionVariance = completionRates.reduce((sum, rate) => sum + Math.pow(rate - meanCompletion, 2), 0) / completionRates.length
+  const stdDevCompletion = Math.sqrt(completionVariance)
+  
+  const medianCompletion = sortedCompletionRates.length % 2 === 0
+    ? (sortedCompletionRates[sortedCompletionRates.length / 2 - 1] + sortedCompletionRates[sortedCompletionRates.length / 2]) / 2
+    : sortedCompletionRates[Math.floor(sortedCompletionRates.length / 2)]
+  
+  return {
+    columnCount: validColumns.length,
+    totalPossibleResponses,
+    totalValidResponses,
+    totalMissingResponses,
+    totalNullResponses,
+    totalSemanticNulls,
+    validResponseRate,
+    missingResponseRate,
+    nullResponseRate,
+    semanticNullRate,
+    avgValidPerColumn,
+    avgMissingPerColumn,
+    avgNullPerColumn,
+    highestCompletion,
+    lowestCompletion,
+    completionBuckets,
+    columnCompletionRates,
+    // Descriptive statistics for valid response counts
+    validCountStats: {
+      min: minValid,
+      max: maxValid,
+      mean: meanValid,
+      median: medianValid,
+      stdDev: stdDevValid,
+      q1: q1Valid,
+      q3: q3Valid
+    },
+    // Descriptive statistics for completion rates
+    completionRateStats: {
+      min: minCompletion,
+      max: maxCompletion,
+      mean: meanCompletion,
+      median: medianCompletion,
+      stdDev: stdDevCompletion
+    }
+  }
+})
+
 // Watch for filter changes and deselect hidden rows
 watch(filteredData, (newFilteredData) => {
   const visibleKeys = new Set(newFilteredData.map(item => item.key))
@@ -733,10 +894,112 @@ const handleImageError = (event: Event) => {
           </div>
         </template>
         
+        <!-- Statistical Analysis Summary -->
+        <div v-if="observationStatsAnalysis" class="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+          <h4 class="font-medium text-blue-900 mb-3">Data Completeness Analysis</h4>
+          
+          <!-- Key Metrics Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+            <div class="text-center p-2 bg-green-50 rounded border border-green-200">
+              <div class="text-sm font-bold text-green-700">
+                {{ observationStatsAnalysis.validResponseRate.toFixed(1) }}%
+              </div>
+              <div class="text-xs text-green-600">Valid Responses</div>
+            </div>
+            
+            <div class="text-center p-2 bg-yellow-50 rounded border border-yellow-200">
+              <div class="text-sm font-bold text-yellow-700">
+                {{ observationStatsAnalysis.missingResponseRate.toFixed(1) }}%
+              </div>
+              <div class="text-xs text-yellow-600">Missing/Refused</div>
+            </div>
+            
+            <div class="text-center p-2 bg-red-50 rounded border border-red-200">
+              <div class="text-sm font-bold text-red-700">
+                {{ observationStatsAnalysis.nullResponseRate.toFixed(1) }}%
+              </div>
+              <div class="text-xs text-red-600">Null Values</div>
+            </div>
+            
+            <div class="text-center p-2 bg-gray-50 rounded border border-gray-200">
+              <div class="text-sm font-bold text-gray-700">
+                {{ observationStatsAnalysis.semanticNullRate.toFixed(1) }}%
+              </div>
+              <div class="text-xs text-gray-600">Semantic Nulls</div>
+            </div>
+          </div>
+          
+          <!-- Descriptive Statistics -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Valid Response Count Statistics -->
+            <div class="p-2 bg-white rounded border">
+              <h5 class="font-medium text-gray-800 mb-2 text-sm">Valid Response Count Statistics</h5>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Mean:</span>
+                  <span class="font-mono">{{ Math.round(observationStatsAnalysis.validCountStats.mean).toLocaleString() }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Std Dev:</span>
+                  <span class="font-mono">{{ Math.round(observationStatsAnalysis.validCountStats.stdDev).toLocaleString() }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Median:</span>
+                  <span class="font-mono">{{ Math.round(observationStatsAnalysis.validCountStats.median).toLocaleString() }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">IQR:</span>
+                  <span class="font-mono">{{ Math.round(observationStatsAnalysis.validCountStats.q1).toLocaleString() }}-{{ Math.round(observationStatsAnalysis.validCountStats.q3).toLocaleString() }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Min:</span>
+                  <span class="font-mono">{{ observationStatsAnalysis.validCountStats.min.toLocaleString() }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Max:</span>
+                  <span class="font-mono">{{ observationStatsAnalysis.validCountStats.max.toLocaleString() }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Completion Rate Statistics -->
+            <div class="p-2 bg-white rounded border">
+              <h5 class="font-medium text-gray-800 mb-2 text-sm">Completion Rate Statistics</h5>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Mean:</span>
+                  <span class="font-mono">{{ observationStatsAnalysis.completionRateStats.mean.toFixed(1) }}%</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Std Dev:</span>
+                  <span class="font-mono">{{ observationStatsAnalysis.completionRateStats.stdDev.toFixed(1) }}%</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Median:</span>
+                  <span class="font-mono">{{ observationStatsAnalysis.completionRateStats.median.toFixed(1) }}%</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Range:</span>
+                  <span class="font-mono">{{ observationStatsAnalysis.completionRateStats.min.toFixed(1) }}%-{{ observationStatsAnalysis.completionRateStats.max.toFixed(1) }}%</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Excellent:</span>
+                  <span class="font-mono">{{ observationStatsAnalysis.completionBuckets.excellent }} (≥95%)</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Poor:</span>
+                  <span class="font-mono">{{ observationStatsAnalysis.completionBuckets.poor }} (<60%)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         <div class="bg-gray-50 rounded-lg p-3">
           <ObservationCountChart 
-            :data="sortedFilteredData" 
-            :title="`Observation Counts${isFilteredBySection ? ` - ${activeSection}` : (filters.sections.length > 0 || filters.types.length > 0 || filters.computed.length > 0 || search.length > 0 ? ' (Filtered)' : '')}`"
+            :data="observationCountData" 
+            :title="`Observation Counts${selectedVisibleRows.length > 0 ? ` (${selectedVisibleRows.length} selected)` : isFilteredBySection ? ` - ${activeSection}` : (filters.sections.length > 0 || filters.types.length > 0 || filters.computed.length > 0 || search.length > 0 ? ' (Filtered)' : '')}`"
+            :filter-zero-counts="false"
           />
         </div>
       </UCard>

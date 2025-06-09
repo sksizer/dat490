@@ -18,7 +18,7 @@ navigation:
 ### 2023 BRFSS Survey
 - [Site](https://www.cdc.gov/brfss/annual_data/annual_2023.html)
 - [Codebook](data/codebook_USCODE23_LLCP_021924.HTML) - details on data columns
-- [Column Explorer](/columns) - Browse all 350 columns with statistics and value distributions
+- [Column Explorer](/columns) - Browse all 344 columns with statistics and value distributions
 - Dataset Size: 433,323 respondents across all 50 states, DC, and territories
 
 ## Data Features

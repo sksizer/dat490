@@ -44,10 +44,12 @@ interface ColumnData {
 interface Props {
   data: ColumnData[]
   title?: string
+  filterZeroCounts?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  title: 'Observation Counts by Feature'
+  title: 'Observation Counts by Feature',
+  filterZeroCounts: true
 })
 
 // Renderer toggle state - default to Canvas
@@ -55,8 +57,15 @@ const useCanvasRenderer = ref(true)
 
 // Prepare chart data from the sorted and filtered column data
 const chartData = computed(() => {
-  return props.data
-    .filter(item => item.statistics?.count && item.statistics.count > 0)
+  let filteredData = props.data
+  
+  // Only filter out zero counts if explicitly requested
+  if (props.filterZeroCounts) {
+    filteredData = filteredData.filter(item => item.statistics?.count && item.statistics.count > 0)
+  }
+  
+  return filteredData
+    .filter(item => item.statistics?.count != null) // Ensure statistics and count exist
     .map(item => {
       // Process value ranges for tooltip
       const valueRanges = []
@@ -82,7 +91,7 @@ const chartData = computed(() => {
       return {
         key: item.key,
         label: item.label || item.key,
-        count: item.statistics!.count,
+        count: item.statistics.count,
         valueRanges
       }
     })
