@@ -4,6 +4,12 @@ const { data: featureImportanceData } = await useAsyncData('feature-importance',
   return queryCollection('feature_importance_summary').first()
 })
 
+// Fetch the model data for analyzed features
+const { data: modelData } = await useAsyncData('model', () => {
+  const val = queryCollection('columns').first()
+  return val
+})
+
 // Set the breadcrumbs
 const { setBreadcrumbs, clearBreadcrumbs } = usePageTitle()
 
@@ -77,6 +83,43 @@ const insights = computed(() => {
     mostCommonAccuracyCount: mostCommonRange[1]
   }
 })
+
+// Create analyzed features data for the table
+const analyzedFeatures = computed(() => {
+  if (!modelData.value?.columns) return []
+  
+  return Object.entries(modelData.value.columns)
+    .filter(([key, column]) => column.demographic_analysis_score !== null && column.demographic_analysis_score !== undefined)
+    .map(([key, column]) => ({
+      key,
+      question: column.question || column.label || key,
+      accuracy: column.demographic_analysis_score,
+      section: column.section_name || 'Unknown',
+      label: column.label || key,
+      sas_variable_name: column.sas_variable_name || key
+    }))
+    .sort((a, b) => (b.accuracy || 0) - (a.accuracy || 0)) // Sort by accuracy desc
+})
+
+// Search and filtering for analyzed features
+const searchAnalyzed = ref('')
+const filteredAnalyzedFeatures = computed(() => {
+  if (!searchAnalyzed.value) return analyzedFeatures.value
+  
+  const searchLower = searchAnalyzed.value.toLowerCase()
+  return analyzedFeatures.value.filter(feature => 
+    feature.key.toLowerCase().includes(searchLower) ||
+    feature.question.toLowerCase().includes(searchLower) ||
+    feature.section.toLowerCase().includes(searchLower)
+  )
+})
+
+// Helper function to get accuracy color class
+const getAccuracyColor = (accuracy: number) => {
+  if (accuracy >= 0.8) return 'text-green-700 bg-green-50'
+  if (accuracy >= 0.6) return 'text-yellow-700 bg-yellow-50'
+  return 'text-red-700 bg-red-50'
+}
 </script>
 
 <template>
@@ -313,6 +356,167 @@ const insights = computed(() => {
                 <div class="text-xs text-gray-500">
                   {{ (feature.average_importance * 100).toFixed(1) }}%
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </UCard>
+
+      <!-- Analyzed Features Table -->
+      <UCard>
+        <template #header>
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-lg font-semibold">All Analyzed Features</h3>
+              <p class="text-sm text-gray-600 mt-1">
+                Complete list of {{ analyzedFeatures.length }} health variables analyzed for demographic predictability
+              </p>
+            </div>
+            <UBadge color="blue" variant="soft">
+              {{ filteredAnalyzedFeatures.length }} feature{{ filteredAnalyzedFeatures.length !== 1 ? 's' : '' }}
+            </UBadge>
+          </div>
+        </template>
+
+        <!-- Search Bar -->
+        <div class="mb-4">
+          <UInput 
+            v-model="searchAnalyzed" 
+            placeholder="Search by column name, question, or section..." 
+            icon="i-heroicons-magnifying-glass"
+            size="sm"
+            class="max-w-md"
+          />
+        </div>
+
+        <!-- Features Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-gray-200">
+                <th class="text-left py-2 px-3 font-medium text-gray-700">Column</th>
+                <th class="text-left py-2 px-3 font-medium text-gray-700">Question/Label</th>
+                <th class="text-left py-2 px-3 font-medium text-gray-700">Accuracy</th>
+                <th class="text-left py-2 px-3 font-medium text-gray-700">Section</th>
+                <th class="text-left py-2 px-3 font-medium text-gray-700">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr 
+                v-for="feature in filteredAnalyzedFeatures" 
+                :key="feature.key"
+                class="border-b border-gray-100 hover:bg-gray-50"
+              >
+                <!-- Column Name -->
+                <td class="py-3 px-3">
+                  <NuxtLink 
+                    :to="`/columns/${feature.sas_variable_name}`"
+                    class="font-mono text-sm text-primary-600 hover:text-primary-700 hover:underline transition-colors"
+                    :title="`View details for ${feature.key}`"
+                  >
+                    {{ feature.key }}
+                  </NuxtLink>
+                </td>
+
+                <!-- Question/Label -->
+                <td class="py-3 px-3">
+                  <div class="max-w-md">
+                    <span 
+                      v-if="feature.question.length <= 100"
+                      class="text-gray-700"
+                    >
+                      {{ feature.question }}
+                    </span>
+                    <span 
+                      v-else
+                      :title="feature.question"
+                      class="text-gray-700 cursor-help"
+                    >
+                      {{ feature.question.substring(0, 100) }}...
+                    </span>
+                  </div>
+                </td>
+
+                <!-- Accuracy Score -->
+                <td class="py-3 px-3">
+                  <div class="flex items-center gap-2">
+                    <span 
+                      :class="`px-2 py-1 rounded-full text-sm font-medium ${getAccuracyColor(feature.accuracy)}`"
+                    >
+                      {{ (feature.accuracy * 100).toFixed(1) }}%
+                    </span>
+                  </div>
+                </td>
+
+                <!-- Section -->
+                <td class="py-3 px-3">
+                  <NuxtLink 
+                    :to="`/columns?section=${encodeURIComponent(feature.section)}`"
+                    class="text-sm text-gray-600 hover:text-primary-600 hover:underline transition-colors"
+                    :title="`View all features in ${feature.section} section`"
+                  >
+                    {{ feature.section }}
+                  </NuxtLink>
+                </td>
+
+                <!-- Actions -->
+                <td class="py-3 px-3">
+                  <div class="flex items-center gap-2">
+                    <NuxtLink 
+                      :to="`/columns/${feature.sas_variable_name}`"
+                      target="_blank"
+                      class="text-gray-500 hover:text-primary-600 transition-colors"
+                      :title="`View ${feature.key} details in new tab`"
+                    >
+                      <UIcon name="i-heroicons-arrow-top-right-on-square" class="w-4 h-4" />
+                    </NuxtLink>
+                    <NuxtLink 
+                      :to="`/columns/${feature.sas_variable_name}/demographic-analysis`"
+                      target="_blank"
+                      class="text-gray-500 hover:text-green-600 transition-colors"
+                      :title="`View ${feature.key} demographic analysis in new tab`"
+                    >
+                      <UIcon name="i-heroicons-chart-bar" class="w-4 h-4" />
+                    </NuxtLink>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State -->
+        <div v-if="filteredAnalyzedFeatures.length === 0 && searchAnalyzed" class="text-center py-8">
+          <UIcon name="i-heroicons-magnifying-glass" class="w-8 h-8 text-gray-400 mx-auto mb-2" />
+          <p class="text-gray-500">No features match your search</p>
+          <UButton 
+            @click="searchAnalyzed = ''" 
+            variant="ghost" 
+            size="sm" 
+            class="mt-2"
+          >
+            Clear search
+          </UButton>
+        </div>
+
+        <!-- Table Footer with Summary -->
+        <div class="mt-4 pt-4 border-t border-gray-200">
+          <div class="flex items-center justify-between text-sm text-gray-600">
+            <div>
+              Showing {{ filteredAnalyzedFeatures.length }} of {{ analyzedFeatures.length }} analyzed features
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-1">
+                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                <span>≥80% accuracy</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                <span>60-80% accuracy</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                <span><60% accuracy</span>
               </div>
             </div>
           </div>

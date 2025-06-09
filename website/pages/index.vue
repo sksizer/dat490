@@ -36,43 +36,44 @@ const sections = [
   {
     title: 'Project Resources',
     cards: [
-      {
-        title: 'Project Outline',
-        description: 'Main project documentation and objectives',
-        url: 'https://docs.google.com/document/d/1RbDx5alcdpi-c61RW2LRcvwGtNUrCIo45GE9f1EYZM4/edit?usp=drivesdk',
-        icon: 'i-heroicons-document',
-        external: true
-      },
-      {
-        title: 'Literature Review',
-        description: 'Research and background literature',
-        url: 'https://docs.google.com/document/d/1y_1qbr25FeLK4nZb1v7dKZTQkcnlG4NB4UmXdkZSLGE/edit?usp=drivesdk',
-        icon: 'i-heroicons-academic-cap',
-        external: true
-      },
-      {
-        title: 'GitHub Repository',
-        description: 'Source code and project files',
-        url: 'https://github.com/sksizer/dat490',
-        icon: 'i-heroicons-code-bracket',
-        external: true
-      }
+      // {
+      //   title: 'Project Outline',
+      //   description: 'Main project documentation and objectives',
+      //   url: 'https://docs.google.com/document/d/1RbDx5alcdpi-c61RW2LRcvwGtNUrCIo45GE9f1EYZM4/edit?usp=drivesdk',
+      //   icon: 'i-heroicons-document',
+      //   external: true
+      // },
+      // {
+      //   title: 'Literature Review',
+      //   description: 'Research and background literature',
+      //   url: 'https://docs.google.com/document/d/1y_1qbr25FeLK4nZb1v7dKZTQkcnlG4NB4UmXdkZSLGE/edit?usp=drivesdk',
+      //   icon: 'i-heroicons-academic-cap',
+      //   external: true
+      // },
+      // {
+      //   title: 'GitHub Repository',
+      //   description: 'Source code and project files',
+      //   url: 'https://github.com/sksizer/dat490',
+      //   icon: 'i-heroicons-code-bracket',
+      //   external: true
+      // }
     ]
   }
 ]
 
 // Add documentation section dynamically from content
-const documentationCards = computed(() => {
-  if (!docData.value) return []
-  
-  return docData.value.map(page => ({
-    title: page.title || page.path,
-    description: 'Project documentation',
-    url: page.path,
-    icon: 'i-heroicons-book-open',
-    external: false
-  }))
-})
+const documentationCards = []
+// computed(() => {
+//   if (!docData.value) return []
+//
+//   return docData.value.map(page => ({
+//     title: page.title || page.path,
+//     description: 'Project documentation',
+//     url: page.path,
+//     icon: 'i-heroicons-book-open',
+//     external: false
+//   }))
+// })
 
 // Set breadcrumbs on mount
 onMounted(() => {
