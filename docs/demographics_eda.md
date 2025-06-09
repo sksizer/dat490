@@ -1,8 +1,20 @@
 # Demographic Analysis - BRFSS 2023
 
+
+
 ## Overview
 
-This analysis explores the relationship between demographic characteristics and health outcomes in the BRFSS 2023 dataset using machine learning techniques. We applied Random Forest models to predict health variables based on demographic features, providing insights into demographic risk factors and predictive patterns.
+We performed an exploratory prediction of multiple features by a selected set
+of demographic features from the BRFSS 2023 dataset. 
+
+Our primary goal is to focus on understanding how demographic factors impact
+various other personal health factors such as chronic disease prevalence, health
+care access, etc. 
+
+This analysis was done as a preliminary exploratory step using the fairly 
+inexpensive Random Forest algorithm. Given the computational ease we could
+do this we ran a predication against all appropriate available features
+numbering (186) in the BRFSS 2023 dataset.
 
 ## Demographic Features
 
@@ -33,21 +45,30 @@ Our analysis uses 16 core demographic features from the BRFSS dataset:
 
 ### Machine Learning Approach
 - **Algorithm**: Random Forest Classifier
-- **Target Variables**: Health outcome columns from BRFSS dataset
-- **Feature Set**: 16 demographic variables (target column automatically excluded)
+- **Target Variables**: Health outcome and various individual status columns from BRFSS dataset
+- **Feature Set**: 16 demographic variables (target column was automatically excluded to avoid data leakage)
 - **Data Requirements**: Minimum 1,000 data points per analysis
 
 ### Data Preprocessing
-- **Semantic Null Handling**: Convert coded missing values (7, 9, 77, 99) to NaN
+- **Feature Selection**: Used only demographic features, and minimized calculated features to avoid data leakage. Also excluded weight and height features under assumption they may have an overwhelming impact on health outcomes.
+- **Semantic Null Handling**: Convert coded missing values (7, 9, 77, 99, etc.) to NaN
 - **Feature Filtering**: Remove features with >30% missing values
 - **Target Exclusion**: Automatically exclude target variable from feature set
-- **Class Balance**: Handle imbalanced datasets appropriately
+- **Missing Value Imputation**: We filled in remaining missing values with mode for each feature
+- **Class Balance**: Use stratified sampling in train/test split to maintain class proportions
 
 ### Model Evaluation
 - **Primary Metric**: Classification accuracy
 - **Additional Metrics**: Precision, recall, F1-score
+- **Cross-validation**: model validation
 - **Visualizations**: Confusion matrices and feature importance plots
-- **Cross-validation**: Robust model validation
+
+## Caveats and Limitations
+Much of the data has highly imbalanced categories, so using accuracy as primary metric 
+for visualization was not ideal. However, given the exploratory nature of this it
+was deemed sufficient for this initial analysis.
+
+We did no additional hyperparameter tuning.
 
 ## Key Findings
 
@@ -70,7 +91,6 @@ Demographic features show consistent importance patterns:
 - **Age Variables**: Strong predictors across most health outcomes
 - **Income and Education**: Significant predictors for preventive care and chronic conditions
 - **Race/Ethnicity**: Important for health disparities analysis
-- **Geographic Variables**: Regional health pattern predictors
 
 ![Individual Feature Analysis](placeholder-individual-feature-analysis.png)
 *Screenshot: Example individual feature analysis page (GENHLTH) showing confusion matrix and feature importance*
@@ -79,9 +99,8 @@ Demographic features show consistent importance patterns:
 The analysis reveals demographic patterns in health outcomes:
 
 - **Socioeconomic Factors**: Income and education strongly predict healthcare access
-- **Age-Related Patterns**: Clear age-based health outcome predictions
-- **Racial/Ethnic Disparities**: Systematic differences in health outcomes by race/ethnicity
-- **Geographic Variations**: Regional differences in health behaviors and outcomes
+- **Age-Related Patterns**: Unsurprisingly age-based health outcome predictions
+- **Racial/Ethnic Disparities**: Systematic differences in health outcomes by race/ethnicity OTHER than 'Hispanic' categorization
 
 ## Technical Implementation
 
@@ -132,8 +151,10 @@ The analysis reveals demographic patterns in health outcomes:
 
 ### Methodological Limitations
 - **Model Choice**: Random Forest may not capture all relationships
-- **Feature Set**: Limited to available demographic variables
+- **Feature Set**: Limited to 16 available demographic variables
 - **Temporal Factors**: No time-series analysis
+- **Class Imbalance**: Only stratified sampling used; no advanced rebalancing techniques
+- **Missing Data**: Simple mode imputation may not capture complex patterns
 
 ### Interpretation Caveats
 - **Correlation vs. Causation**: Results show association, not causation

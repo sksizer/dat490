@@ -63,10 +63,6 @@ const menuItems = computed(() => [
         <div class="flex items-center py-2">
           <!-- Left section with dropdown using hamburger icon -->
           <div class="flex items-center">
-            <UDropdownMenu :items="menuItems" hover>
-              <UButton color="white" variant="ghost" icon="i-heroicons-bars-3-20-solid" aria-label="Menu" />
-            </UDropdownMenu>
-            
             <!-- Breadcrumbs -->
             <div class="ml-3 flex-1">
               <UBreadcrumb 
