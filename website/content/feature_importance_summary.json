@@ -1,12 +1,12 @@
 {
-  "total_analyses": 186,
-  "successful_analyses": 186,
-  "average_accuracy": 0.7232485357888666,
+  "total_analyses": 187,
+  "successful_analyses": 187,
+  "average_accuracy": 0.7242291181373253,
   "top_features": [
     {
       "feature": "_AGE80",
-      "average_importance": 0.2530480773184978,
-      "frequency": 182.0,
+      "average_importance": 0.2525223114781375,
+      "frequency": 183.0,
       "rank": 1.0
     },
     {
@@ -17,67 +17,67 @@
     },
     {
       "feature": "EMPLOY1",
-      "average_importance": 0.14198377752223948,
-      "frequency": 160.0,
+      "average_importance": 0.14181158464757393,
+      "frequency": 161.0,
       "rank": 3.0
     },
     {
       "feature": "INCOME3",
-      "average_importance": 0.12276591326224104,
+      "average_importance": 0.12268135155714632,
       "frequency": 159.0,
       "rank": 4.0
     },
     {
       "feature": "EDUCA",
-      "average_importance": 0.09257411416870127,
-      "frequency": 132.0,
+      "average_importance": 0.09293697111594092,
+      "frequency": 133.0,
       "rank": 5.0
     },
     {
       "feature": "MARITAL",
-      "average_importance": 0.07872088452897628,
+      "average_importance": 0.07866494497763653,
       "frequency": 133.0,
       "rank": 6.0
     },
     {
       "feature": "_IMPRACE",
-      "average_importance": 0.0700273172573638,
+      "average_importance": 0.07003896505530059,
       "frequency": 46.0,
       "rank": 7.0
     },
     {
       "feature": "RENTHOM1",
-      "average_importance": 0.0570839827963625,
-      "frequency": 52.0,
+      "average_importance": 0.05751649696296182,
+      "frequency": 53.0,
       "rank": 8.0
     },
     {
       "feature": "SEXVAR",
-      "average_importance": 0.056658554728766596,
+      "average_importance": 0.056476970312130594,
       "frequency": 31.0,
       "rank": 9.0
     },
     {
       "feature": "CHILDREN",
-      "average_importance": 0.047076942576680374,
+      "average_importance": 0.046929251700327454,
       "frequency": 20.0,
       "rank": 10.0
     },
     {
       "feature": "CPDEMO1C",
-      "average_importance": 0.028743713135880318,
+      "average_importance": 0.028668306036085493,
       "frequency": 1.0,
       "rank": 11.0
     },
     {
       "feature": "_HISPANC",
-      "average_importance": 0.024358849181803623,
-      "frequency": 3.0,
+      "average_importance": 0.024900878358966774,
+      "frequency": 4.0,
       "rank": 12.0
     },
     {
       "feature": "VETERAN3",
-      "average_importance": 0.021517447789803495,
+      "average_importance": 0.021440635250845004,
       "frequency": 8.0,
       "rank": 13.0
     },
@@ -89,18 +89,18 @@
     }
   ],
   "feature_frequency": {
-    "_AGE80": 182,
+    "_AGE80": 183,
     "_CRACE1": 3,
-    "EMPLOY1": 160,
+    "EMPLOY1": 161,
     "INCOME3": 159,
-    "EDUCA": 132,
+    "EDUCA": 133,
     "MARITAL": 133,
     "_IMPRACE": 46,
-    "RENTHOM1": 52,
+    "RENTHOM1": 53,
     "SEXVAR": 31,
     "CHILDREN": 20,
     "CPDEMO1C": 1,
-    "_HISPANC": 3,
+    "_HISPANC": 4,
     "VETERAN3": 8,
     "NUMHHOL4": 0
   },
@@ -114,7 +114,7 @@
     "60-70%": 32,
     "70-80%": 36,
     "80-90%": 38,
-    "90-100%": 39
+    "90-100%": 40
   },
   "sections_analyzed": [
     "Adverse Childhood Experiences",
@@ -123,6 +123,7 @@
     "Aspirin for CVD Prevention",
     "Breast and Cervical Cancer Screening",
     "COVID Vaccination",
+    "Calculated Variables",
     "Cancer Survivorship: Course of Treatment",
     "Cancer Survivorship: Pain Management",
     "Cancer Survivorship: Type of Cancer",
@@ -173,9 +174,9 @@
     "Weighting Variables"
   ],
   "analysis_metadata": {
-    "generation_timestamp": 1749404639.246697,
-    "processing_time_seconds": 0.037780046463012695,
-    "total_analyses_attempted": 186,
+    "generation_timestamp": 1749600214.17776,
+    "processing_time_seconds": 0.013765096664428711,
+    "total_analyses_attempted": 187,
     "demographic_features_used": 26
   }
 }

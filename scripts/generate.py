@@ -226,6 +226,11 @@ def generate_demographic_analyses(df: pd.DataFrame, metadata: Dict[str, ColumnMe
         'Weighting Variables'
     ]
     
+    # Columns to explicitly include even if they're in excluded sections
+    FORCE_INCLUDE_COLUMNS = [
+        '_HLTHPL1'  # Health plan status - important for demographic analysis
+    ]
+    
     # Identify candidate columns for analysis
     candidate_columns = []
     
@@ -237,8 +242,8 @@ def generate_demographic_analyses(df: pd.DataFrame, metadata: Dict[str, ColumnMe
         if col_name in DEMOGRAPHIC_FEATURE_COLUMNS:
             continue
             
-        # Skip columns from excluded sections
-        if col_meta.section_name in EXCLUDED_TARGET_SECTIONS:
+        # Skip columns from excluded sections UNLESS they're in the force include list
+        if col_meta.section_name in EXCLUDED_TARGET_SECTIONS and col_name not in FORCE_INCLUDE_COLUMNS:
             continue
             
         # Check if column has enough valid data

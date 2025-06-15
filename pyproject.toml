@@ -21,6 +21,7 @@ dependencies = [
     "scikit-learn (>=1.6.1,<2.0.0)",
     "notebook (>=7.4.3,<8.0.0)",
     "statsmodels (>=0.14.4,<0.15.0)",
+    "kmodes (>=0.12.2,<0.13.0)",
 ]
 
 

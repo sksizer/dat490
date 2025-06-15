@@ -151,7 +151,7 @@
     "features_dropped_missing": 4,
     "target_missing_dropped": 17860,
     "hyperparameter_tuning": false,
-    "analysis_time_seconds": 2.3744020462036133,
+    "analysis_time_seconds": 2.634021043777466,
     "target_distribution": {
       "1.0": 31964,
       "2.0": 381959,

@@ -1,0 +1,147 @@
+{
+  "target_column": "_HLTHPL1",
+  "accuracy": 0.9066174349506722,
+  "classification_report": {
+    "1.0": {
+      "precision": 0.9092749441548772,
+      "recall": 0.9970021304009491,
+      "f1-score": 0.9511199274678869,
+      "support": 78389.0
+    },
+    "2.0": {
+      "precision": 0.5893648449039882,
+      "recall": 0.08786610878661087,
+      "f1-score": 0.15293215791490994,
+      "support": 4541.0
+    },
+    "9.0": {
+      "precision": 0.5277777777777778,
+      "recall": 0.0050870147255689425,
+      "f1-score": 0.01007690267833466,
+      "support": 3735.0
+    },
+    "accuracy": 0.9066174349506722,
+    "macro avg": {
+      "precision": 0.6754725222788811,
+      "recall": 0.363318417971043,
+      "f1-score": 0.3713763293537105,
+      "support": 86665.0
+    },
+    "weighted avg": {
+      "precision": 0.8760711862697246,
+      "recall": 0.9066174349506722,
+      "f1-score": 0.8687410391146988,
+      "support": 86665.0
+    }
+  },
+  "feature_importance": [
+    {
+      "feature": "EDUCA",
+      "importance": 0.16042836330251486
+    },
+    {
+      "feature": "_AGE80",
+      "importance": 0.15472986517111126
+    },
+    {
+      "feature": "RENTHOM1",
+      "importance": 0.13796413195043414
+    },
+    {
+      "feature": "_HISPANC",
+      "importance": 0.12571830531131284
+    },
+    {
+      "feature": "EMPLOY1",
+      "importance": 0.1097837099597779
+    },
+    {
+      "feature": "INCOME3",
+      "importance": 0.10695287440952772
+    },
+    {
+      "feature": "_IMPRACE",
+      "importance": 0.07220545547154367
+    },
+    {
+      "feature": "MARITAL",
+      "importance": 0.0682601884284441
+    },
+    {
+      "feature": "SEXVAR",
+      "importance": 0.02270226881783374
+    },
+    {
+      "feature": "CHILDREN",
+      "importance": 0.01945874869868575
+    },
+    {
+      "feature": "CPDEMO1C",
+      "importance": 0.014642585474247816
+    },
+    {
+      "feature": "VETERAN3",
+      "importance": 0.0071535030045661325
+    }
+  ],
+  "confusion_matrix": [
+    [
+      78154,
+      220,
+      15
+    ],
+    [
+      4140,
+      399,
+      2
+    ],
+    [
+      3658,
+      58,
+      19
+    ]
+  ],
+  "class_labels": [
+    "Have some form of insuranceNotes: PRIMINS1=1, 2, 3, 4, 5, 6, 7, 8, 9, 10",
+    "Do not have some form of health insuranceNotes: PRIMINS1=88",
+    "Don't know, refused or missing insurance responseNotes: PRIMINS1=77, 99, or Missing"
+  ],
+  "model_parameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_split": 10,
+    "min_samples_leaf": 5,
+    "random_state": 42,
+    "n_jobs": -1
+  },
+  "analysis_metadata": {
+    "total_samples": 433323,
+    "training_samples": 346658,
+    "test_samples": 86665,
+    "features_used": [
+      "MARITAL",
+      "EDUCA",
+      "RENTHOM1",
+      "CPDEMO1C",
+      "VETERAN3",
+      "EMPLOY1",
+      "CHILDREN",
+      "INCOME3",
+      "SEXVAR",
+      "_HISPANC",
+      "_IMPRACE",
+      "_AGE80"
+    ],
+    "features_dropped_missing": 4,
+    "target_missing_dropped": 0,
+    "hyperparameter_tuning": false,
+    "analysis_time_seconds": 1.6145870685577393,
+    "target_distribution": {
+      "1.0": 391946,
+      "2.0": 22703,
+      "9.0": 18674
+    }
+  },
+  "successful": true,
+  "error_message": null
+}
